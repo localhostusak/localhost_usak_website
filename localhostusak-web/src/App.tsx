@@ -9,6 +9,7 @@ import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { FloatingCTA } from './components/layout/FloatingCTA';
 
+import { EnglishPage } from './pages/EnglishPage';
 import { HomePage } from './pages/HomePage';
 import { EventsPage } from './pages/EventsPage';
 import { CareersPage } from './pages/CareersPage';
@@ -87,6 +88,7 @@ const AppContent: React.FC = () => {
         <Route path="/etkinlikler" element={<EventsPage />} />
         <Route path="/kariyer" element={<CareersPage />} />
         <Route path="/projeler" element={<ProjectsPage />} />
+        <Route path="/en" element={<EnglishPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

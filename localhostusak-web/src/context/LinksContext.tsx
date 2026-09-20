@@ -11,23 +11,8 @@ interface LinksContextType {
 
 const LinksContext = createContext<LinksContextType | undefined>(undefined);
 
-const STORAGE_KEY = 'localhostusak_community_links';
-
 export const LinksProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [links, setLinks] = useState<CommunityLinks>(() => {
-    // Check localStorage for cached/offline links
-    if (typeof window !== 'undefined') {
-      try {
-        const cached = localStorage.getItem(STORAGE_KEY);
-        if (cached) {
-          return { ...DEFAULT_COMMUNITY_LINKS, ...JSON.parse(cached) };
-        }
-      } catch {
-        // Fallback to defaults
-      }
-    }
-    return DEFAULT_COMMUNITY_LINKS;
-  });
+  const [links, setLinks] = useState<CommunityLinks>(DEFAULT_COMMUNITY_LINKS);
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -41,14 +26,9 @@ export const LinksProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (data) {
           const merged = { ...DEFAULT_COMMUNITY_LINKS, ...data };
           setLinks(merged);
-          try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
-          } catch {}
         }
       })
-      .catch((_err) => {
-        // Silent catch: use cached or default links
-      })
+      .catch(() => {})
       .finally(() => {
         if (isMounted) setIsLoading(false);
       });
@@ -62,13 +42,9 @@ export const LinksProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const merged = { ...links, ...newLinks };
     setLinks(merged);
 
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
-    } catch {}
-
     return {
       success: true,
-      message: 'Bağlantılar yerel olarak güncellendi. Kalıcı değişiklikler Payload CMS Admin panelinden (/admin) yapılmalıdır.',
+      message: 'Bağlantılar yalnızca bu oturum için güncellendi. Kalıcı değişiklikler Payload CMS üzerinden yapılmalıdır.',
     };
   };
 

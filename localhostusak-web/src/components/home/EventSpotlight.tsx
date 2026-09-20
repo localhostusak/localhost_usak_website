@@ -1,38 +1,43 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { CountdownTimer } from '../shared/CountdownTimer';
 import { downloadICS, openGoogleCalendar } from '../../utils/calendarExport';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 import { fetchEvents } from '../../services/api';
 import { EventItem } from '../../types/event';
-import defaultEvents from '../../data/events.json';
+import { useCmsCollection } from '../../hooks/useCmsCollection';
+import { EmptyState } from '../shared/EmptyState';
 
 export const EventSpotlight: React.FC = () => {
   const { links } = useLinks();
   const { openWhatsAppWithRules } = useWhatsAppModal();
-  const [events, setEvents] = useState<EventItem[]>(defaultEvents as EventItem[]);
-
-  useEffect(() => {
-    fetchEvents()
-      .then((data) => {
-        if (data && data.length > 0) {
-          setEvents(data);
-        }
-      })
-      .catch(() => {
-        // Fallback to defaultEvents
-      });
-  }, []);
+  const { items: events, isLoading, error, retry } = useCmsCollection<EventItem>(fetchEvents);
 
   // En yakın yaklaşan (upcoming) etkinliği tarihe göre en yakından uzağa sıralayarak seç:
   const upcomingEvent = useMemo(() => {
     const upcomingList = events
-      .filter((e) => e.status === 'upcoming')
+      .filter((e) => e.status === 'upcoming' && new Date(e.dateStart).getTime() >= Date.now())
       .sort((a, b) => new Date(a.dateStart).getTime() - new Date(b.dateStart).getTime());
-    return upcomingList[0] || events[0];
+    return upcomingList[0];
   }, [events]);
 
-  const targetDate = upcomingEvent?.dateStart || '2026-09-28T14:00:00';
+  if (isLoading || error || !upcomingEvent) {
+    return (
+      <section className="section" id="events" style={{ background: 'var(--bg-secondary)' }}>
+        <div className="container">
+          <EmptyState
+            icon={error ? '⚠️' : isLoading ? '⏳' : '📅'}
+            title={error ? 'Etkinliklere Ulaşılamadı' : isLoading ? 'Etkinlikler Yükleniyor' : 'Yeni Buluşmalar Yakında'}
+            description={error ? 'Güncel etkinlikler şu anda yüklenemiyor.' : isLoading ? 'Güncel etkinlikler getiriliyor.' : 'Yaklaşan bir etkinlik duyurulduğunda burada paylaşacağız.'}
+            actionText={error ? 'Tekrar Dene' : undefined}
+            onAction={error ? retry : undefined}
+          />
+        </div>
+      </section>
+    );
+  }
+
+  const targetDate = upcomingEvent.dateStart;
   const meetupDate = new Date(targetDate);
 
   const formattedDate = !isNaN(meetupDate.getTime())
@@ -46,16 +51,11 @@ export const EventSpotlight: React.FC = () => {
       })
     : targetDate;
 
-  const eventTitle = upcomingEvent?.title || 'Buluşma #3: Kahve, Kod ve Gelecek Projeler';
-  const eventDesc =
-    upcomingEvent?.description ||
-    "Uşak'ta teknolojiyle ilgilenen herkesin bir araya geldiği, projelerini anlattığı, takıldığı noktalarda birbirine destek olduğu ve keyifli bir kahve eşliğinde networking yaptığı 3. buluşmamız!";
-  const eventLocation = upcomingEvent?.location || 'Coff The Story / Treehouse Cafe, Uşak';
-  const eventMapUrl = upcomingEvent?.mapUrl || 'https://maps.google.com/?q=Uşak+Coff+The+Story';
-  const eventTags =
-    upcomingEvent?.tags && upcomingEvent.tags.length > 0
-      ? upcomingEvent.tags
-      : ['#WebDev', '#AI_Agents', '#UI_UX', '#MobileDev', '#Freelance', '#CoffeeAndCode'];
+  const eventTitle = upcomingEvent.title;
+  const eventDesc = upcomingEvent.description || 'Etkinlik ayrıntıları yakında paylaşılacak.';
+  const eventLocation = upcomingEvent.location || 'Mekan yakında duyurulacak';
+  const eventMapUrl = upcomingEvent.mapUrl;
+  const eventTags = upcomingEvent.tags || [];
 
   const handleDownloadICS = () => {
     downloadICS({
@@ -216,7 +216,7 @@ export const EventSpotlight: React.FC = () => {
                   <span>Google Takvim'e Kaydet</span>
                   <span>📅</span>
                 </button>
-                <a
+                {(links.whatsappCoworking || links.whatsappGeneral) && <a
                   href={links.whatsappCoworking || links.whatsappGeneral}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -231,7 +231,7 @@ export const EventSpotlight: React.FC = () => {
                 >
                   <span>WhatsApp Grubuna Katıl</span>
                   <span>💬</span>
-                </a>
+                </a>}
               </div>
             </div>
           </div>

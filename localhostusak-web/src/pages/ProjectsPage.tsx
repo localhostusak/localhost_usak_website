@@ -9,14 +9,13 @@ import { ProjectItem } from '../types/project';
 import { useLinks } from '../context/LinksContext';
 
 import { fetchProjects, likeProject, fetchProjectsPageSettings, ProjectsPageSettingsData } from '../services/api';
+import seoPages from '../seo/pages.json';
 import { usePageMeta } from '../hooks/usePageMeta';
-
-// Static fallback
-import initialProjects from '../data/projects.json';
+import { useCmsCollection } from '../hooks/useCmsCollection';
 
 export const ProjectsPage: React.FC = () => {
   const { links } = useLinks();
-  const [projects, setProjects] = useState<ProjectItem[]>(initialProjects as ProjectItem[]);
+  const { items: projects, isLoading, error, retry } = useCmsCollection<ProjectItem>(fetchProjects);
   const [selectedType, setSelectedType] = useState<string>('all');
   const [selectedTech, setSelectedTech] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -24,22 +23,11 @@ export const ProjectsPage: React.FC = () => {
 
   // SEO Meta
   usePageMeta({
-    title: settings?.meta?.title || 'Projeler & Vitrin — localhostusak',
-    description:
-      settings?.meta?.description ||
-      "Uşak teknoloji topluluğu üyelerinin geliştirdiği projeler, açık kaynak depoları ve ekip arkadaşı arayan girişimler.",
+    title: settings?.meta?.title || seoPages["/projeler"].title,
+    description: settings?.meta?.description || seoPages["/projeler"].description,
   });
 
-  // Fetch from API with fallback
   useEffect(() => {
-    fetchProjects()
-      .then((data) => {
-        if (data && data.length > 0) setProjects(data);
-      })
-      .catch(() => {
-        // Fallback to static data
-      });
-
     fetchProjectsPageSettings()
       .then((data) => {
         if (data) setSettings(data);
@@ -94,8 +82,8 @@ export const ProjectsPage: React.FC = () => {
     <main>
       <PageHero
         tag={settings?.hero?.tag || "// PROJE VİTRİNİ & AÇIK KAYNAK"}
-        title={settings?.hero?.title || "Uşak'ta Üretiliyor,"}
-        highlightText={settings?.hero?.highlightText || "Dünyaya Açılıyor"}
+        title={settings?.hero?.title || "Uşak Yazılım Projeleri,"}
+        highlightText={settings?.hero?.highlightText || "Birlikte Üretiyoruz"}
         description={settings?.hero?.description || "Topluluk üyelerimizin geliştirdiği açık kaynak projeler, erken aşama girişimler ve birlikte üretmek için ekip arkadaşı arayanlar."}
         whatsappUrl={settings?.whatsappCta?.overrideUrl || links.whatsappProjects}
         whatsappLabel={settings?.whatsappCta?.buttonText || "WhatsApp Projeler Grubuna Katıl"}
@@ -128,13 +116,17 @@ export const ProjectsPage: React.FC = () => {
           </h2>
         </div>
 
-        {filteredProjects.length === 0 ? (
+        {isLoading ? (
+          <EmptyState icon="⏳" title="Projeler Yükleniyor" description="Güncel projeler getiriliyor." />
+        ) : error ? (
+          <EmptyState icon="⚠️" title="Projelere Ulaşılamadı" description="İçerik şu anda yüklenemiyor. Biraz sonra tekrar deneyebilirsin." actionText="Tekrar Dene" onAction={retry} />
+        ) : filteredProjects.length === 0 ? (
           <EmptyState
             icon="🚀"
-            title="Proje Bulunamadı"
-            description="Arama kriterlerine uygun proje vitrini bulunmuyor. Filtreleri temizleyerek tüm projeleri listeleyebilirsin."
-            actionText="Filtreleri Sıfırla"
-            onAction={() => {
+            title={projects.length === 0 ? 'Henüz Proje Yok' : 'Proje Bulunamadı'}
+            description={projects.length === 0 ? 'Topluluk projeleri eklendiğinde burada görünecek.' : 'Arama kriterlerine uygun proje bulunmuyor. Filtreleri temizleyerek tüm projeleri listeleyebilirsin.'}
+            actionText={projects.length === 0 ? undefined : 'Filtreleri Sıfırla'}
+            onAction={projects.length === 0 ? undefined : () => {
               setSelectedType('all');
               setSelectedTech('all');
               setSearchQuery('');

@@ -176,7 +176,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onLike }) => 
           </a>
         )}
 
-        {!project.demoUrl && !project.githubUrl && (
+        {!project.demoUrl && !project.githubUrl && links.whatsappProjects && (
           <a
             href={links.whatsappProjects}
             target="_blank"

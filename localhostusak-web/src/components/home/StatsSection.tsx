@@ -2,10 +2,12 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { useSiteSettings } from '../../context/SiteSettingsContext';
 
+const EMPTY_STATS: NonNullable<ReturnType<typeof useSiteSettings>['settings']['stats']> = [];
+
 export const StatsSection: React.FC = () => {
   const { theme } = useTheme();
   const { settings } = useSiteSettings();
-  const statsData = settings.stats && settings.stats.length > 0 ? settings.stats : [];
+  const statsData = settings.stats ?? EMPTY_STATS;
   const [counts, setCounts] = useState<number[]>(statsData.map(() => 0));
   const sectionRef = useRef<HTMLElement | null>(null);
   const animatedRef = useRef(false);
@@ -51,6 +53,8 @@ export const StatsSection: React.FC = () => {
     observer.observe(el);
     return () => observer.disconnect();
   }, [statsData]);
+
+  if (statsData.length === 0) return null;
 
   return (
     <section className="section" id="stats" ref={sectionRef}>

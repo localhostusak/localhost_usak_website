@@ -18,6 +18,7 @@ import { GeneralSettings } from './globals/GeneralSettings'
 import { EventsPageSettings } from './globals/EventsPageSettings'
 import { CareersPageSettings } from './globals/CareersPageSettings'
 import { ProjectsPageSettings } from './globals/ProjectsPageSettings'
+import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -47,15 +48,10 @@ export default buildConfig({
     ProjectsPageSettings,
   ],
   cors: [
-    'https://localhostusak.com',
-    'https://www.localhostusak.com',
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-  ],
-  csrf: [
-    'https://localhostusak.com',
-    'https://www.localhostusak.com',
+    'https://localhostusak.tech',
+    'https://www.localhostusak.tech',
+    'http://rwqqhpeag4mw5peahi5ru5s6.31.77.112.167.sslip.io',
+    'http://cet3r7uoxel41tcg0vg3drui.31.77.112.167.sslip.io',
     'http://localhost:5173',
     'http://localhost:3000',
     'http://127.0.0.1:3000',
@@ -74,6 +70,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
+    prodMigrations: migrations,
   }),
   sharp,
   plugins: [],

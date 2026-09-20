@@ -114,7 +114,7 @@ export const Footer: React.FC = () => {
                 padding: 0,
               }}
             >
-              <li>
+              {links.whatsappGeneral && <li>
                 <a
                   href={links.whatsappGeneral}
                   target="_blank"
@@ -126,22 +126,22 @@ export const Footer: React.FC = () => {
                 >
                   💬 WhatsApp Topluluğu
                 </a>
-              </li>
-              <li>
+              </li>}
+              {links.instagram && <li>
                 <a href={links.instagram} target="_blank" rel="noopener noreferrer">
                   📷 Instagram (@localhostusak)
                 </a>
-              </li>
-              <li>
+              </li>}
+              {links.github && <li>
                 <a href={links.github} target="_blank" rel="noopener noreferrer">
                   🐙 GitHub Deposu
                 </a>
-              </li>
-              <li>
+              </li>}
+              {links.x && <li>
                 <a href={links.x} target="_blank" rel="noopener noreferrer">
                   🐦 X / Twitter
                 </a>
-              </li>
+              </li>}
             </ul>
           </div>
         </div>

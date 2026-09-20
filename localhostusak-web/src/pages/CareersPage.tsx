@@ -9,14 +9,13 @@ import { CareerItem } from '../types/career';
 import { useLinks } from '../context/LinksContext';
 
 import { fetchCareers, fetchCareersPageSettings, CareersPageSettingsData } from '../services/api';
+import seoPages from '../seo/pages.json';
 import { usePageMeta } from '../hooks/usePageMeta';
-
-// Static fallback
-import initialCareers from '../data/careers.json';
+import { useCmsCollection } from '../hooks/useCmsCollection';
 
 export const CareersPage: React.FC = () => {
   const { links } = useLinks();
-  const [careers, setCareers] = useState<CareerItem[]>(initialCareers as CareerItem[]);
+  const { items: careers, isLoading, error, retry } = useCmsCollection<CareerItem>(fetchCareers);
   const [selectedType, setSelectedType] = useState<string>('all');
   const [selectedWorkMode, setSelectedWorkMode] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -24,22 +23,11 @@ export const CareersPage: React.FC = () => {
 
   // SEO Meta
   usePageMeta({
-    title: settings?.meta?.title || 'Kariyer & İlanlar — localhostusak',
-    description:
-      settings?.meta?.description ||
-      "Uşak ve uzaktan çalışma olanakları; teknoloji, yazılım, staj ve freelance kariyer fırsatları panosu.",
+    title: settings?.meta?.title || seoPages["/kariyer"].title,
+    description: settings?.meta?.description || seoPages["/kariyer"].description,
   });
 
-  // Fetch from API with fallback
   useEffect(() => {
-    fetchCareers()
-      .then((data) => {
-        if (data && data.length > 0) setCareers(data);
-      })
-      .catch(() => {
-        // Fallback to static data
-      });
-
     fetchCareersPageSettings()
       .then((data) => {
         if (data) setSettings(data);
@@ -83,8 +71,8 @@ export const CareersPage: React.FC = () => {
     <main>
       <PageHero
         tag={settings?.hero?.tag || "// KARİYER & FIRSAT PANOSU"}
-        title={settings?.hero?.title || "Uşak'tan Globale,"}
-        highlightText={settings?.hero?.highlightText || "Doğru Fırsatı Yakala"}
+        title={settings?.hero?.title || "Uşak Yazılım Kariyeri,"}
+        highlightText={settings?.hero?.highlightText || "İş İlanları ve Staj"}
         description={settings?.hero?.description || "Topluluk üyelerinin paylaştığı iş ilanları, staj fırsatları, freelance projeler ve ücretsiz mentorluk eşleşmeleri."}
         whatsappUrl={settings?.whatsappCta?.overrideUrl || links.whatsappCareers}
         whatsappLabel={settings?.whatsappCta?.buttonText || "WhatsApp Kariyer Grubuna Katıl"}
@@ -113,13 +101,17 @@ export const CareersPage: React.FC = () => {
           </h2>
         </div>
 
-        {filteredCareers.length === 0 ? (
+        {isLoading ? (
+          <EmptyState icon="⏳" title="İlanlar Yükleniyor" description="Güncel fırsatlar getiriliyor." />
+        ) : error ? (
+          <EmptyState icon="⚠️" title="İlanlara Ulaşılamadı" description="İçerik şu anda yüklenemiyor. Biraz sonra tekrar deneyebilirsin." actionText="Tekrar Dene" onAction={retry} />
+        ) : filteredCareers.length === 0 ? (
           <EmptyState
             icon="💼"
-            title="İlan Bulunamadı"
-            description="Seçtiğin kriterlere uygun açık kariyer ilanı bulunmuyor. Filtreleri temizleyerek tüm ilanları listeleyebilirsin."
-            actionText="Filtreleri Sıfırla"
-            onAction={() => {
+            title={careers.length === 0 ? 'Henüz Aktif İlan Yok' : 'İlan Bulunamadı'}
+            description={careers.length === 0 ? 'Yeni kariyer fırsatları eklendiğinde burada görünecek.' : 'Seçtiğin kriterlere uygun açık kariyer ilanı bulunmuyor. Filtreleri temizleyerek tüm ilanları listeleyebilirsin.'}
+            actionText={careers.length === 0 ? undefined : 'Filtreleri Sıfırla'}
+            onAction={careers.length === 0 ? undefined : () => {
               setSelectedType('all');
               setSelectedWorkMode('all');
               setSearchQuery('');

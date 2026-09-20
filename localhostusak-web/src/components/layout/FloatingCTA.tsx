@@ -52,6 +52,8 @@ export const FloatingCTA: React.FC<FloatingCTAProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  if (!effectiveUrl) return null;
+
   return (
     <a
       href={effectiveUrl}
@@ -70,4 +72,3 @@ export const FloatingCTA: React.FC<FloatingCTAProps> = ({
     </a>
   );
 };
-

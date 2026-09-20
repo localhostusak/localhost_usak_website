@@ -1,11 +1,11 @@
+import seoPages from '../seo/pages.json';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { GeneralSettingsData, fetchGeneralSettings } from '../services/api';
 
 const DEFAULT_GENERAL_SETTINGS: GeneralSettingsData = {
   meta: {
-    siteTitle: "localhostusak — Uşak'ın Teknoloji ve Tasarım Topluluğu",
-    defaultDescription:
-      "Uşak'taki yazılımcılar, tasarımcılar, remote çalışanlar ve öğrenciler için açık, samimi ve üretken teknoloji topluluğu. Kahveni al, laptopunu getir!",
+    siteTitle: seoPages['/'].title,
+    defaultDescription: seoPages['/'].description,
     keywords:
       'Uşak yazılım, Uşak teknoloji, localhostusak, developer community, UI UX Uşak, Uşak meetup, remote çalışma, coworking',
   },

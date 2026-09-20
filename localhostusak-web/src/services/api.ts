@@ -6,13 +6,29 @@ import { CommunityLinks } from '../constants/links';
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
-function normalizeMediaUrl(media: any, fallbackUrl?: string): string {
-  if (!media) return fallbackUrl || '';
-  if (typeof media === 'string') return media;
-  if (media.url) {
-    return media.url;
+function configuredUrl(url: unknown): url is string {
+  if (typeof url !== 'string' || !url.trim()) return false;
+  try {
+    const parsed = new URL(url);
+    if (!['http:', 'https:'].includes(parsed.protocol)) return false;
+    return !(parsed.hostname === 'chat.whatsapp.com' && parsed.pathname === '/');
+  } catch {
+    return false;
   }
-  return fallbackUrl || '';
+}
+
+function absoluteMediaUrl(url: string): string {
+  if (/^https?:\/\//i.test(url)) return url;
+  return new URL(url, new URL(API_BASE, window.location.origin)).toString();
+}
+
+function normalizeMediaUrl(media: any, fallbackUrl?: string): string {
+  if (!media) return fallbackUrl ? absoluteMediaUrl(fallbackUrl) : '';
+  if (typeof media === 'string') return absoluteMediaUrl(media);
+  if (media.url) {
+    return absoluteMediaUrl(media.url);
+  }
+  return fallbackUrl ? absoluteMediaUrl(fallbackUrl) : '';
 }
 
 export function normalizeEventDoc(doc: any): EventItem {
@@ -36,7 +52,7 @@ export function normalizeEventDoc(doc: any): EventItem {
     capacity: doc.capacity,
     attendees: doc.attendees || 0,
     imageUrl: normalizeMediaUrl(doc.coverImage, doc.imageUrl),
-    whatsappLink: doc.whatsappLink,
+    whatsappLink: configuredUrl(doc.whatsappLink) ? doc.whatsappLink : undefined,
     tags: Array.isArray(doc.tags) ? doc.tags.map((t: any) => (typeof t === 'string' ? t : t.tag || t.name)) : [],
     createdAt: doc.createdAt || new Date().toISOString(),
   };
@@ -103,7 +119,7 @@ export async function fetchCareers(): Promise<CareerItem[]> {
   const data = await res.json();
   const docs = Array.isArray(data) ? data : data.docs || [];
 
-  return docs.map((doc: any) => ({
+  return docs.filter((doc: any) => !doc.expiresAt || new Date(doc.expiresAt).getTime() >= Date.now()).map((doc: any) => ({
     id: doc.id,
     title: doc.title,
     company: doc.company,
@@ -185,7 +201,7 @@ export async function fetchCommunityLinks(): Promise<Partial<CommunityLinks> | n
 
     const linkMap: Record<string, string> = {};
     for (const doc of docs) {
-      if (doc.key && doc.url) {
+      if (doc.key && configuredUrl(doc.url)) {
         linkMap[doc.key] = doc.url;
       }
     }
@@ -375,4 +391,3 @@ export async function fetchProjectsPageSettings(): Promise<ProjectsPageSettingsD
     return null;
   }
 }
-

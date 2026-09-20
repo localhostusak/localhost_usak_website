@@ -8,6 +8,7 @@ export const ValuesBento: React.FC = () => {
   const { openWhatsAppWithRules } = useWhatsAppModal();
   const { settings } = useSiteSettings();
   const values = settings.values || [];
+  if (values.length === 0) return null;
 
   return (
     <section className="section" id="values" style={{ background: 'var(--bg-secondary)' }}>
@@ -59,7 +60,7 @@ export const ValuesBento: React.FC = () => {
                 )}
 
                 {/* If last card, offer WhatsApp button */}
-                {idx === values.length - 1 && (
+                {idx === values.length - 1 && links.whatsappGeneral && (
                   <div style={{ marginTop: '2rem' }}>
                     <a
                       href={links.whatsappGeneral}

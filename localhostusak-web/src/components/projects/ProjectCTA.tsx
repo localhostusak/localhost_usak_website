@@ -5,6 +5,7 @@ import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 export const ProjectCTA: React.FC = () => {
   const { links } = useLinks();
   const { openWhatsAppWithRules } = useWhatsAppModal();
+  if (!links.whatsappProjects) return null;
   return (
     <div
       className="card circuit-border"

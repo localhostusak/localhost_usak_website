@@ -1,21 +1,20 @@
+import { usePageMeta } from '../hooks/usePageMeta';
 import React, { useEffect } from 'react';
 
-export const AdminPage: React.FC = () => {
-  useEffect(() => {
-    // In local development on port 5173, redirect to Payload CMS on port 3000
-    // In production, Nginx proxies /admin directly to Payload CMS
-    const isDev = window.location.port === '5173';
-    const targetUrl = isDev ? 'http://localhost:3000/admin' : '/admin';
+const configuredApi = import.meta.env.VITE_API_URL;
+const adminUrl = configuredApi && /^https?:\/\//.test(configuredApi)
+  ? new URL('/admin', configuredApi).toString()
+  : import.meta.env.DEV ? 'http://localhost:3000/admin' : '/admin';
 
+export const AdminPage: React.FC = () => {
+  usePageMeta({ noindex: true, title: "Yönetim Paneli | localhostusak" });
+  useEffect(() => {
     const timer = setTimeout(() => {
-      window.location.href = targetUrl;
+      window.location.href = adminUrl;
     }, 800);
 
     return () => clearTimeout(timer);
   }, []);
-
-  const isDev = typeof window !== 'undefined' && window.location.port === '5173';
-  const targetUrl = isDev ? 'http://localhost:3000/admin' : '/admin';
 
   return (
     <main style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem 1rem' }}>
@@ -38,7 +37,7 @@ export const AdminPage: React.FC = () => {
           Topluluk etkinlikleri, kariyer ilanları, projeler ve medya içeriklerini yönetebileceğin modern CMS paneline yönlendiriliyorsun...
         </p>
 
-        <a href={targetUrl} className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+        <a href={adminUrl} className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
           <span>Yönetim Paneline Git</span>
           <span>↗</span>
         </a>
