@@ -71,10 +71,10 @@ export const SponsorsSection: React.FC = () => {
             <div className="sponsors-empty-box card circuit-border">
               <div className="sponsors-empty-icon">🤝</div>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-                Sponsorluk Görüşmelerimiz Devam Ediyor
+                Henüz Destekçi Eklenmedi
               </h3>
               <p style={{ color: 'var(--text-secondary)', maxWidth: '520px', margin: '0 auto 1.5rem', fontSize: '0.95rem' }}>
-                Topluluğumuza destek olmak, etkinliklerimizde yer almak veya ortak projeler geliştirmek için bizimle iletişime geçebilirsiniz.
+                Destekçilerimiz eklendiğinde burada görünecek.
               </p>
               {links.instagram && <a
                 href={links.instagram}
