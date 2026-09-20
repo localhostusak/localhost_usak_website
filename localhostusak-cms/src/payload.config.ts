@@ -24,7 +24,6 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
-  serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
   admin: {
     user: Users.slug,
     importMap: {
@@ -49,14 +48,6 @@ export default buildConfig({
     ProjectsPageSettings,
   ],
   cors: [
-    'https://localhostusak.com',
-    'https://www.localhostusak.com',
-    'http://cet3r7uoxel41tcg0vg3drui.31.77.112.167.sslip.io',
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-  ],
-  csrf: [
     'https://localhostusak.com',
     'https://www.localhostusak.com',
     'http://cet3r7uoxel41tcg0vg3drui.31.77.112.167.sslip.io',
