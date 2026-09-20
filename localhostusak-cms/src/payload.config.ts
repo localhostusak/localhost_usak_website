@@ -18,6 +18,7 @@ import { GeneralSettings } from './globals/GeneralSettings'
 import { EventsPageSettings } from './globals/EventsPageSettings'
 import { CareersPageSettings } from './globals/CareersPageSettings'
 import { ProjectsPageSettings } from './globals/ProjectsPageSettings'
+import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -74,6 +75,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
+    prodMigrations: migrations,
   }),
   sharp,
   plugins: [],
