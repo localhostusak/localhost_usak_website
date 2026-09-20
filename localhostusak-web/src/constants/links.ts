@@ -4,8 +4,7 @@
  * Bu dosya, tüm web sitesinde kullanılan WhatsApp grup bağlantıları
  * ve sosyal medya hesaplarının merkezi kaynağıdır.
  * 
- * Buradaki değerler varsayılan (fallback) olup, Admin paneli üzerinden
- * dinamik olarak güncellenebilir ve SQLite veritabanında saklanır.
+ * Bağlantılar Payload CMS tarafından sağlanır. Boş değerler gösterilmez.
  */
 
 export interface CommunityLinks {
@@ -22,13 +21,13 @@ export interface CommunityLinks {
 }
 
 export const DEFAULT_COMMUNITY_LINKS: CommunityLinks = {
-  whatsappGeneral: 'https://chat.whatsapp.com/',
-  whatsappProjects: 'https://chat.whatsapp.com/',
-  whatsappCareers: 'https://chat.whatsapp.com/',
-  whatsappCoworking: 'https://chat.whatsapp.com/',
-  instagram: 'https://instagram.com/localhostusak',
-  github: 'https://github.com/localhostusak',
-  x: 'https://x.com/localhostusak',
+  whatsappGeneral: '',
+  whatsappProjects: '',
+  whatsappCareers: '',
+  whatsappCoworking: '',
+  instagram: '',
+  github: '',
+  x: '',
 };
 
 export interface LinkMetaItem {

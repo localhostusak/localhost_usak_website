@@ -4,6 +4,7 @@ import { useSiteSettings } from '../../context/SiteSettingsContext';
 export const FlowSteps: React.FC = () => {
   const { settings } = useSiteSettings();
   const steps = settings.flowSteps || [];
+  if (steps.length === 0) return null;
 
   return (
     <section className="section" id="flow">
@@ -12,7 +13,7 @@ export const FlowSteps: React.FC = () => {
           <span className="section-tag">// BULUŞMA FORMATI</span>
           <h2 className="section-title">Buluşmada Neler Olur?</h2>
           <p className="section-desc">
-            İlk kez geleceksen endişelenme! 4 adımlı doğal ve rahat akışımız seni bekliyor.
+            İlk kez geleceksen endişelenme! Buluşmalarımızın akışını burada görebilirsin.
           </p>
         </div>
 

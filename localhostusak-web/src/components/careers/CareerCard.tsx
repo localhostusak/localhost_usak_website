@@ -120,7 +120,7 @@ export const CareerCard: React.FC<CareerCardProps> = ({ career }) => {
             <span>Başvur</span>
             <span>↗</span>
           </a>
-        ) : (
+        ) : links.whatsappCareers ? (
           <a
             href={links.whatsappCareers}
             target="_blank"
@@ -134,7 +134,7 @@ export const CareerCard: React.FC<CareerCardProps> = ({ career }) => {
             <span>Detay / İletişim</span>
             <span>💬</span>
           </a>
-        )}
+        ) : null}
 
         {career.contact && (
           <div

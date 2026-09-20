@@ -10,13 +10,11 @@ import { useLinks } from '../context/LinksContext';
 
 import { fetchCareers, fetchCareersPageSettings, CareersPageSettingsData } from '../services/api';
 import { usePageMeta } from '../hooks/usePageMeta';
-
-// Static fallback
-import initialCareers from '../data/careers.json';
+import { useCmsCollection } from '../hooks/useCmsCollection';
 
 export const CareersPage: React.FC = () => {
   const { links } = useLinks();
-  const [careers, setCareers] = useState<CareerItem[]>(initialCareers as CareerItem[]);
+  const { items: careers, isLoading, error, retry } = useCmsCollection<CareerItem>(fetchCareers);
   const [selectedType, setSelectedType] = useState<string>('all');
   const [selectedWorkMode, setSelectedWorkMode] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -30,16 +28,7 @@ export const CareersPage: React.FC = () => {
       "Uşak ve uzaktan çalışma olanakları; teknoloji, yazılım, staj ve freelance kariyer fırsatları panosu.",
   });
 
-  // Fetch from API with fallback
   useEffect(() => {
-    fetchCareers()
-      .then((data) => {
-        if (data && data.length > 0) setCareers(data);
-      })
-      .catch(() => {
-        // Fallback to static data
-      });
-
     fetchCareersPageSettings()
       .then((data) => {
         if (data) setSettings(data);
@@ -113,13 +102,17 @@ export const CareersPage: React.FC = () => {
           </h2>
         </div>
 
-        {filteredCareers.length === 0 ? (
+        {isLoading ? (
+          <EmptyState icon="⏳" title="İlanlar Yükleniyor" description="Güncel fırsatlar getiriliyor." />
+        ) : error ? (
+          <EmptyState icon="⚠️" title="İlanlara Ulaşılamadı" description="İçerik şu anda yüklenemiyor. Biraz sonra tekrar deneyebilirsin." actionText="Tekrar Dene" onAction={retry} />
+        ) : filteredCareers.length === 0 ? (
           <EmptyState
             icon="💼"
-            title="İlan Bulunamadı"
-            description="Seçtiğin kriterlere uygun açık kariyer ilanı bulunmuyor. Filtreleri temizleyerek tüm ilanları listeleyebilirsin."
-            actionText="Filtreleri Sıfırla"
-            onAction={() => {
+            title={careers.length === 0 ? 'Henüz Aktif İlan Yok' : 'İlan Bulunamadı'}
+            description={careers.length === 0 ? 'Yeni kariyer fırsatları eklendiğinde burada görünecek.' : 'Seçtiğin kriterlere uygun açık kariyer ilanı bulunmuyor. Filtreleri temizleyerek tüm ilanları listeleyebilirsin.'}
+            actionText={careers.length === 0 ? undefined : 'Filtreleri Sıfırla'}
+            onAction={careers.length === 0 ? undefined : () => {
               setSelectedType('all');
               setSelectedWorkMode('all');
               setSearchQuery('');

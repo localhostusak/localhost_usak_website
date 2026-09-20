@@ -165,7 +165,7 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
               <span>Google Takvim'e Kaydet</span>
               <span>📅</span>
             </button>
-            <a
+            {(event.whatsappLink || links.whatsappCoworking) && <a
               href={event.whatsappLink || links.whatsappCoworking}
               target="_blank"
               rel="noopener noreferrer"
@@ -177,7 +177,7 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
             >
               <span>WhatsApp Coworking Masasına Katıl</span>
               <span>💬</span>
-            </a>
+            </a>}
           </div>
         </div>
       </div>

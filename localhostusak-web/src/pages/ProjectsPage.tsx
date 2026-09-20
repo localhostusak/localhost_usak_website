@@ -10,13 +10,11 @@ import { useLinks } from '../context/LinksContext';
 
 import { fetchProjects, likeProject, fetchProjectsPageSettings, ProjectsPageSettingsData } from '../services/api';
 import { usePageMeta } from '../hooks/usePageMeta';
-
-// Static fallback
-import initialProjects from '../data/projects.json';
+import { useCmsCollection } from '../hooks/useCmsCollection';
 
 export const ProjectsPage: React.FC = () => {
   const { links } = useLinks();
-  const [projects, setProjects] = useState<ProjectItem[]>(initialProjects as ProjectItem[]);
+  const { items: projects, isLoading, error, retry } = useCmsCollection<ProjectItem>(fetchProjects);
   const [selectedType, setSelectedType] = useState<string>('all');
   const [selectedTech, setSelectedTech] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -30,16 +28,7 @@ export const ProjectsPage: React.FC = () => {
       "Uşak teknoloji topluluğu üyelerinin geliştirdiği projeler, açık kaynak depoları ve ekip arkadaşı arayan girişimler.",
   });
 
-  // Fetch from API with fallback
   useEffect(() => {
-    fetchProjects()
-      .then((data) => {
-        if (data && data.length > 0) setProjects(data);
-      })
-      .catch(() => {
-        // Fallback to static data
-      });
-
     fetchProjectsPageSettings()
       .then((data) => {
         if (data) setSettings(data);
@@ -128,13 +117,17 @@ export const ProjectsPage: React.FC = () => {
           </h2>
         </div>
 
-        {filteredProjects.length === 0 ? (
+        {isLoading ? (
+          <EmptyState icon="⏳" title="Projeler Yükleniyor" description="Güncel projeler getiriliyor." />
+        ) : error ? (
+          <EmptyState icon="⚠️" title="Projelere Ulaşılamadı" description="İçerik şu anda yüklenemiyor. Biraz sonra tekrar deneyebilirsin." actionText="Tekrar Dene" onAction={retry} />
+        ) : filteredProjects.length === 0 ? (
           <EmptyState
             icon="🚀"
-            title="Proje Bulunamadı"
-            description="Arama kriterlerine uygun proje vitrini bulunmuyor. Filtreleri temizleyerek tüm projeleri listeleyebilirsin."
-            actionText="Filtreleri Sıfırla"
-            onAction={() => {
+            title={projects.length === 0 ? 'Henüz Proje Yok' : 'Proje Bulunamadı'}
+            description={projects.length === 0 ? 'Topluluk projeleri eklendiğinde burada görünecek.' : 'Arama kriterlerine uygun proje bulunmuyor. Filtreleri temizleyerek tüm projeleri listeleyebilirsin.'}
+            actionText={projects.length === 0 ? undefined : 'Filtreleri Sıfırla'}
+            onAction={projects.length === 0 ? undefined : () => {
               setSelectedType('all');
               setSelectedTech('all');
               setSearchQuery('');

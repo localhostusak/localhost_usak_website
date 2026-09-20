@@ -12,7 +12,8 @@ interface EventCardProps {
 export const EventCard: React.FC<EventCardProps> = ({ event, eventType }) => {
   const { links } = useLinks();
   const { openWhatsAppWithRules } = useWhatsAppModal();
-  const isUpcoming = event.status === 'upcoming';
+  const isUpcoming = event.status === 'upcoming' && new Date(event.dateStart).getTime() >= Date.now();
+  const isCancelled = event.status === 'cancelled';
   const startDate = new Date(event.dateStart);
 
   const formattedDate = startDate.toLocaleDateString('tr-TR', {
@@ -50,7 +51,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, eventType }) => {
           </span>
 
           <span className={`badge ${isUpcoming ? 'badge-live' : 'badge-orange'}`}>
-            {isUpcoming ? 'YAKLAŞAN' : 'TAMAMLANDI'}
+            {isCancelled ? 'İPTAL EDİLDİ' : isUpcoming ? 'YAKLAŞAN' : 'TAMAMLANDI'}
           </span>
         </div>
 
@@ -126,7 +127,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, eventType }) => {
               <span>Takvime Ekle</span>
               <span>📥</span>
             </button>
-            <a
+            {(event.whatsappLink || links.whatsappCoworking) && <a
               href={event.whatsappLink || links.whatsappCoworking}
               target="_blank"
               rel="noopener noreferrer"
@@ -138,11 +139,11 @@ export const EventCard: React.FC<EventCardProps> = ({ event, eventType }) => {
             >
               <span>Masada Yer Ayır</span>
               <span>💬</span>
-            </a>
+            </a>}
           </>
         ) : (
           <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-            ✓ Etkinlik başarıyla tamamlandı
+            {isCancelled ? 'Etkinlik iptal edildi' : '✓ Etkinlik tamamlandı'}
           </span>
         )}
       </div>

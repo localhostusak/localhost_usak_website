@@ -4,6 +4,7 @@ import { useSiteSettings } from '../../context/SiteSettingsContext';
 export const PersonaCards: React.FC = () => {
   const { settings } = useSiteSettings();
   const personas = settings.personas || [];
+  if (personas.length === 0) return null;
 
   return (
     <section className="section" id="personas">

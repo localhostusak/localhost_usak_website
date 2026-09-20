@@ -50,6 +50,7 @@ export default buildConfig({
   cors: [
     'https://localhostusak.com',
     'https://www.localhostusak.com',
+    'http://rwqqhpeag4mw5peahi5ru5s6.31.77.112.167.sslip.io',
     'http://cet3r7uoxel41tcg0vg3drui.31.77.112.167.sslip.io',
     'http://localhost:5173',
     'http://localhost:3000',

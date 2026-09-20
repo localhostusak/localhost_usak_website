@@ -10,15 +10,12 @@ import { useLinks } from '../context/LinksContext';
 
 import { fetchEvents, fetchEventTypes, fetchEventsPageSettings, EventsPageSettingsData } from '../services/api';
 import { usePageMeta } from '../hooks/usePageMeta';
-
-// Static fallbacks
-import initialEvents from '../data/events.json';
-import initialTypes from '../data/eventTypes.json';
+import { useCmsCollection } from '../hooks/useCmsCollection';
 
 export const EventsPage: React.FC = () => {
   const { links } = useLinks();
-  const [events, setEvents] = useState<EventItem[]>(initialEvents as EventItem[]);
-  const [eventTypes, setEventTypes] = useState<EventType[]>(initialTypes as EventType[]);
+  const { items: events, isLoading, error, retry } = useCmsCollection<EventItem>(fetchEvents);
+  const { items: eventTypes } = useCmsCollection<EventType>(fetchEventTypes);
   const [selectedType, setSelectedType] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -32,24 +29,7 @@ export const EventsPage: React.FC = () => {
       "Uşak'taki yazılım, tasarım ve yapay zeka buluşmaları, coworking günleri ve workshop takvimi.",
   });
 
-  // Fetch from API with fallback
   useEffect(() => {
-    fetchEvents()
-      .then((data) => {
-        if (data && data.length > 0) setEvents(data);
-      })
-      .catch(() => {
-        // Fallback to static data
-      });
-
-    fetchEventTypes()
-      .then((data) => {
-        if (data && data.length > 0) setEventTypes(data);
-      })
-      .catch(() => {
-        // Fallback to static data
-      });
-
     fetchEventsPageSettings()
       .then((data) => {
         if (data) setSettings(data);
@@ -80,6 +60,7 @@ export const EventsPage: React.FC = () => {
     { id: 'all', label: 'Tüm Durumlar' },
     { id: 'upcoming', label: 'Yaklaşan' },
     { id: 'completed', label: 'Geçmiş' },
+    { id: 'cancelled', label: 'İptal Edildi' },
   ];
 
   // Filter logic
@@ -100,7 +81,7 @@ export const EventsPage: React.FC = () => {
   // Spotlight event: En yakın yaklaşan etkinlik (tarihe göre sıralı)
   const spotlightEvent = useMemo(() => {
     const upcoming = events
-      .filter((e) => e.status === 'upcoming')
+      .filter((e) => e.status === 'upcoming' && new Date(e.dateStart).getTime() >= Date.now())
       .sort((a, b) => new Date(a.dateStart).getTime() - new Date(b.dateStart).getTime());
     return upcoming[0];
   }, [events]);
@@ -137,7 +118,7 @@ export const EventsPage: React.FC = () => {
         />
 
         {/* Spotlight Event (if in 'all' or 'upcoming' filter and available) */}
-        {selectedType === 'all' && selectedStatus !== 'completed' && searchQuery === '' && spotlightEvent && (
+        {!isLoading && !error && selectedType === 'all' && selectedStatus !== 'completed' && selectedStatus !== 'cancelled' && searchQuery === '' && spotlightEvent && (
           <EventSpotlightCard event={spotlightEvent} eventType={typeMap.get(spotlightEvent.typeId)} />
         )}
 
@@ -148,13 +129,17 @@ export const EventsPage: React.FC = () => {
           </h2>
         </div>
 
-        {filteredEvents.length === 0 ? (
+        {isLoading ? (
+          <EmptyState icon="⏳" title="Etkinlikler Yükleniyor" description="Güncel etkinlikler getiriliyor." />
+        ) : error ? (
+          <EmptyState icon="⚠️" title="Etkinliklere Ulaşılamadı" description="İçerik şu anda yüklenemiyor. Biraz sonra tekrar deneyebilirsin." actionText="Tekrar Dene" onAction={retry} />
+        ) : filteredEvents.length === 0 ? (
           <EmptyState
             icon="📅"
-            title="Buluşma Bulunamadı"
-            description="Seçtiğin kriterlere uygun etkinlik bulunmuyor. Filtreleri sıfırlayarak tüm etkinlikleri görebilirsin."
-            actionText="Filtreleri Sıfırla"
-            onAction={() => {
+            title={events.length === 0 ? 'Henüz Buluşma Yok' : 'Buluşma Bulunamadı'}
+            description={events.length === 0 ? 'Yeni buluşmalar duyurulduğunda burada görünecek.' : 'Seçtiğin kriterlere uygun etkinlik bulunmuyor. Filtreleri sıfırlayarak tüm etkinlikleri görebilirsin.'}
+            actionText={events.length === 0 ? undefined : 'Filtreleri Sıfırla'}
+            onAction={events.length === 0 ? undefined : () => {
               setSelectedType('all');
               setSelectedStatus('all');
               setSearchQuery('');
@@ -169,7 +154,7 @@ export const EventsPage: React.FC = () => {
         )}
 
         {/* Event Statistics Banner */}
-        <EventStats totalEvents={events.length} totalAttendees={totalAttendees} />
+        {!isLoading && !error && events.length > 0 && <EventStats totalEvents={events.length} totalAttendees={totalAttendees} />}
       </div>
     </main>
   );

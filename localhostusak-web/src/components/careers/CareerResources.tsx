@@ -8,7 +8,8 @@ interface CareerResourcesProps {
 
 export const CareerResources: React.FC<CareerResourcesProps> = ({ items }) => {
   const { settings } = useSiteSettings();
-  const resources = items && items.length > 0 ? items : (settings.careerResources || []);
+  const resources = items ?? settings.careerResources ?? [];
+  if (resources.length === 0) return null;
 
   return (
     <section style={{ margin: '3.5rem 0' }}>
