@@ -6,6 +6,17 @@ import { CommunityLinks } from '../constants/links';
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
+function configuredUrl(url: unknown): url is string {
+  if (typeof url !== 'string' || !url.trim()) return false;
+  try {
+    const parsed = new URL(url);
+    if (!['http:', 'https:'].includes(parsed.protocol)) return false;
+    return !(parsed.hostname === 'chat.whatsapp.com' && parsed.pathname === '/');
+  } catch {
+    return false;
+  }
+}
+
 function absoluteMediaUrl(url: string): string {
   if (/^https?:\/\//i.test(url)) return url;
   return new URL(url, new URL(API_BASE, window.location.origin)).toString();
@@ -41,7 +52,7 @@ export function normalizeEventDoc(doc: any): EventItem {
     capacity: doc.capacity,
     attendees: doc.attendees || 0,
     imageUrl: normalizeMediaUrl(doc.coverImage, doc.imageUrl),
-    whatsappLink: doc.whatsappLink,
+    whatsappLink: configuredUrl(doc.whatsappLink) ? doc.whatsappLink : undefined,
     tags: Array.isArray(doc.tags) ? doc.tags.map((t: any) => (typeof t === 'string' ? t : t.tag || t.name)) : [],
     createdAt: doc.createdAt || new Date().toISOString(),
   };
@@ -190,7 +201,7 @@ export async function fetchCommunityLinks(): Promise<Partial<CommunityLinks> | n
 
     const linkMap: Record<string, string> = {};
     for (const doc of docs) {
-      if (doc.key && doc.url) {
+      if (doc.key && configuredUrl(doc.url)) {
         linkMap[doc.key] = doc.url;
       }
     }
