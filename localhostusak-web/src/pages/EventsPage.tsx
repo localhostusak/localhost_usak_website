@@ -9,6 +9,7 @@ import { EventItem, EventType } from '../types/event';
 import { useLinks } from '../context/LinksContext';
 
 import { fetchEvents, fetchEventTypes, fetchEventsPageSettings, EventsPageSettingsData } from '../services/api';
+import seoPages from '../seo/pages.json';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useCmsCollection } from '../hooks/useCmsCollection';
 
@@ -23,10 +24,8 @@ export const EventsPage: React.FC = () => {
 
   // SEO Meta
   usePageMeta({
-    title: settings?.meta?.title || 'Etkinlikler & Coworking — localhostusak',
-    description:
-      settings?.meta?.description ||
-      "Uşak'taki yazılım, tasarım ve yapay zeka buluşmaları, coworking günleri ve workshop takvimi.",
+    title: settings?.meta?.title || seoPages["/etkinlikler"].title,
+    description: settings?.meta?.description || seoPages["/etkinlikler"].description,
   });
 
   useEffect(() => {
@@ -94,8 +93,8 @@ export const EventsPage: React.FC = () => {
     <main>
       <PageHero
         tag={settings?.hero?.tag || "// ETKİNLİK TAKVİMİ & COWORKING"}
-        title={settings?.hero?.title || "Cowork'ten Workshop'a,"}
-        highlightText={settings?.hero?.highlightText || "Tüm Buluşmalar"}
+        title={settings?.hero?.title || "Uşak Teknoloji Etkinlikleri,"}
+        highlightText={settings?.hero?.highlightText || "Coworking ve Buluşmalar"}
         description={settings?.hero?.description || "Kahveni al, etkinliğini seç, masada yerini al. Yazılım, tasarım, yapay zeka ve serbest çalışma Uşak'ta aynı masada."}
         whatsappUrl={settings?.whatsappCta?.overrideUrl || links.whatsappCoworking}
         whatsappLabel={settings?.whatsappCta?.buttonText || "WhatsApp Coworking Grubuna Katıl"}
@@ -125,7 +124,7 @@ export const EventsPage: React.FC = () => {
         {/* Event List Section */}
         <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h2 style={{ fontSize: '1.4rem', fontWeight: 800 }}>
-            Tüm Buluşmalar <span style={{ color: 'var(--accent-primary)' }}>({filteredEvents.length})</span>
+            Coworking ve Buluşmalar <span style={{ color: 'var(--accent-primary)' }}>({filteredEvents.length})</span>
           </h2>
         </div>
 

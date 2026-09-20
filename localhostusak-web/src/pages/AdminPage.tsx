@@ -1,3 +1,4 @@
+import { usePageMeta } from '../hooks/usePageMeta';
 import React, { useEffect } from 'react';
 
 const configuredApi = import.meta.env.VITE_API_URL;
@@ -6,6 +7,7 @@ const adminUrl = configuredApi && /^https?:\/\//.test(configuredApi)
   : import.meta.env.DEV ? 'http://localhost:3000/admin' : '/admin';
 
 export const AdminPage: React.FC = () => {
+  usePageMeta({ noindex: true, title: "Yönetim Paneli | localhostusak" });
   useEffect(() => {
     const timer = setTimeout(() => {
       window.location.href = adminUrl;

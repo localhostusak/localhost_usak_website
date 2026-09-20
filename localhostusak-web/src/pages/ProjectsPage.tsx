@@ -9,6 +9,7 @@ import { ProjectItem } from '../types/project';
 import { useLinks } from '../context/LinksContext';
 
 import { fetchProjects, likeProject, fetchProjectsPageSettings, ProjectsPageSettingsData } from '../services/api';
+import seoPages from '../seo/pages.json';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useCmsCollection } from '../hooks/useCmsCollection';
 
@@ -22,10 +23,8 @@ export const ProjectsPage: React.FC = () => {
 
   // SEO Meta
   usePageMeta({
-    title: settings?.meta?.title || 'Projeler & Vitrin — localhostusak',
-    description:
-      settings?.meta?.description ||
-      "Uşak teknoloji topluluğu üyelerinin geliştirdiği projeler, açık kaynak depoları ve ekip arkadaşı arayan girişimler.",
+    title: settings?.meta?.title || seoPages["/projeler"].title,
+    description: settings?.meta?.description || seoPages["/projeler"].description,
   });
 
   useEffect(() => {
@@ -83,8 +82,8 @@ export const ProjectsPage: React.FC = () => {
     <main>
       <PageHero
         tag={settings?.hero?.tag || "// PROJE VİTRİNİ & AÇIK KAYNAK"}
-        title={settings?.hero?.title || "Uşak'ta Üretiliyor,"}
-        highlightText={settings?.hero?.highlightText || "Dünyaya Açılıyor"}
+        title={settings?.hero?.title || "Uşak Yazılım Projeleri,"}
+        highlightText={settings?.hero?.highlightText || "Birlikte Üretiyoruz"}
         description={settings?.hero?.description || "Topluluk üyelerimizin geliştirdiği açık kaynak projeler, erken aşama girişimler ve birlikte üretmek için ekip arkadaşı arayanlar."}
         whatsappUrl={settings?.whatsappCta?.overrideUrl || links.whatsappProjects}
         whatsappLabel={settings?.whatsappCta?.buttonText || "WhatsApp Projeler Grubuna Katıl"}

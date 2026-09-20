@@ -1,8 +1,10 @@
+import { usePageMeta } from '../hooks/usePageMeta';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 
 export const NotFoundPage: React.FC = () => {
+  usePageMeta({ noindex: true, title: "Sayfa Bulunamadı | localhostusak" });
   const { theme } = useTheme();
 
   return (
