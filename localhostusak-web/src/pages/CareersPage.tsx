@@ -9,6 +9,7 @@ import { CareerItem } from '../types/career';
 import { useLinks } from '../context/LinksContext';
 
 import { fetchCareers, fetchCareersPageSettings, CareersPageSettingsData } from '../services/api';
+import seoPages from '../seo/pages.json';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useCmsCollection } from '../hooks/useCmsCollection';
 
@@ -22,10 +23,8 @@ export const CareersPage: React.FC = () => {
 
   // SEO Meta
   usePageMeta({
-    title: settings?.meta?.title || 'Kariyer & İlanlar — localhostusak',
-    description:
-      settings?.meta?.description ||
-      "Uşak ve uzaktan çalışma olanakları; teknoloji, yazılım, staj ve freelance kariyer fırsatları panosu.",
+    title: settings?.meta?.title || seoPages["/kariyer"].title,
+    description: settings?.meta?.description || seoPages["/kariyer"].description,
   });
 
   useEffect(() => {
@@ -72,8 +71,8 @@ export const CareersPage: React.FC = () => {
     <main>
       <PageHero
         tag={settings?.hero?.tag || "// KARİYER & FIRSAT PANOSU"}
-        title={settings?.hero?.title || "Uşak'tan Globale,"}
-        highlightText={settings?.hero?.highlightText || "Doğru Fırsatı Yakala"}
+        title={settings?.hero?.title || "Uşak Yazılım Kariyeri,"}
+        highlightText={settings?.hero?.highlightText || "İş İlanları ve Staj"}
         description={settings?.hero?.description || "Topluluk üyelerinin paylaştığı iş ilanları, staj fırsatları, freelance projeler ve ücretsiz mentorluk eşleşmeleri."}
         whatsappUrl={settings?.whatsappCta?.overrideUrl || links.whatsappCareers}
         whatsappLabel={settings?.whatsappCta?.buttonText || "WhatsApp Kariyer Grubuna Katıl"}

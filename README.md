@@ -208,7 +208,7 @@ localhost_usak_website/
 ├── localhostusak-cms/                     # ⚙️ Headless CMS (Payload v3 + Next.js)
 │   ├── package.json
 │   ├── Dockerfile                         # Container build
-│   ├── docker-compose.yml                 # CMS + PostgreSQL compose
+│   ├── docker-compose.development.yml                 # CMS + PostgreSQL compose
 │   ├── next.config.ts
 │   ├── tsconfig.json
 │   └── src/
@@ -244,71 +244,76 @@ localhost_usak_website/
 
 ## 🛠️ Kurulum ve Yerel Geliştirme
 
-### Gereksinimler
-- **Node.js:** `v20.9.0` veya üzeri (v22 LTS önerilir)
-- **PostgreSQL:** `16` (yerel kurulum veya Docker)
-- **npm:** `v10.0.0` veya üzeri
+Ortam dosyaları, production build ve güvenli Git akışı için [ENVIRONMENTS.md](ENVIRONMENTS.md) dosyasını okuyun.
 
-### 1. Repoyu Klonlayın
+Node.js 20.9+ ve npm gereklidir. Veritabanı için yerel PostgreSQL 16 veya
+Docker Desktop + Docker Compose kullanabilirsiniz. Bu Mac'te Homebrew PostgreSQL
+16, `localhostusak` veritabanı ve `.env.development.local` zaten hazırlandı; sonraki açılışlarda
+repo kökünden üç ayrı terminalde yalnızca şu komutları çalıştırın:
+
 ```bash
-git clone https://github.com/RecepSamiOzdemir/localhost_usak_website.git
-cd localhost_usak_website
+# Terminal 1 — yerel veritabanı (zaten çalışıyorsa tekrar gerekmez)
+brew services start postgresql@16
+
+# Terminal 2 — CMS ve API
+npm run cms
+
+# Terminal 3 — React/Vite frontend
+npm run dev
 ```
 
-### 2. PostgreSQL Veritabanını Hazırlayın
-```bash
-# PostgreSQL shell'ine bağlanın
-psql -U postgres
+Başka bir makinede ilk kurulum için veritabanını aşağıdaki iki yoldan biriyle
+hazırlayın. Bu veritabanları canlı VDS veritabanından ayrıdır.
 
-# Veritabanı oluşturun
-CREATE DATABASE localhostusak;
-\q
-```
-
-### 3. CMS'i Kurun ve Başlatın
+**Docker yolu:**
 
 ```bash
 cd localhostusak-cms
-
-# Bağımlılıkları yükleyin
-npm install
-
-# .env dosyasını oluşturun
-cp .env.example .env
-# .env içinde DATABASE_URL ve PAYLOAD_SECRET ayarlayın
-
-# Başlangıç verilerini yükleyin (opsiyonel)
-npm run seed
-
-# CMS geliştirme sunucusunu başlatın
-npm run dev
+docker compose -f docker-compose.development.yml up -d postgres
 ```
-> CMS Admin Paneli: `http://localhost:3000/admin`  
-> İlk girişte admin kullanıcınızı oluşturmanız istenecektir.
 
-### 4. Frontend'i Kurun ve Başlatın
+**macOS/Homebrew yolu:**
 
 ```bash
-cd localhostusak-web
-
-# Bağımlılıkları yükleyin
-npm install
-
-# Geliştirme sunucusunu başlatın
-npm run dev
+brew install postgresql@16
+brew services start postgresql@16
+/opt/homebrew/opt/postgresql@16/bin/psql -d postgres -c "CREATE ROLE localhostusak_user WITH LOGIN PASSWORD 'localhostusak_dev_password'"
+/opt/homebrew/opt/postgresql@16/bin/createdb -O localhostusak_user localhostusak
 ```
-> Web Sitesi: `http://localhost:5173`  
-> Vite, `/api/*` ve `/media/*` isteklerini otomatik olarak `http://localhost:3000` adresine yönlendirir.
 
-### 🚀 Root Kısayolları
-Monorepo kökünden her iki servisi ayrı terminallerde başlatabilirsiniz:
+Veritabanı hazır olduktan sonra bir kez bağımlılıkları ve yerel CMS
+yapılandırmasını kurun:
+
 ```bash
-# Terminal 1 — CMS & API
-npm run cms
-
-# Terminal 2 — Frontend
-npm run dev
+cd localhostusak-cms
+cp .env.development.example .env.development.local
+openssl rand -hex 32
+# Üretilen değeri .env.development.local içindeki PAYLOAD_SECRET alanına yapıştırın.
+npm ci
+cd ../localhostusak-web
+npm ci
 ```
+
+Docker kullanıyorsanız sonraki açılışlarda veritabanı için
+`cd localhostusak-cms && docker compose -f docker-compose.development.yml up -d postgres` çalıştırın; diğer
+iki terminalin komutları aynıdır.
+
+- Web: `http://localhost:5173`
+- CMS yönetim paneli: `http://localhost:3000/admin`
+- API kontrolü: `http://localhost:3000/api/events`
+
+Vite, `/api` isteklerini yerel CMS'e yönlendirir. Frontend geliştirme env'sinde
+`VITE_API_URL=/api` kullanın veya bu değişkeni boş bırakın; canlı CMS adresini
+yerel geliştirme ortamına koymayın. Geliştirme modunda Payload şemayı yerel veritabanına uygular.
+Yeni yerel veritabanı boştur; yönetim panelinde ayrı bir yerel kullanıcı
+oluşturun. `npm run seed` örnek veri yükler, yalnızca özellikle istediğinizde
+çalıştırın. `.env.development.local` Git tarafından yok sayılır; gerçek şifreleri repoya eklemeyin.
+
+Production build kontrollerinde gerekli env değerlerini ayrıca sağlamalısınız;
+geliştirme env dosyası bu komutlara yüklenmez. Ayrıntılar [ENVIRONMENTS.md](ENVIRONMENTS.md) içindedir.
+Yerel PostgreSQL'i `brew services stop postgresql@16`, Docker veritabanını ise
+`cd localhostusak-cms && docker compose -f docker-compose.development.yml stop postgres` ile durdurabilirsiniz.
+`docker compose -f docker-compose.development.yml down -v` yerel veriyi siler.
 
 ---
 

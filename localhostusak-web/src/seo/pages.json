@@ -1,0 +1,37 @@
+{
+  "/": {
+    "title": "Uşak Teknoloji ve Yazılım Topluluğu | localhostusak",
+    "description": "Uşak'ta yazılımcılar, mühendisler, tasarımcılar ve öğrenciler için teknoloji topluluğu. Coworking buluşmaları, açık kaynak projeleri ve kariyer paylaşımları.",
+    "lang": "tr",
+    "legacyTitle": "localhostusak — Uşak'ın Teknoloji ve Tasarım Topluluğu",
+    "legacyDescription": "Uşak'taki yazılımcılar, tasarımcılar, remote çalışanlar ve öğrenciler için açık, samimi ve üretken teknoloji topluluğu. Kahveni al, laptopunu getir!"
+  },
+  "/etkinlikler": {
+    "title": "Uşak Teknoloji Etkinlikleri ve Coworking | localhostusak",
+    "description": "Uşak'ta yazılım, tasarım ve yapay zeka buluşmalarını keşfet. Topluluğun coworking günleri, atölyeleri ve teknoloji etkinlikleri burada duyurulur.",
+    "lang": "tr",
+    "legacyTitle": "Etkinlikler & Coworking — localhostusak",
+    "legacyDescription": "Uşak'taki yazılım, tasarım ve yapay zeka buluşmaları, coworking günleri ve workshop takvimi."
+  },
+  "/kariyer": {
+    "title": "Uşak Yazılım İş İlanları, Staj ve Kariyer | localhostusak",
+    "description": "Uşak ve uzaktan çalışma için topluluğun paylaştığı yazılım iş ilanları, mühendislik ve teknoloji kariyer fırsatları, staj ve freelance projeleri.",
+    "lang": "tr",
+    "legacyTitle": "Kariyer & İlanlar — localhostusak",
+    "legacyDescription": "Uşak ve uzaktan çalışma olanakları; teknoloji, yazılım, staj ve freelance kariyer fırsatları panosu."
+  },
+  "/projeler": {
+    "title": "Uşak Yazılım Projeleri ve Açık Kaynak | localhostusak",
+    "description": "Uşak teknoloji topluluğunun yazılım projelerini keşfet. Açık kaynak çalışmaları, geliştirici ekipleri ve birlikte üretmek için iş birliği fırsatları.",
+    "lang": "tr",
+    "legacyTitle": "Projeler & Vitrin — localhostusak",
+    "legacyDescription": "Uşak teknoloji topluluğu üyelerinin geliştirdiği projeler, açık kaynak depoları ve ekip arkadaşı arayan girişimler."
+  },
+  "/en": {
+    "title": "Usak Technology & Software Developer Community | localhostusak",
+    "description": "Meet the technology community in Uşak, Turkey. Connect with software developers, engineers and designers through coworking, projects and career opportunities.",
+    "lang": "en",
+    "legacyTitle": "",
+    "legacyDescription": ""
+  }
+}
