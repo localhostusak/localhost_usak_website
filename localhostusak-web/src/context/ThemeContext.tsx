@@ -130,7 +130,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       el.style.top = `${y}px`;
       el.style.width = `${size}px`;
       el.style.height = `${size}px`;
-      el.style.borderRadius = theme === 'pixel' ? '0px' : '50%';
+      el.style.borderRadius = '50%';
       el.style.backgroundColor = color;
       el.style.boxShadow = `0 0 8px ${color}`;
       el.style.pointerEvents = 'none';

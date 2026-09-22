@@ -349,11 +349,6 @@
   padding: 4.5rem 0 2.5rem 0;
 }
 
-[data-theme="pixel"] .footer-wrapper {
-  border-top: 3px solid var(--pixel-black);
-  background-color: #F5EBDC;
-}
-
 .footer-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
@@ -367,14 +362,9 @@
   justify-content: space-between;
   padding-top: 2rem;
   border-top: 1px solid var(--border-subtle);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.85rem;
   color: var(--text-muted);
-}
-
-[data-theme="pixel"] .footer-bottom {
-  border-top: 2px dashed var(--pixel-black);
-  color: var(--coffee-brown);
 }
 
 @media (max-width: 900px) {

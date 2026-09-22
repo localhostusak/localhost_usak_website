@@ -68,16 +68,17 @@ export const HeroSection: React.FC = () => {
       draw(isPixel: boolean) {
         if (!ctx) return;
         ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         if (isPixel) {
-          ctx.fillStyle = this.isBlue ? '#3A86FF' : '#EE6C19';
-          ctx.fillRect(this.x - 2, this.y - 2, 4, 4);
+          ctx.fillStyle = this.isBlue ? 'rgba(37, 99, 235, 0.7)' : 'rgba(227, 93, 20, 0.75)';
+          ctx.shadowBlur = 4;
+          ctx.shadowColor = this.isBlue ? 'rgba(37, 99, 235, 0.3)' : 'rgba(227, 93, 20, 0.3)';
         } else {
-          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-          ctx.fillStyle = this.isBlue ? '#00E5FF' : '#FF6600';
+          ctx.fillStyle = this.isBlue ? 'rgba(59, 130, 246, 0.85)' : 'rgba(227, 93, 20, 0.9)';
           ctx.shadowBlur = 8;
-          ctx.shadowColor = this.isBlue ? '#00E5FF' : '#FF6600';
-          ctx.fill();
+          ctx.shadowColor = this.isBlue ? 'rgba(59, 130, 246, 0.4)' : 'rgba(227, 93, 20, 0.4)';
         }
+        ctx.fill();
       }
     }
 
@@ -112,10 +113,10 @@ export const HeroSection: React.FC = () => {
             ctx.lineTo(particles[j].x, particles[j].y);
 
             if (isPixel) {
-              ctx.strokeStyle = `rgba(92, 61, 46, ${0.15 * (1 - dist / 110)})`;
-              ctx.lineWidth = 1;
+              ctx.strokeStyle = `rgba(227, 93, 20, ${0.12 * (1 - dist / 110)})`;
+              ctx.lineWidth = 0.75;
             } else {
-              ctx.strokeStyle = `rgba(255, 102, 0, ${0.25 * (1 - dist / 110)})`;
+              ctx.strokeStyle = `rgba(227, 93, 20, ${0.2 * (1 - dist / 110)})`;
               ctx.lineWidth = 0.8;
             }
             ctx.stroke();
