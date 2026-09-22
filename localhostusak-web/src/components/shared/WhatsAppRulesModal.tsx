@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Users, ShieldAlert, MessageSquare, Compass, Handshake, ScrollText, Check } from 'lucide-react';
 
 export interface WhatsAppRulesModalProps {
   isOpen: boolean;
@@ -12,7 +13,7 @@ interface RuleItem {
   id: number;
   title: string;
   desc: string;
-  icon: string;
+  icon: React.ReactNode;
   badge?: string;
   isHighlight?: boolean;
 }
@@ -22,35 +23,35 @@ const RULES: RuleItem[] = [
     id: 1,
     title: 'Topluluğa Saygı',
     desc: 'Tüm üyelerin kendini rahat hissettiği, güvenli ve destekleyici bir ortam için birbirimize saygılı olalım.',
-    icon: '👥',
+    icon: <Users size={20} />,
     badge: '01',
   },
   {
     id: 2,
     title: 'Özelden Toplu Mesaj',
     desc: 'Topluluktaki üyelere toplu şekilde özelden ulaşıp iş, proje veya müşteri toplamaya çalışılması kesinlikle doğru bulmadığımız bir yaklaşımdır.',
-    icon: '🚫',
+    icon: <ShieldAlert size={20} />,
     badge: '02 // ÖNEMLİ',
   },
   {
     id: 3,
     title: 'Paylaşımlar İçin Doğru Grup',
     desc: 'Proje, iş birliği veya ekip ihtiyacı varsa lütfen ilgili grubumuzda paylaşın.',
-    icon: '💬',
+    icon: <MessageSquare size={20} />,
     badge: '03',
   },
   {
     id: 4,
     title: 'Yönlendirme Bizden',
     desc: 'Gerekli durumlarda doğru kişileri ve ekipleri biz yönlendireceğiz.',
-    icon: '🧭',
+    icon: <Compass size={20} />,
     badge: '04',
   },
   {
     id: 5,
     title: 'Birlikte Daha Güçlüyüz',
     desc: 'Üyelerimizin rahatlığı ve topluluğun güven ortamı bizim için önemli. Birlikte çalışalım, birlikte üretelim ve fırsatları şeffaf şekilde birlikte büyütelim.',
-    icon: '🤝',
+    icon: <Handshake size={20} />,
     badge: '05 // DAYANIŞMA',
     isHighlight: true,
   },
@@ -271,7 +272,10 @@ export const WhatsAppRulesModal: React.FC<WhatsAppRulesModalProps> = ({
             className="wa-rules-scroll-indicator"
             onClick={handleScrollToBottomClick}
           >
-            <span>📜 Tüm kuralları görmek için aşağı kaydırın</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+              <ScrollText size={16} />
+              <span>Tüm kuralları görmek için aşağı kaydırın</span>
+            </span>
             <span className="bounce-arrow">↓</span>
           </button>
         )}
@@ -300,8 +304,9 @@ export const WhatsAppRulesModal: React.FC<WhatsAppRulesModalProps> = ({
                     (Onaylamak için lütfen kuralları sonuna kadar okuyup kaydırın)
                   </span>
                 ) : (
-                  <span className="wa-rules-unlocked-hint">
-                    ✓ Tüm kuralları incelediniz, kutuyu işaretleyerek devam edebilirsiniz.
+                  <span className="wa-rules-unlocked-hint" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                    <Check size={14} />
+                    <span>Tüm kuralları incelediniz, kutuyu işaretleyerek devam edebilirsiniz.</span>
                   </span>
                 )}
               </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { ExternalLink, Users, AlertTriangle, Loader2 } from 'lucide-react';
 import { SponsorItem } from '../../types/sponsor';
 import { useLinks } from '../../context/LinksContext';
 
@@ -14,7 +15,7 @@ export const SponsorsSection: React.FC = () => {
     <section className="section sponsors-section" id="sponsors">
       <div className="container">
         <div className="section-header">
-          <span className="section-tag">// DESTEKÇİLERİMİZ & SPONSORLAR</span>
+          <span className="section-tag">DESTEKÇİLERİMİZ & SPONSORLAR</span>
           <h2 className="section-title">Topluluğumuza Güç Katanlar</h2>
           <p className="section-desc">
             Uşak teknoloji ve tasarım ekosisteminin büyümesine katkı sağlayan,
@@ -23,9 +24,19 @@ export const SponsorsSection: React.FC = () => {
         </div>
 
         {isLoading ? (
-          <EmptyState icon="⏳" title="Destekçiler Yükleniyor" description="Güncel destekçiler getiriliyor." />
+          <EmptyState
+            icon={<Loader2 size={40} style={{ animation: 'spin 1.5s linear infinite', color: 'var(--text-muted)' }} />}
+            title="Destekçiler Yükleniyor"
+            description="Güncel destekçiler getiriliyor."
+          />
         ) : error ? (
-          <EmptyState icon="⚠️" title="Destekçilere Ulaşılamadı" description="Destekçi bilgileri şu anda yüklenemiyor." actionText="Tekrar Dene" onAction={retry} />
+          <EmptyState
+            icon={<AlertTriangle size={40} style={{ color: '#FF6600' }} />}
+            title="Destekçilere Ulaşılamadı"
+            description="Destekçi bilgileri şu anda yüklenemiyor."
+            actionText="Tekrar Dene"
+            onAction={retry}
+          />
         ) : sponsors.length > 0 ? (
           <div className="sponsors-grid">
             {sponsors.map((sponsor) => (
@@ -59,7 +70,7 @@ export const SponsorsSection: React.FC = () => {
                     <h3 className="sponsor-name">{sponsor.name}</h3>
                     <div className="sponsor-link-badge">
                       <span>Web Sitesini Ziyaret Et</span>
-                      <span className="sponsor-external-icon">↗</span>
+                      <ExternalLink size={14} className="sponsor-external-icon" />
                     </div>
                   </div>
                 </div>
@@ -69,7 +80,9 @@ export const SponsorsSection: React.FC = () => {
         ) : (
           (
             <div className="sponsors-empty-box card circuit-border">
-              <div className="sponsors-empty-icon">🤝</div>
+              <div className="sponsors-empty-icon">
+                <Users size={36} style={{ color: 'var(--accent-primary)', margin: '0 auto' }} />
+              </div>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>
                 Henüz Destekçi Eklenmedi
               </h3>
@@ -83,7 +96,6 @@ export const SponsorsSection: React.FC = () => {
                 className="btn btn-secondary btn-sm"
               >
                 <span>İletişime Geçin</span>
-                <span>✨</span>
               </a>}
             </div>
           )

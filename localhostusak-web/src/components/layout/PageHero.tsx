@@ -1,9 +1,10 @@
 import React from 'react';
+import { MessageCircle } from 'lucide-react';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 
 interface PageHeroProps {
-  tag: string;
+  tag?: string;
   title: string;
   highlightText?: string;
   description: string;
@@ -18,19 +19,17 @@ export const PageHero: React.FC<PageHeroProps> = ({
   highlightText,
   description,
   whatsappUrl,
-  whatsappLabel = 'WhatsApp Grubuna Katıl',
+  whatsappLabel = "WhatsApp'a Katıl",
   secondaryAction,
 }) => {
   const { links } = useLinks();
   const { openWhatsAppWithRules } = useWhatsAppModal();
-  const effectiveUrl = whatsappUrl !== undefined ? whatsappUrl : links.whatsappGeneral;
+  const effectiveUrl = whatsappUrl || links.whatsappGeneral;
 
   return (
     <section className="page-hero">
       <div className="container page-hero-inner">
-        <span className="section-tag" style={{ marginBottom: '1rem', display: 'inline-block' }}>
-          {tag}
-        </span>
+        {tag && <span className="page-hero-tag">{tag}</span>}
 
         <h1 className="page-hero-title">
           {title}{' '}
@@ -46,12 +45,13 @@ export const PageHero: React.FC<PageHeroProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-lg btn-whatsapp"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem' }}
               onClick={(e) => {
                 e.preventDefault();
                 openWhatsAppWithRules(effectiveUrl, whatsappLabel);
               }}
             >
-              <span>💬</span>
+              <MessageCircle size={20} />
               <span>{whatsappLabel}</span>
             </a>
           )}

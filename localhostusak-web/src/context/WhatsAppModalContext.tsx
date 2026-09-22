@@ -73,10 +73,20 @@ export const WhatsAppModalProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
+const defaultWhatsAppModalContext: WhatsAppModalContextType = {
+  openWhatsAppWithRules: (targetUrl: string) => {
+    if (targetUrl) {
+      window.open(targetUrl, '_blank', 'noopener,noreferrer');
+    }
+  },
+  isRulesAccepted: false,
+};
+
 export const useWhatsAppModal = (): WhatsAppModalContextType => {
   const context = useContext(WhatsAppModalContext);
   if (!context) {
-    throw new Error('useWhatsAppModal must be used within a WhatsAppModalProvider');
+    console.warn('useWhatsAppModal was called outside WhatsAppModalProvider. Using safe fallback.');
+    return defaultWhatsAppModalContext;
   }
   return context;
 };

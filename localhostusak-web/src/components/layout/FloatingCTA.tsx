@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { MessageCircle } from 'lucide-react';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 
@@ -67,7 +68,9 @@ export const FloatingCTA: React.FC<FloatingCTAProps> = ({
         openWhatsAppWithRules(effectiveUrl, label);
       }}
     >
-      <span className="floating-cta-icon">💬</span>
+      <span className="floating-cta-icon" style={{ display: 'inline-flex', alignItems: 'center' }}>
+        <MessageCircle size={18} />
+      </span>
       <span>{label}</span>
     </a>
   );

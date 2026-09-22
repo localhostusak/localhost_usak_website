@@ -52,7 +52,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [isCracking, setIsCracking] = useState<boolean>(false);
   const [breachHits, setBreachHits] = useState<number>(0);
-  const [breachStatusText, setBreachStatusText] = useState<string>('⚡ Reality Fracture: 100%');
+  const [breachStatusText, setBreachStatusText] = useState<string>('Reality Fracture: 100%');
   const [isUnlockedToastVisible, setIsUnlockedToastVisible] = useState<boolean>(false);
   const [toastTheme, setToastTheme] = useState<Theme>('pixel');
   const [hasBreached, setHasBreached] = useState<boolean>(() => {
@@ -115,29 +115,35 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
   }, []);
 
-  const spawnFloatingEmojis = (x: number, y: number, emojis: string[], count: number) => {
+  const spawnFloatingParticles = (x: number, y: number, colors: string | string[], count: number) => {
+    if (typeof window === 'undefined') return;
     const screenW = window.innerWidth;
     const screenH = window.innerHeight;
+    const colorArray = Array.isArray(colors) ? colors : [colors];
 
     for (let i = 0; i < count; i++) {
       const el = document.createElement('div');
-      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      const size = Math.floor(Math.random() * 8 + 5);
+      const color = colorArray[Math.floor(Math.random() * colorArray.length)];
       el.style.position = 'fixed';
       el.style.left = `${x}px`;
       el.style.top = `${y}px`;
-      el.style.fontSize = `${Math.floor(Math.random() * 16 + 18)}px`;
+      el.style.width = `${size}px`;
+      el.style.height = `${size}px`;
+      el.style.borderRadius = theme === 'pixel' ? '0px' : '50%';
+      el.style.backgroundColor = color;
+      el.style.boxShadow = `0 0 8px ${color}`;
       el.style.pointerEvents = 'none';
       el.style.zIndex = '10000';
       el.style.userSelect = 'none';
-      el.style.transition = 'all 1.2s cubic-bezier(0.1, 0.9, 0.2, 1)';
+      el.style.transition = 'all 1.1s cubic-bezier(0.1, 0.9, 0.2, 1)';
       document.body.appendChild(el);
 
       const angle = Math.random() * Math.PI * 2;
-      const dist = Math.random() * 120 + 35;
+      const dist = Math.random() * 110 + 30;
       let targetX = x + Math.cos(angle) * dist;
-      let targetY = y + Math.sin(angle) * dist - 50;
+      let targetY = y + Math.sin(angle) * dist - 40;
 
-      // Viewport bounds clamp to prevent overflowing or causing horizontal scroll
       targetX = Math.max(16, Math.min(screenW - 36, targetX));
       targetY = Math.max(16, Math.min(screenH - 36, targetY));
 
@@ -146,7 +152,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         el.style.opacity = '0';
       });
 
-      setTimeout(() => el.remove(), 1300);
+      setTimeout(() => el.remove(), 1200);
     }
   };
 
@@ -169,20 +175,14 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       ctx.beginPath();
       ctx.moveTo(currX, currY);
 
-      for (let s = 0; s < segments; s++) {
-        const segLen = length / segments;
-        const segAngle = angle + (Math.random() - 0.5) * 0.9;
-        currX += Math.cos(segAngle) * segLen;
-        currY += Math.sin(segAngle) * segLen;
+      let currLen = 0;
+      for (let j = 0; j < segments; j++) {
+        const segLen = (length / segments) * (0.6 + Math.random() * 0.8);
+        currLen += segLen;
+        const deviation = (Math.random() - 0.5) * 0.6;
+        currX += Math.cos(angle + deviation) * segLen;
+        currY += Math.sin(angle + deviation) * segLen;
         ctx.lineTo(currX, currY);
-
-        if (s > 2 && Math.random() > 0.6) {
-          const subAngle = segAngle + (Math.random() > 0.5 ? 0.7 : -0.7);
-          const subLen = segLen * 1.5;
-          ctx.moveTo(currX, currY);
-          ctx.lineTo(currX + Math.cos(subAngle) * subLen, currY + Math.sin(subAngle) * subLen);
-          ctx.moveTo(currX, currY);
-        }
       }
       ctx.stroke();
     }
@@ -208,7 +208,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       setThemeState('modern');
       document.body.classList.remove('crt-reboot-effect');
       setBreachHits(0);
-      setBreachStatusText('⚡ Reality Fracture: 100%');
+      setBreachStatusText('Reality Fracture: 100%');
       const canvas = canvasRef.current;
       if (canvas) {
         const ctx = canvas.getContext('2d');
@@ -240,19 +240,19 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       if (nextHit === 1) {
         // Step 1: Initial Fracture
         setBreachHits(1);
-        setBreachStatusText('💥 Reality Fracture: 33%');
+        setBreachStatusText('Reality Fracture: 33%');
         applyScreenShake('shake-level-1');
         soundFX.playCrack(0);
         drawCracks(posX, posY, 4, 6, 140);
-        spawnFloatingEmojis(posX, posY, ['⚡', '✨', theme === 'modern' ? '🌙' : '☀️'], 5);
+        spawnFloatingParticles(posX, posY, ['#00E5FF', '#FF6600'], 6);
       } else if (nextHit === 2) {
         // Step 2: Critical Fracture
         setBreachHits(2);
-        setBreachStatusText('🚨 Reality Fracture: 66% [CRITICAL]');
+        setBreachStatusText('Reality Fracture: 66% [CRITICAL]');
         applyScreenShake('shake-level-2');
         soundFX.playCrack(1);
         drawCracks(posX, posY, 7, 8, 260);
-        spawnFloatingEmojis(posX, posY, ['⚡', '🔥', '✨', '🧡'], 8);
+        spawnFloatingParticles(posX, posY, ['#FF6600', '#FF8533', '#00E5FF'], 10);
       } else {
         // Step 3: Full Dimension Breach & Theme Transformation!
         setIsCracking(true);
@@ -264,7 +264,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         applyScreenShake('shake-level-2');
         soundFX.playCrack(2);
         drawCracks(posX, posY, 12, 12, 450);
-        spawnFloatingEmojis(posX, posY, ['✨', '⚡', '🧡', '☕', '☀️', '🌙'], 18);
+        spawnFloatingParticles(posX, posY, ['#FF6600', '#00E5FF', '#3A86FF', '#FF8533'], 18);
 
         const flash = document.createElement('div');
         flash.className = 'breach-flash active';
@@ -283,7 +283,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             soundFX.playReboot();
           }
           setBreachHits(0);
-          setBreachStatusText('⚡ Reality Fracture: 100%');
+          setBreachStatusText('Reality Fracture: 100%');
         }, 180);
 
         setTimeout(() => {
@@ -304,7 +304,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (breachHits > 0) {
       const timer = setTimeout(() => {
         setBreachHits(0);
-        setBreachStatusText('⚡ Reality Fracture: 100%');
+        setBreachStatusText('Reality Fracture: 100%');
         const canvas = canvasRef.current;
         if (canvas) {
           const ctx = canvas.getContext('2d');

@@ -1,4 +1,5 @@
 import React from 'react';
+import { ExternalLink, MessageCircle } from 'lucide-react';
 import { CareerItem, CareerType } from '../../types/career';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
@@ -13,26 +14,26 @@ export const CareerCard: React.FC<CareerCardProps> = ({ career }) => {
   const getTypeBadge = (type: CareerType) => {
     switch (type) {
       case 'job':
-        return { label: 'İş İlanı', icon: '💼', color: '#FF6600' };
+        return { label: 'İş İlanı', color: '#FF6600' };
       case 'internship':
-        return { label: 'Staj', icon: '🎓', color: '#00E5FF' };
+        return { label: 'Staj', color: '#00E5FF' };
       case 'freelance':
-        return { label: 'Freelance', icon: '🌍', color: '#10B981' };
+        return { label: 'Freelance', color: '#10B981' };
       case 'mentorship':
-        return { label: 'Mentorluk', icon: '🤝', color: '#8B5CF6' };
+        return { label: 'Mentorluk', color: '#8B5CF6' };
       default:
-        return { label: 'İlan', icon: '📌', color: '#FF6600' };
+        return { label: 'İlan', color: '#FF6600' };
     }
   };
 
   const getWorkModeLabel = (mode: string) => {
     switch (mode) {
       case 'remote':
-        return '🌐 Remote';
+        return 'Remote';
       case 'hybrid':
-        return '🏢 Hibrit';
+        return 'Hibrit';
       case 'onsite':
-        return '📍 Ofis / Uşak';
+        return 'Ofis / Uşak';
       default:
         return mode;
     }
@@ -71,7 +72,7 @@ export const CareerCard: React.FC<CareerCardProps> = ({ career }) => {
               fontSize: '0.75rem',
             }}
           >
-            {badgeInfo.icon} {badgeInfo.label}
+            {badgeInfo.label}
           </span>
         </div>
 
@@ -116,9 +117,10 @@ export const CareerCard: React.FC<CareerCardProps> = ({ career }) => {
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-primary btn-sm"
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem' }}
           >
             <span>Başvur</span>
-            <span>↗</span>
+            <ExternalLink size={14} />
           </a>
         ) : links.whatsappCareers ? (
           <a
@@ -126,13 +128,14 @@ export const CareerCard: React.FC<CareerCardProps> = ({ career }) => {
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-primary btn-sm"
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem' }}
             onClick={(e) => {
               e.preventDefault();
               openWhatsAppWithRules(links.whatsappCareers, 'Kariyer & İlanlar');
             }}
           >
             <span>Detay / İletişim</span>
-            <span>💬</span>
+            <MessageCircle size={14} />
           </a>
         ) : null}
 

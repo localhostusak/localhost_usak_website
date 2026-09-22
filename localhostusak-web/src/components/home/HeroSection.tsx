@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { Calendar, MapPin } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
@@ -177,7 +178,9 @@ export const HeroSection: React.FC = () => {
           {/* Location Pill */}
           <div style={{ marginBottom: '1.5rem' }}>
             <div className="location-pill">
-              <span>📍 U Ş A K</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                <MapPin size={14} style={{ color: 'var(--accent-primary)' }} /> U Ş A K
+              </span>
               <span style={{ opacity: 0.4 }}>|</span>
               <span style={{ fontSize: '0.8rem', color: 'var(--accent-primary)' }}>
                 {hero?.cityCoordinates || '38.6823° N, 29.4082° E'}
@@ -194,8 +197,8 @@ export const HeroSection: React.FC = () => {
               letterSpacing: '-0.03em',
             }}
           >
-            {hero?.title || "Uşak'ın Teknoloji ve"} <br />
-            <span className="gradient-text">{hero?.titleHighlight || 'Tasarım Topluluğu'}</span>
+            {hero?.title || "Uşak'ta Teknoloji"} <br />
+            <span className="gradient-text">{hero?.titleHighlight || 'Etrafında Buluş'}</span>
           </h1>
 
           {/* Terminal Prompt Subtitle */}
@@ -222,7 +225,7 @@ export const HeroSection: React.FC = () => {
             }}
           >
             {hero?.description ||
-              'Kahveni al, laptopunu getir, aramıza katıl. Deneyimli olmak şart değil; merakın ve öğrenme isteğin varsa masada sana da yer var.'}
+              "Kahveni al, laptopunu getir, masada yerini al. Uşak'ın yerel teknoloji ekosistemini birlikte büyütüyoruz."}
           </p>
 
           {/* Primary Hero Actions */}
@@ -253,9 +256,9 @@ export const HeroSection: React.FC = () => {
               <span>WhatsApp Topluluğuna Katıl</span>
             </a>}
 
-            <Link to="/etkinlikler" className="btn btn-lg btn-primary" id="hero-btn-events">
+            <Link to="/etkinlikler" className="btn btn-lg btn-primary" id="hero-btn-events" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem' }}>
               <span>Sıradaki Buluşma</span>
-              <span>📅</span>
+              <Calendar size={18} />
             </Link>
 
             {links.instagram && <a
@@ -264,8 +267,14 @@ export const HeroSection: React.FC = () => {
               rel="noopener noreferrer"
               className="btn btn-lg btn-secondary"
               id="hero-btn-instagram"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem' }}
             >
-              <span>📷 @localhostusak</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#E1306C' }}>
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+              </svg>
+              <span>@localhostusak</span>
             </a>}
           </div>
 
@@ -292,7 +301,7 @@ export const HeroSection: React.FC = () => {
                     textTransform: 'uppercase',
                   }}
                 >
-                  // TOPLULUK MOTOSU
+                  TOPLULUK MOTOSU
                 </div>
                 <div style={{ color: 'var(--text-primary)', fontWeight: 600 }}>
                   "Resmiyetten uzak, samimi bir masa. Good Code, Better People."

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { Coffee } from 'lucide-react';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { LinksProvider } from './context/LinksContext';
 import { SiteSettingsProvider } from './context/SiteSettingsContext';
@@ -9,7 +10,6 @@ import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { FloatingCTA } from './components/layout/FloatingCTA';
 
-import { EnglishPage } from './pages/EnglishPage';
 import { HomePage } from './pages/HomePage';
 import { EventsPage } from './pages/EventsPage';
 import { CareersPage } from './pages/CareersPage';
@@ -52,9 +52,9 @@ const LevelUnlockedToast: React.FC = () => {
     >
       {toastTheme === 'pixel' ? (
         <>
-          <span className="toast-badge-icon">☕</span>
+          <span className="toast-badge-icon"><Coffee size={18} /></span>
           <div className="toast-content">
-            <strong className="toast-title">LEVEL UNLOCKED: COZY RETRO MODE! 🕹️</strong>
+            <strong className="toast-title">LEVEL UNLOCKED: COZY RETRO MODE</strong>
             <div className="toast-subtitle">
               Uşak kafe masasına hoş geldin!
             </div>
@@ -65,7 +65,7 @@ const LevelUnlockedToast: React.FC = () => {
           <span className="toast-badge-icon modern-glyph">&gt;_</span>
           <div className="toast-content">
             <div className="toast-status-tag">// SYSTEM RESTORED: HUD ONLINE</div>
-            <strong className="toast-title">CYBER HUD MODE ACTIVATED ⚡</strong>
+            <strong className="toast-title">CYBER HUD MODE ACTIVATED</strong>
             <div className="toast-subtitle">
               Terminal oturumu başlatıldı. Uşak tech stack devrede.
             </div>
@@ -88,7 +88,6 @@ const AppContent: React.FC = () => {
         <Route path="/etkinlikler" element={<EventsPage />} />
         <Route path="/kariyer" element={<CareersPage />} />
         <Route path="/projeler" element={<ProjectsPage />} />
-        <Route path="/en" element={<EnglishPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

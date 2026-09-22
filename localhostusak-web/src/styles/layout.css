@@ -208,7 +208,13 @@
 }
 
 .mobile-menu-toggle {
-  display: none;
+  display: none !important;
+}
+
+@media (min-width: 901px) {
+  .mobile-drawer {
+    display: none !important;
+  }
 }
 
 .hero-section {
@@ -380,10 +386,12 @@
     padding: 2rem 1.5rem;
   }
   .nav-links {
-    display: none;
+    display: none !important;
   }
   .mobile-menu-toggle {
     display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
   }
   .footer-grid {
     grid-template-columns: 1fr;

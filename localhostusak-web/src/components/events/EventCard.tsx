@@ -1,4 +1,5 @@
 import React from 'react';
+import { Calendar, MapPin, Users, Download, MessageCircle } from 'lucide-react';
 import { EventItem, EventType } from '../../types/event';
 import { downloadICS } from '../../utils/calendarExport';
 import { useLinks } from '../../context/LinksContext';
@@ -47,7 +48,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, eventType }) => {
               border: `1px solid ${eventType ? eventType.colorModern : 'var(--accent-primary)'}`,
             }}
           >
-            {eventType?.icon || '📅'} {eventType?.label || event.typeId}
+            {eventType?.label || event.typeId}
           </span>
 
           <span className={`badge ${isUpcoming ? 'badge-live' : 'badge-orange'}`}>
@@ -72,12 +73,12 @@ export const EventCard: React.FC<EventCardProps> = ({ event, eventType }) => {
 
         <div className="event-card-meta">
           <div className="event-card-meta-item">
-            <span>📅</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center' }}><Calendar size={14} /></span>
             <span>{formattedDate}</span>
           </div>
 
           <div className="event-card-meta-item">
-            <span>📍</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center' }}><MapPin size={14} /></span>
             <span>{event.location}</span>
             {event.mapUrl && (
               <a
@@ -97,7 +98,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, eventType }) => {
           </div>
 
           <div className="event-card-meta-item">
-            <span>👥</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center' }}><Users size={14} /></span>
             <span>
               {event.attendees} Katılımcı {event.capacity ? `/ ${event.capacity} Kontenjan` : ''}
             </span>
@@ -123,27 +124,29 @@ export const EventCard: React.FC<EventCardProps> = ({ event, eventType }) => {
               className="btn btn-secondary btn-sm"
               onClick={handleCalendar}
               title="Takvime Ekle (.ICS)"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
             >
               <span>Takvime Ekle</span>
-              <span>📥</span>
+              <Download size={14} />
             </button>
             {(event.whatsappLink || links.whatsappCoworking) && <a
               href={event.whatsappLink || links.whatsappCoworking}
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-primary btn-sm"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
               onClick={(e) => {
                 e.preventDefault();
                 openWhatsAppWithRules(event.whatsappLink || links.whatsappCoworking, 'Coworking Masası');
               }}
             >
               <span>Masada Yer Ayır</span>
-              <span>💬</span>
+              <MessageCircle size={14} />
             </a>}
           </>
         ) : (
           <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-            {isCancelled ? 'Etkinlik iptal edildi' : '✓ Etkinlik tamamlandı'}
+            {isCancelled ? 'Etkinlik iptal edildi' : 'Etkinlik tamamlandı'}
           </span>
         )}
       </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { MessageCircle } from 'lucide-react';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 
@@ -9,7 +10,7 @@ export const CareerCTA: React.FC = () => {
   return (
     <div className="card circuit-border career-cta-card">
       <span className="section-tag" style={{ marginBottom: '1rem', display: 'inline-block' }}>
-        // ŞİRKETLER & EKİPLER İÇİN
+        ŞİRKETLER & EKİPLER İÇİN
       </span>
       <h3 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 900, marginBottom: '1rem' }}>
         Ekibine Uşak'tan Yetenek mi Arıyorsun?
@@ -32,12 +33,14 @@ export const CareerCTA: React.FC = () => {
           target="_blank"
           rel="noopener noreferrer"
           className="btn btn-whatsapp btn-lg"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem' }}
           onClick={(e) => {
             e.preventDefault();
             openWhatsAppWithRules(links.whatsappCareers, 'Kariyer & İlanlar Grubu');
           }}
         >
-          <span>💬 WhatsApp Kariyer Grubuna Katıl</span>
+          <MessageCircle size={20} />
+          <span>WhatsApp Kariyer Grubuna Katıl</span>
         </a>
       </div>
     </div>

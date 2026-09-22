@@ -105,7 +105,7 @@ export async function fetchEventTypes(): Promise<EventType[]> {
   return docs.map((doc: any) => ({
     id: doc.slug || String(doc.id),
     label: doc.label,
-    icon: doc.icon || '☕',
+    icon: doc.icon || 'coffee',
     colorModern: doc.colorModern || '#FF6600',
     colorPixel: doc.colorPixel || '#EE6C19',
     isDefault: doc.isDefault,

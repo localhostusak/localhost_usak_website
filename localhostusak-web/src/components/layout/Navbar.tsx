@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useGeneralSettings } from '../../context/GeneralSettingsContext';
 
@@ -18,10 +19,20 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu on route change
+  // Close mobile menu on route change or desktop resize
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 900) {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleThemeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -71,7 +82,12 @@ export const Navbar: React.FC = () => {
       <div className="container nav-container">
         {/* Brand Logo */}
         <Link to="/" className="brand-logo" id="nav-brand-logo" aria-label="localhostusak Ana Sayfa">
-          <span>&gt;_</span>
+          <img
+            src="/logo.png"
+            alt="localhost[uşak]"
+            className="brand-logo-img"
+            style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'contain' }}
+          />
           <span>
             localhost<span className="brand-highlight">[uşak]</span>
           </span>
@@ -82,30 +98,30 @@ export const Navbar: React.FC = () => {
           <Link
             to="/"
             id="nav-link-home"
-            style={{ color: isActive('/') ? 'var(--accent-primary)' : undefined, fontWeight: isActive('/') ? 700 : 400 }}
+            style={{ color: isActive('/') ? 'var(--accent-primary)' : undefined, fontWeight: isActive('/') ? 700 : 500 }}
           >
-            // ana sayfa
+            Ana Sayfa
           </Link>
           <Link
             to="/etkinlikler"
             id="nav-link-events"
-            style={{ color: isActive('/etkinlikler') ? 'var(--accent-primary)' : undefined, fontWeight: isActive('/etkinlikler') ? 700 : 400 }}
+            style={{ color: isActive('/etkinlikler') ? 'var(--accent-primary)' : undefined, fontWeight: isActive('/etkinlikler') ? 700 : 500 }}
           >
-            // etkinlikler
+            Etkinlikler
           </Link>
           <Link
             to="/kariyer"
             id="nav-link-careers"
-            style={{ color: isActive('/kariyer') ? 'var(--accent-primary)' : undefined, fontWeight: isActive('/kariyer') ? 700 : 400 }}
+            style={{ color: isActive('/kariyer') ? 'var(--accent-primary)' : undefined, fontWeight: isActive('/kariyer') ? 700 : 500 }}
           >
-            // kariyer
+            Kariyer
           </Link>
           <Link
             to="/projeler"
             id="nav-link-projects"
-            style={{ color: isActive('/projeler') ? 'var(--accent-primary)' : undefined, fontWeight: isActive('/projeler') ? 700 : 400 }}
+            style={{ color: isActive('/projeler') ? 'var(--accent-primary)' : undefined, fontWeight: isActive('/projeler') ? 700 : 500 }}
           >
-            // projeler
+            Projeler
           </Link>
         </nav>
 
@@ -214,8 +230,9 @@ export const Navbar: React.FC = () => {
             className="btn btn-sm btn-secondary mobile-menu-toggle"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Menüyü Aç/Kapat"
+            style={{ padding: '0.4rem' }}
           >
-            {mobileMenuOpen ? '✕' : '☰'}
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
@@ -223,6 +240,7 @@ export const Navbar: React.FC = () => {
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div
+          className="mobile-drawer"
           style={{
             background: 'var(--bg-card)',
             padding: '1.25rem 1.5rem',
@@ -244,9 +262,10 @@ export const Navbar: React.FC = () => {
               alignItems: 'center',
               textDecoration: 'none',
               fontSize: '1rem',
+              fontWeight: isActive('/') ? 700 : 400,
             }}
           >
-            // ana sayfa
+            Ana Sayfa
           </Link>
           <Link
             to="/etkinlikler"
@@ -258,9 +277,10 @@ export const Navbar: React.FC = () => {
               alignItems: 'center',
               textDecoration: 'none',
               fontSize: '1rem',
+              fontWeight: isActive('/etkinlikler') ? 700 : 400,
             }}
           >
-            // etkinlikler
+            Etkinlikler
           </Link>
           <Link
             to="/kariyer"
@@ -272,9 +292,10 @@ export const Navbar: React.FC = () => {
               alignItems: 'center',
               textDecoration: 'none',
               fontSize: '1rem',
+              fontWeight: isActive('/kariyer') ? 700 : 400,
             }}
           >
-            // kariyer
+            Kariyer
           </Link>
           <Link
             to="/projeler"
@@ -286,23 +307,10 @@ export const Navbar: React.FC = () => {
               alignItems: 'center',
               textDecoration: 'none',
               fontSize: '1rem',
+              fontWeight: isActive('/projeler') ? 700 : 400,
             }}
           >
-            // projeler
-          </Link>
-          <Link
-            to="/admin"
-            onClick={() => setMobileMenuOpen(false)}
-            style={{
-              color: 'var(--text-muted)',
-              fontSize: '0.85rem',
-              minHeight: '44px',
-              display: 'flex',
-              alignItems: 'center',
-              textDecoration: 'none',
-            }}
-          >
-            // [admin paneli]
+            Projeler
           </Link>
         </div>
       )}

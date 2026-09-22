@@ -1,4 +1,5 @@
 import React from 'react';
+import { Check } from 'lucide-react';
 
 export const Manifesto: React.FC = () => {
   return (
@@ -71,10 +72,12 @@ export const Manifesto: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Text & Vision */}
+          {/* Right Text Content */}
           <div>
-            <span className="section-tag">// MİSYON & VİZYON</span>
-            <h2 className="section-title">Şehirdeki Yalnız Çalışmayı Kırıyoruz</h2>
+            <span className="section-tag" style={{ marginBottom: '1rem', display: 'inline-block' }}>
+              BİZ KİMİZ?
+            </span>
+            <h2 className="section-title" style={{ textAlign: 'left', marginBottom: '1.5rem' }}>Şehirdeki Yalnız Çalışmayı Kırıyoruz</h2>
             <div className="pixel-bubble" style={{ display: 'none' }}>
               <strong>Kahveni al, masaya otur!</strong> Resmiyetten uzak, sıcak bir topluluk masası.
             </div>
@@ -98,10 +101,22 @@ export const Manifesto: React.FC = () => {
             </p>
 
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-              <div className="badge badge-orange">✓ Sıfır Hiyerarşi</div>
-              <div className="badge badge-blue">✓ Tamamen Ücretsiz</div>
-              <div className="badge badge-orange">✓ Açık Kaynak Ruhu</div>
-              <div className="badge badge-blue">✓ Yerel Dayanışma</div>
+              <div className="badge badge-orange" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                <Check size={14} />
+                <span>Sıfır Hiyerarşi</span>
+              </div>
+              <div className="badge badge-blue" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                <Check size={14} />
+                <span>Tamamen Ücretsiz</span>
+              </div>
+              <div className="badge badge-orange" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                <Check size={14} />
+                <span>Açık Kaynak Ruhu</span>
+              </div>
+              <div className="badge badge-blue" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                <Check size={14} />
+                <span>Yerel Dayanışma</span>
+              </div>
             </div>
           </div>
         </div>

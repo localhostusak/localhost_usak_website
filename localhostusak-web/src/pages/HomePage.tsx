@@ -31,7 +31,6 @@ export const HomePage: React.FC = () => {
         <h2>Uşak'ta yazılım, mühendislik ve birlikte üretim</h2>
         <p>Uşak teknoloji topluluğu localhostusak; yazılımcıları, mühendisleri, tasarımcıları ve öğrencileri aynı masada buluşturur. Deneyimini paylaşmak, yeni beceriler öğrenmek veya bir projeye ekip arkadaşı bulmak için aramıza katılabilirsin.</p>
         <p><Link to="/etkinlikler">Uşak coworking ve teknoloji buluşmalarını</Link> takip et, <Link to="/projeler">açık kaynak yazılım projelerini</Link> keşfet veya <Link to="/kariyer">iş ilanları, staj ve kariyer paylaşımlarına</Link> göz at. Yeni içerikler topluluk tarafından eklendikçe bu sayfalarda görünür.</p>
-        <p lang="en"><Link to="/en">Meet the Usak technology and software developer community →</Link></p>
       </section>
       {/* 3. Değerlerimiz */}
       <ValuesBento />

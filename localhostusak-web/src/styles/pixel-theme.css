@@ -181,15 +181,6 @@
   position: relative;
 }
 
-[data-theme="pixel"] .stat-card::before {
-  content: '★';
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  font-size: 0.9rem;
-  color: var(--accent-secondary);
-}
-
 [data-theme="pixel"] .stat-number {
   color: var(--pixel-orange);
   font-family: var(--font-pixel) !important;

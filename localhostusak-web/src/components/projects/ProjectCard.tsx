@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ExternalLink, Heart, Users, MessageCircle } from 'lucide-react';
 import { ProjectItem, ProjectType } from '../../types/project';
 import { soundFX } from '../../utils/audioFx';
 import { useLinks } from '../../context/LinksContext';
@@ -18,13 +19,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onLike }) => 
   const getTypeBadge = (type: ProjectType) => {
     switch (type) {
       case 'showcase':
-        return { label: 'Vitrin', icon: '🚀', color: '#FF6600' };
+        return { label: 'Vitrin', color: '#FF6600' };
       case 'seeking_team':
-        return { label: 'Ekip Arıyor', icon: '🤝', color: '#00E5FF' };
+        return { label: 'Ekip Arıyor', color: '#00E5FF' };
       case 'opensource':
-        return { label: 'Açık Kaynak', icon: '🐙', color: '#10B981' };
+        return { label: 'Açık Kaynak', color: '#10B981' };
       default:
-        return { label: 'Proje', icon: '📦', color: '#FF6600' };
+        return { label: 'Proje', color: '#FF6600' };
     }
   };
 
@@ -55,7 +56,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onLike }) => 
               fontSize: '0.75rem',
             }}
           >
-            {badgeInfo.icon} {badgeInfo.label}
+            {badgeInfo.label}
           </span>
 
           <button
@@ -63,8 +64,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onLike }) => 
             className={`project-like-btn ${hasLiked ? 'liked' : ''}`}
             onClick={handleLike}
             title="Projeyi Beğen"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
           >
-            <span>{hasLiked ? '❤️' : '🤍'}</span>
+            <Heart size={14} style={{ fill: hasLiked ? '#FF453A' : 'none', color: hasLiked ? '#FF453A' : 'currentColor' }} />
             <span>{likes}</span>
           </button>
         </div>
@@ -105,9 +107,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onLike }) => 
                 fontWeight: 700,
                 color: 'var(--accent-secondary)',
                 marginBottom: '0.35rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.35rem',
               }}
             >
-              🤝 ARANAN EKİP ROLLERİ:
+              <Users size={14} />
+              <span>ARANAN EKİP ROLLERİ:</span>
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
               {project.rolesNeeded.map((role, idx) => (
@@ -156,10 +162,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onLike }) => 
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-primary btn-sm"
-            style={{ flex: 1 }}
+            style={{ flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem' }}
           >
             <span>Canlı Demo</span>
-            <span>↗</span>
+            <ExternalLink size={14} />
           </a>
         )}
 
@@ -169,10 +175,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onLike }) => 
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-secondary btn-sm"
-            style={{ flex: 1 }}
+            style={{ flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem' }}
           >
             <span>GitHub</span>
-            <span>🐙</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
+              <path d="M9 18c-4.51 2-5-2-7-2"/>
+            </svg>
           </a>
         )}
 
@@ -182,14 +191,14 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onLike }) => 
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-secondary btn-sm"
-            style={{ flex: 1 }}
+            style={{ flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem' }}
             onClick={(e) => {
               e.preventDefault();
               openWhatsAppWithRules(links.whatsappProjects, 'Projeler Grubu');
             }}
           >
             <span>Ekiple İletişime Geç</span>
-            <span>💬</span>
+            <MessageCircle size={14} />
           </a>
         )}
       </div>

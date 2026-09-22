@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { AlertTriangle, Loader2, FolderGit2 } from 'lucide-react';
 import { PageHero } from '../components/layout/PageHero';
 import { FilterBar, FilterOption } from '../components/shared/FilterBar';
 import { ProjectSpotlight } from '../components/projects/ProjectSpotlight';
@@ -42,10 +43,10 @@ export const ProjectsPage: React.FC = () => {
   };
 
   const primaryOptions: FilterOption[] = [
-    { id: 'all', label: 'Tüm Projeler', icon: '⚡' },
-    { id: 'showcase', label: 'Vitrin', icon: '🚀' },
-    { id: 'seeking_team', label: 'Ekip Arıyor', icon: '🤝' },
-    { id: 'opensource', label: 'Açık Kaynak', icon: '🐙' },
+    { id: 'all', label: 'Tüm Projeler' },
+    { id: 'showcase', label: 'Vitrin' },
+    { id: 'seeking_team', label: 'Ekip Arıyor' },
+    { id: 'opensource', label: 'Açık Kaynak' },
   ];
 
   const secondaryOptions: FilterOption[] = [
@@ -81,7 +82,6 @@ export const ProjectsPage: React.FC = () => {
   return (
     <main>
       <PageHero
-        tag={settings?.hero?.tag || "// PROJE VİTRİNİ & AÇIK KAYNAK"}
         title={settings?.hero?.title || "Uşak Yazılım Projeleri,"}
         highlightText={settings?.hero?.highlightText || "Birlikte Üretiyoruz"}
         description={settings?.hero?.description || "Topluluk üyelerimizin geliştirdiği açık kaynak projeler, erken aşama girişimler ve birlikte üretmek için ekip arkadaşı arayanlar."}
@@ -117,12 +117,22 @@ export const ProjectsPage: React.FC = () => {
         </div>
 
         {isLoading ? (
-          <EmptyState icon="⏳" title="Projeler Yükleniyor" description="Güncel projeler getiriliyor." />
+          <EmptyState
+            icon={<Loader2 size={40} style={{ animation: 'spin 1.5s linear infinite', color: 'var(--text-muted)' }} />}
+            title="Projeler Yükleniyor"
+            description="Güncel projeler getiriliyor."
+          />
         ) : error ? (
-          <EmptyState icon="⚠️" title="Projelere Ulaşılamadı" description="İçerik şu anda yüklenemiyor. Biraz sonra tekrar deneyebilirsin." actionText="Tekrar Dene" onAction={retry} />
+          <EmptyState
+            icon={<AlertTriangle size={40} style={{ color: '#FF6600' }} />}
+            title="Projelere Ulaşılamadı"
+            description="İçerik şu anda yüklenemiyor. Biraz sonra tekrar deneyebilirsin."
+            actionText="Tekrar Dene"
+            onAction={retry}
+          />
         ) : filteredProjects.length === 0 ? (
           <EmptyState
-            icon="🚀"
+            icon={<FolderGit2 size={40} style={{ color: 'var(--text-muted)' }} />}
             title={projects.length === 0 ? 'Henüz Proje Yok' : 'Proje Bulunamadı'}
             description={projects.length === 0 ? 'Topluluk projeleri eklendiğinde burada görünecek.' : 'Arama kriterlerine uygun proje bulunmuyor. Filtreleri temizleyerek tüm projeleri listeleyebilirsin.'}
             actionText={projects.length === 0 ? undefined : 'Filtreleri Sıfırla'}
