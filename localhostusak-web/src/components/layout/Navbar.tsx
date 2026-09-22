@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, MessageSquare } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useGeneralSettings } from '../../context/GeneralSettingsContext';
+import { useLinks } from '../../context/LinksContext';
+import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 
 export const Navbar: React.FC = () => {
   const { theme, isCracking, toggleTheme, breachHits, hasBreached } = useTheme();
   const { settings } = useGeneralSettings();
+  const { links } = useLinks();
+  const { openWhatsAppWithRules } = useWhatsAppModal();
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -80,60 +84,75 @@ export const Navbar: React.FC = () => {
         </div>
       )}
       <div className="container nav-container">
-        {/* Brand Logo */}
-        <Link to="/" className="brand-logo" id="nav-brand-logo" aria-label="localhostusak Ana Sayfa">
-          <img
-            src="/logo.png"
-            alt="localhost[uşak]"
-            className="brand-logo-img"
-            style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'contain' }}
-          />
-          <span>
-            localhost<span className="brand-highlight">[uşak]</span>
-          </span>
-        </Link>
+        {/* Brand Logo Column */}
+        <div className="nav-brand-wrapper">
+          <Link to="/" className="brand-logo" id="nav-brand-logo" aria-label="localhostusak Ana Sayfa">
+            <img
+              src="/logo.png"
+              alt="localhost[uşak]"
+              className="brand-logo-img"
+              width={32}
+              height={32}
+            />
+            <span className="brand-logo-text">
+              localhost<span className="brand-highlight">[uşak]</span>
+            </span>
+          </Link>
+        </div>
 
-        {/* Navigation Links */}
+        {/* Navigation Links Column (Centered Pill) */}
         <nav className="nav-links" aria-label="Ana Menü">
           <Link
             to="/"
             id="nav-link-home"
-            style={{ color: isActive('/') ? 'var(--accent-primary)' : undefined, fontWeight: isActive('/') ? 700 : 500 }}
+            className={`nav-link ${isActive('/') ? 'active' : ''}`}
           >
             Ana Sayfa
           </Link>
           <Link
             to="/etkinlikler"
             id="nav-link-events"
-            style={{ color: isActive('/etkinlikler') ? 'var(--accent-primary)' : undefined, fontWeight: isActive('/etkinlikler') ? 700 : 500 }}
+            className={`nav-link ${isActive('/etkinlikler') ? 'active' : ''}`}
           >
             Etkinlikler
           </Link>
           <Link
             to="/kariyer"
             id="nav-link-careers"
-            style={{ color: isActive('/kariyer') ? 'var(--accent-primary)' : undefined, fontWeight: isActive('/kariyer') ? 700 : 500 }}
+            className={`nav-link ${isActive('/kariyer') ? 'active' : ''}`}
           >
             Kariyer
           </Link>
           <Link
             to="/projeler"
             id="nav-link-projects"
-            style={{ color: isActive('/projeler') ? 'var(--accent-primary)' : undefined, fontWeight: isActive('/projeler') ? 700 : 500 }}
+            className={`nav-link ${isActive('/projeler') ? 'active' : ''}`}
           >
             Projeler
           </Link>
           <Link
             to="/sponsorlar"
             id="nav-link-sponsors"
-            style={{ color: isActive('/sponsorlar') ? 'var(--accent-primary)' : undefined, fontWeight: isActive('/sponsorlar') ? 700 : 500 }}
+            className={`nav-link ${isActive('/sponsorlar') ? 'active' : ''}`}
           >
             Sponsorlar
           </Link>
         </nav>
 
-        {/* Action Buttons: Classic Theme Toggle Button with Crescent Moon / Sun & Eye-Catching Crack */}
+        {/* Action Buttons Column */}
         <div className="nav-actions">
+          {/* Topluluğa Katıl WhatsApp CTA */}
+          <button
+            type="button"
+            className="nav-cta-btn"
+            id="nav-btn-join"
+            onClick={() => openWhatsAppWithRules(links.whatsappGeneral, 'Navbar')}
+            aria-label="WhatsApp Topluluğuna Katıl"
+          >
+            <MessageSquare size={15} />
+            <span>Topluluğa Katıl</span>
+          </button>
+
           <button
             className={`theme-toggle-btn ${isCracking ? 'cracking' : ''} ${!hasBreached && breachHits === 1 ? 'crack-stage-1' : ''} ${!hasBreached && breachHits === 2 ? 'crack-stage-2' : ''}`}
             id="btn-theme-toggle"
@@ -336,6 +355,30 @@ export const Navbar: React.FC = () => {
           >
             Sponsorlar
           </Link>
+
+          {/* Mobile WhatsApp CTA Button */}
+          <button
+            type="button"
+            className="btn btn-primary btn-full"
+            onClick={() => {
+              setMobileMenuOpen(false);
+              openWhatsAppWithRules(links.whatsappGeneral, 'Mobil Menü');
+            }}
+            style={{
+              marginTop: '0.75rem',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem',
+              padding: '0.75rem 1rem',
+              borderRadius: 'var(--radius-full)',
+              fontWeight: 600,
+              fontSize: '0.95rem',
+            }}
+          >
+            <MessageSquare size={16} />
+            <span>Topluluğa Katıl</span>
+          </button>
         </div>
       )}
     </header>
