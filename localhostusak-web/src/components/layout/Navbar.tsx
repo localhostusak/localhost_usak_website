@@ -55,13 +55,13 @@ export const Navbar: React.FC = () => {
         <div
           className="announcement-banner"
           style={{
-            background: 'linear-gradient(90deg, #FF6600, #FF8533)',
-            color: '#080A0D',
-            padding: '0.4rem 1rem',
+            background: 'linear-gradient(90deg, #E35D14, #E68A3C)',
+            color: '#FFFDFC',
+            padding: '0.45rem 1rem',
             textAlign: 'center',
             fontSize: '0.825rem',
-            fontWeight: 700,
-            fontFamily: 'var(--font-mono)',
+            fontWeight: 600,
+            fontFamily: 'var(--font-body)',
             letterSpacing: '0.02em',
             borderBottom: '1px solid rgba(0,0,0,0.1)',
           }}
@@ -69,7 +69,7 @@ export const Navbar: React.FC = () => {
           {settings?.header?.announcementUrl ? (
             <Link
               to={settings.header.announcementUrl}
-              style={{ color: '#080A0D', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+              style={{ color: '#FFFDFC', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
             >
               <span>{settings.header.announcementText}</span>
               <span style={{ fontSize: '1rem', lineHeight: 1 }}>→</span>
@@ -122,6 +122,13 @@ export const Navbar: React.FC = () => {
             style={{ color: isActive('/projeler') ? 'var(--accent-primary)' : undefined, fontWeight: isActive('/projeler') ? 700 : 500 }}
           >
             Projeler
+          </Link>
+          <Link
+            to="/sponsorlar"
+            id="nav-link-sponsors"
+            style={{ color: isActive('/sponsorlar') ? 'var(--accent-primary)' : undefined, fontWeight: isActive('/sponsorlar') ? 700 : 500 }}
+          >
+            Sponsorlar
           </Link>
         </nav>
 
@@ -248,8 +255,10 @@ export const Navbar: React.FC = () => {
             display: 'flex',
             flexDirection: 'column',
             gap: '0.5rem',
-            fontFamily: 'var(--font-mono)',
-            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.25)',
+            fontFamily: 'var(--font-body)',
+            boxShadow: 'var(--shadow-card)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
           }}
         >
           <Link
@@ -261,8 +270,8 @@ export const Navbar: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               textDecoration: 'none',
-              fontSize: '1rem',
-              fontWeight: isActive('/') ? 700 : 400,
+              fontSize: '1.05rem',
+              fontWeight: isActive('/') ? 700 : 500,
             }}
           >
             Ana Sayfa
@@ -276,8 +285,8 @@ export const Navbar: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               textDecoration: 'none',
-              fontSize: '1rem',
-              fontWeight: isActive('/etkinlikler') ? 700 : 400,
+              fontSize: '1.05rem',
+              fontWeight: isActive('/etkinlikler') ? 700 : 500,
             }}
           >
             Etkinlikler
@@ -291,8 +300,8 @@ export const Navbar: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               textDecoration: 'none',
-              fontSize: '1rem',
-              fontWeight: isActive('/kariyer') ? 700 : 400,
+              fontSize: '1.05rem',
+              fontWeight: isActive('/kariyer') ? 700 : 500,
             }}
           >
             Kariyer
@@ -306,11 +315,26 @@ export const Navbar: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               textDecoration: 'none',
-              fontSize: '1rem',
-              fontWeight: isActive('/projeler') ? 700 : 400,
+              fontSize: '1.05rem',
+              fontWeight: isActive('/projeler') ? 700 : 500,
             }}
           >
             Projeler
+          </Link>
+          <Link
+            to="/sponsorlar"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              color: isActive('/sponsorlar') ? 'var(--accent-primary)' : 'var(--text-secondary)',
+              minHeight: '44px',
+              display: 'flex',
+              alignItems: 'center',
+              textDecoration: 'none',
+              fontSize: '1.05rem',
+              fontWeight: isActive('/sponsorlar') ? 700 : 500,
+            }}
+          >
+            Sponsorlar
           </Link>
         </div>
       )}

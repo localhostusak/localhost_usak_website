@@ -169,10 +169,9 @@ export const HeroSection: React.FC = () => {
         <canvas id="hero-canvas" ref={canvasRef} />
       </div>
 
-      {/* Glowing Ambient Background Orbs (Modern Mode) */}
+      {/* Glowing Ambient Background Orbs */}
       <div className="hero-glow-orb" aria-hidden="true" />
       <div className="hero-glow-orb-secondary" aria-hidden="true" />
-      <div className="scanline-effect" aria-hidden="true" />
 
       <div className="container hero-content">
         <div style={{ maxWidth: '860px', margin: '0 auto', textAlign: 'center' }}>
@@ -202,17 +201,23 @@ export const HeroSection: React.FC = () => {
             <span className="gradient-text">{hero?.titleHighlight || 'Etrafında Buluş'}</span>
           </h1>
 
-          {/* Terminal Prompt Subtitle */}
-          <div
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: 'clamp(0.95rem, 2vw, 1.2rem)',
-              color: 'var(--text-code)',
-              marginBottom: '1.5rem',
-            }}
-          >
-            <span>&gt;_ {hero?.subtitle || 'connect • build • collaborate • grow'}</span>
-            <span className="terminal-cursor" />
+          {/* Section Tag Subtitle */}
+          <div style={{ marginBottom: '1.25rem' }}>
+            <span
+              className="badge"
+              style={{
+                background: 'rgba(227, 93, 20, 0.1)',
+                color: 'var(--accent-primary)',
+                border: '1px solid rgba(227, 93, 20, 0.25)',
+                fontWeight: 700,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                fontSize: '0.8rem',
+                padding: '0.4rem 1rem',
+              }}
+            >
+              {hero?.subtitle || 'CONNECT • BUILD • COLLABORATE • GROW'}
+            </span>
           </div>
 
           {/* Hero Description Quote */}
@@ -282,33 +287,50 @@ export const HeroSection: React.FC = () => {
           {/* Reference Community Motto Pill Preview */}
           <div>
             <div
-              className="card card-glass circuit-border"
+              className="card"
               style={{
-                padding: '1.25rem 1.75rem',
+                padding: '1.15rem 1.75rem',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '1.5rem',
-                maxWidth: '600px',
+                gap: '1rem',
+                maxWidth: '620px',
+                border: '1px solid var(--border-medium)',
               }}
             >
-              <span className="circuit-node" />
+              <div
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: 'var(--radius-sm)',
+                  background: 'rgba(227, 93, 20, 0.12)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'var(--accent-primary)',
+                  flexShrink: 0,
+                  fontSize: '1.1rem',
+                }}
+              >
+                ✦
+              </div>
               <div style={{ textAlign: 'left', fontSize: '0.9rem' }}>
                 <div
                   style={{
-                    fontFamily: 'var(--font-mono)',
+                    fontFamily: 'var(--font-heading)',
                     color: 'var(--accent-primary)',
                     fontWeight: 700,
-                    fontSize: '0.8rem',
+                    fontSize: '0.75rem',
+                    letterSpacing: '0.06em',
                     textTransform: 'uppercase',
+                    marginBottom: '0.2rem',
                   }}
                 >
-                  TOPLULUK MOTOSU
+                  TOPLULUK VİZYONU
                 </div>
-                <div style={{ color: 'var(--text-primary)', fontWeight: 600 }}>
+                <div style={{ color: 'var(--text-primary)', fontWeight: 600, lineHeight: 1.4 }}>
                   "Resmiyetten uzak, samimi bir masa. Good Code, Better People."
                 </div>
               </div>
-              <span className="circuit-node node-blue" />
             </div>
           </div>
         </div>
