@@ -58,8 +58,10 @@ export const Footer: React.FC = () => {
           <div>
             <h4
               style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.9rem',
+                fontFamily: 'var(--font-heading)',
+                fontSize: '0.85rem',
+                fontWeight: 700,
+                letterSpacing: '0.06em',
                 color: 'var(--text-primary)',
                 marginBottom: '1.25rem',
                 textTransform: 'uppercase',
@@ -91,6 +93,9 @@ export const Footer: React.FC = () => {
               <li>
                 <Link to="/projeler" style={{ color: 'inherit' }}>Projeler & Vitrin</Link>
               </li>
+              <li>
+                <Link to="/sponsorlar" style={{ color: 'inherit' }}>Sponsorlarımız</Link>
+              </li>
             </ul>
           </div>
 
@@ -98,8 +103,10 @@ export const Footer: React.FC = () => {
           <div>
             <h4
               style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.9rem',
+                fontFamily: 'var(--font-heading)',
+                fontSize: '0.85rem',
+                fontWeight: 700,
+                letterSpacing: '0.06em',
                 color: 'var(--text-primary)',
                 marginBottom: '1.25rem',
                 textTransform: 'uppercase',

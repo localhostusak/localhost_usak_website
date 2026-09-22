@@ -26,5 +26,12 @@
     "lang": "tr",
     "legacyTitle": "Projeler & Vitrin — localhostusak",
     "legacyDescription": "Uşak teknoloji topluluğu üyelerinin geliştirdiği projeler, açık kaynak depoları ve ekip arkadaşı arayan girişimler."
+  },
+  "/sponsorlar": {
+    "title": "Topluluk Sponsorları ve Destekçilerimiz | localhostusak",
+    "description": "Uşak teknoloji ekosistemine güç katan değerli sponsorlarımız ve topluluk destekçilerimiz. Siz de sponsor olarak genç mühendislere ve açık kaynak projelerine destek olun.",
+    "lang": "tr",
+    "legacyTitle": "Sponsorlarımız & Destekçiler — localhostusak",
+    "legacyDescription": "Uşak teknoloji topluluğu sponsorları ve kurumsal destekçileri."
   }
 }

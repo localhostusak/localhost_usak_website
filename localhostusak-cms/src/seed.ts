@@ -207,7 +207,41 @@ async function seed() {
     }
   }
 
-  // 6. Site Settings (Global)
+  // 6. Sponsors
+  const sponsorsDataPath = path.resolve(dirname, '../../localhostusak-web/src/data/sponsors.json')
+  if (fs.existsSync(sponsorsDataPath)) {
+    const sponsorsData = JSON.parse(fs.readFileSync(sponsorsDataPath, 'utf-8'))
+    for (const s of sponsorsData) {
+      const existing = await payload.find({
+        collection: 'sponsors',
+        where: {
+          name: {
+            equals: s.name,
+          },
+        },
+        limit: 1,
+      })
+
+      if (existing.docs.length === 0) {
+        await payload.create({
+          collection: 'sponsors',
+          data: {
+            name: s.name,
+            tier: s.tier || 'community',
+            logoUrl: s.logoUrl,
+            websiteUrl: s.websiteUrl,
+            sortOrder: s.sortOrder ?? 0,
+            isActive: s.isActive !== false,
+          },
+        })
+        console.log(`  ✓ Sponsor eklendi: [${s.tier}] ${s.name}`)
+      } else {
+        console.log(`  - Sponsor zaten mevcut: ${s.name}`)
+      }
+    }
+  }
+
+  // 7. Site Settings (Global)
   console.log('  -> Site Ayarları (Global) kontrol ediliyor...')
   try {
     await payload.updateGlobal({
