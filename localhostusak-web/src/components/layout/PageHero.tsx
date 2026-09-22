@@ -45,7 +45,7 @@ export const PageHero: React.FC<PageHeroProps> = ({
               href={effectiveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-whatsapp"
+              className="btn btn-lg btn-whatsapp"
               onClick={(e) => {
                 e.preventDefault();
                 openWhatsAppWithRules(effectiveUrl, whatsappLabel);

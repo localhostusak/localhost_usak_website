@@ -298,3 +298,9 @@
     box-shadow: 3px 3px 0px var(--pixel-black) !important;
   }
 }
+
+@media (max-width: 768px) {
+  [data-theme="pixel"] .career-actions {
+    border-top: 2px dashed var(--pixel-black);
+  }
+}

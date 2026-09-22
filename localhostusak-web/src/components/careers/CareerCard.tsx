@@ -109,13 +109,13 @@ export const CareerCard: React.FC<CareerCardProps> = ({ career }) => {
         )}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', minWidth: '150px' }}>
+      <div className="career-actions">
         {career.applyUrl ? (
           <a
             href={career.applyUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-primary btn-full"
+            className="btn btn-primary btn-sm"
           >
             <span>Başvur</span>
             <span>↗</span>
@@ -125,7 +125,7 @@ export const CareerCard: React.FC<CareerCardProps> = ({ career }) => {
             href={links.whatsappCareers}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-primary btn-full"
+            className="btn btn-primary btn-sm"
             onClick={(e) => {
               e.preventDefault();
               openWhatsAppWithRules(links.whatsappCareers, 'Kariyer & İlanlar');
@@ -137,14 +137,7 @@ export const CareerCard: React.FC<CareerCardProps> = ({ career }) => {
         ) : null}
 
         {career.contact && (
-          <div
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.75rem',
-              color: 'var(--text-muted)',
-              textAlign: 'center',
-            }}
-          >
+          <div className="career-contact-hint">
             {career.contact}
           </div>
         )}

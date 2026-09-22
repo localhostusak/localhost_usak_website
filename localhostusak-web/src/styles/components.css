@@ -219,6 +219,18 @@
   border: 1px solid var(--border-subtle);
 }
 
+@media (max-width: 640px) {
+  .card {
+    padding: 1.25rem 1rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .card {
+    padding: 1rem 0.75rem;
+  }
+}
+
 /* --------------------------------------------------------------------------
    4. Terminal Window
    -------------------------------------------------------------------------- */

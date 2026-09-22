@@ -12,7 +12,7 @@ export const CareerResources: React.FC<CareerResourcesProps> = ({ items }) => {
   if (resources.length === 0) return null;
 
   return (
-    <section style={{ margin: '3.5rem 0' }}>
+    <section className="career-resources-section">
       <div className="section-header" style={{ marginBottom: '2rem' }}>
         <span className="section-tag">// KAYNAKLAR & REHBERLER</span>
         <h2 className="section-title">Kariyerini Güçlendirecek Araçlar</h2>

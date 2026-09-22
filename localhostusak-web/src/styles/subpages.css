@@ -224,7 +224,20 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.75rem;
   margin-top: auto;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+  .event-card-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .event-card-footer .btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 [data-theme="pixel"] .event-card-footer {
@@ -245,14 +258,73 @@
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 1.5rem;
-  align-items: center;
+  align-items: flex-start;
   padding: 1.75rem;
   transition: all var(--transition-normal);
+}
+
+.career-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-end;
+  min-width: 120px;
+}
+
+.career-actions .btn {
+  white-space: nowrap;
+  min-width: 110px;
+}
+
+.career-contact-hint {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.career-cta-card {
+  padding: 3.5rem 2.5rem;
+  text-align: center;
+  margin: 3rem 0;
+  background: var(--bg-secondary);
+}
+
+.career-resources-section {
+  margin: 3.5rem 0;
 }
 
 @media (max-width: 768px) {
   .career-card {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
+    padding: 1.25rem 1rem;
+  }
+
+  .career-actions {
+    align-items: stretch;
+    width: 100%;
+    min-width: 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .career-actions .btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .career-contact-hint {
+    text-align: center;
+  }
+
+  .career-cta-card {
+    padding: 2rem 1.25rem;
+    margin: 2rem 0;
+  }
+
+  .career-resources-section {
+    margin: 2.25rem 0;
   }
 }
 

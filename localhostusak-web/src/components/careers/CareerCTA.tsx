@@ -7,15 +7,7 @@ export const CareerCTA: React.FC = () => {
   const { openWhatsAppWithRules } = useWhatsAppModal();
   if (!links.whatsappCareers) return null;
   return (
-    <div
-      className="card circuit-border"
-      style={{
-        padding: '3.5rem 2.5rem',
-        textAlign: 'center',
-        margin: '3rem 0',
-        background: 'var(--bg-secondary)',
-      }}
-    >
+    <div className="card circuit-border career-cta-card">
       <span className="section-tag" style={{ marginBottom: '1rem', display: 'inline-block' }}>
         // ŞİRKETLER & EKİPLER İÇİN
       </span>
@@ -34,7 +26,7 @@ export const CareerCTA: React.FC = () => {
         yayınlamak için topluluk moderatörlerine mesaj atabilir veya grupta doğrudan paylaşabilirsin.
       </p>
 
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+      <div className="cta-actions" style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
         <a
           href={links.whatsappCareers}
           target="_blank"
