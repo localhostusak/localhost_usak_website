@@ -82,18 +82,24 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-xl);
+  min-width: 0;
+  max-width: 100%;
 }
 
 .grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-lg);
+  min-width: 0;
+  max-width: 100%;
 }
 
 .grid-4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--space-md);
+  min-width: 0;
+  max-width: 100%;
 }
 
 /* Bento Grid */
@@ -101,14 +107,16 @@
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: var(--space-lg);
+  min-width: 0;
+  max-width: 100%;
 }
 
-.bento-span-12 { grid-column: span 12; }
-.bento-span-8  { grid-column: span 8; }
-.bento-span-7  { grid-column: span 7; }
-.bento-span-6  { grid-column: span 6; }
-.bento-span-5  { grid-column: span 5; }
-.bento-span-4  { grid-column: span 4; }
+.bento-span-12 { grid-column: span 12; min-width: 0; }
+.bento-span-8  { grid-column: span 8; min-width: 0; }
+.bento-span-7  { grid-column: span 7; min-width: 0; }
+.bento-span-6  { grid-column: span 6; min-width: 0; }
+.bento-span-5  { grid-column: span 5; min-width: 0; }
+.bento-span-4  { grid-column: span 4; min-width: 0; }
 
 /* Responsive Layout */
 @media (max-width: 1024px) {
@@ -199,6 +207,10 @@
   gap: 1rem;
 }
 
+.mobile-menu-toggle {
+  display: none;
+}
+
 .hero-section {
   position: relative;
   min-height: calc(100vh - var(--nav-height));
@@ -226,11 +238,39 @@
   pointer-events: auto;
 }
 
+.spotlight-card {
+  position: relative;
+  padding: 3rem 2.5rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
 .spotlight-inner {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 2.5rem;
   align-items: center;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.spotlight-inner > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.spotlight-countdown-card {
+  background: var(--surface-elevated);
+  padding: 2rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-circuit);
+  text-align: center;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .spotlight-badges {
@@ -253,11 +293,19 @@
   gap: 0.75rem;
   font-size: 1.05rem;
   color: var(--text-primary);
+  min-width: 0;
+  word-break: break-word;
+}
+
+.meetup-meta-item > div {
+  min-width: 0;
+  word-break: break-word;
 }
 
 .meetup-meta-item .meta-icon {
   font-size: 1.25rem;
   color: var(--accent-primary);
+  flex-shrink: 0;
 }
 
 .agenda-tags {
@@ -326,6 +374,10 @@
 @media (max-width: 900px) {
   .spotlight-inner {
     grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .spotlight-card {
+    padding: 2rem 1.5rem;
   }
   .nav-links {
     display: none;
@@ -341,5 +393,33 @@
     flex-direction: column;
     gap: 1rem;
     text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .spotlight-card {
+    padding: 1.5rem 1rem !important;
+  }
+  .spotlight-countdown-card {
+    padding: 1.25rem 0.75rem !important;
+  }
+  .spotlight-badges {
+    gap: 0.4rem;
+  }
+  .meetup-meta-list {
+    gap: 0.75rem;
+    margin: 1.25rem 0;
+  }
+  .meetup-meta-item {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .spotlight-card {
+    padding: 1.25rem 0.6rem !important;
+  }
+  .spotlight-countdown-card {
+    padding: 1rem 0.5rem !important;
   }
 }

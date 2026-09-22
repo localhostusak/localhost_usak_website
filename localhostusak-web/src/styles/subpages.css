@@ -503,3 +503,17 @@
   border: 2px dashed var(--pixel-black);
   border-radius: 0;
 }
+
+@media (max-width: 640px) {
+  .filter-bar-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .search-input-box {
+    width: 100%;
+    min-width: 0;
+  }
+}

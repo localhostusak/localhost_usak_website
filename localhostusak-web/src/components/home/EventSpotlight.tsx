@@ -88,10 +88,7 @@ export const EventSpotlight: React.FC = () => {
           </p>
         </div>
 
-        <div
-          className="spotlight-card card circuit-border"
-          style={{ padding: '3rem 2.5rem', position: 'relative' }}
-        >
+        <div className="spotlight-card card circuit-border">
           {/* Corner HUD Markers (Modern) */}
           <span className="hud-corner-tl" aria-hidden="true" />
           <span className="hud-corner-tr" aria-hidden="true" />
@@ -165,15 +162,7 @@ export const EventSpotlight: React.FC = () => {
             </div>
 
             {/* Right Countdown & Action Card */}
-            <div
-              style={{
-                background: 'var(--surface-elevated)',
-                padding: '2rem',
-                borderRadius: 'var(--radius-md)',
-                border: '1px solid var(--border-circuit)',
-                textAlign: 'center',
-              }}
-            >
+            <div className="spotlight-countdown-card">
               <div
                 style={{
                   fontFamily: 'var(--font-mono)',

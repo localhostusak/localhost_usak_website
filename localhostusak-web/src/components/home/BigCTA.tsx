@@ -43,7 +43,7 @@ export const BigCTA: React.FC = () => {
             tutkunlarıyla anında iletişim kurmak için WhatsApp grubumuza katıl.
           </p>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1.25rem' }}>
+          <div className="cta-actions" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1.25rem' }}>
             {links.whatsappGeneral && <a
               href={links.whatsappGeneral}
               target="_blank"

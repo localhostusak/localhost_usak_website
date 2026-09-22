@@ -58,6 +58,18 @@
   font-size: 0.8rem !important;
 }
 
+@media (max-width: 640px) {
+  [data-theme="pixel"] .btn {
+    padding: 0.65rem 1rem !important;
+    font-size: 0.85rem !important;
+    white-space: normal;
+  }
+  [data-theme="pixel"] .btn-lg {
+    padding: 0.75rem 1.15rem !important;
+    font-size: 0.9rem !important;
+  }
+}
+
 [data-theme="pixel"] .btn-primary {
   background-color: var(--pixel-orange) !important;
   color: #FFFFFF !important;
@@ -274,4 +286,15 @@
 [data-theme="pixel"] .hud-corner-bl,
 [data-theme="pixel"] .hud-corner-br {
   display: none !important;
+}
+
+@media (max-width: 640px) {
+  [data-theme="pixel"] .countdown-box {
+    border-width: 2px !important;
+    box-shadow: 2px 2px 0px var(--pixel-black) !important;
+  }
+  [data-theme="pixel"] .spotlight-countdown-card {
+    border: 2px solid var(--pixel-black) !important;
+    box-shadow: 3px 3px 0px var(--pixel-black) !important;
+  }
 }

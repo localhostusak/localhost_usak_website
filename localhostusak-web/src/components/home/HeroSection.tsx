@@ -227,6 +227,7 @@ export const HeroSection: React.FC = () => {
 
           {/* Primary Hero Actions */}
           <div
+            className="hero-actions"
             style={{
               display: 'flex',
               flexWrap: 'wrap',

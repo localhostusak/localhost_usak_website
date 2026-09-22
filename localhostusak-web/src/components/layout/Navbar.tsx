@@ -213,7 +213,6 @@ export const Navbar: React.FC = () => {
           <button
             className="btn btn-sm btn-secondary mobile-menu-toggle"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            style={{ display: 'none' }}
             aria-label="Menüyü Aç/Kapat"
           >
             {mobileMenuOpen ? '✕' : '☰'}
@@ -230,23 +229,79 @@ export const Navbar: React.FC = () => {
             borderBottom: '1px solid var(--border-subtle)',
             display: 'flex',
             flexDirection: 'column',
-            gap: '1rem',
+            gap: '0.5rem',
             fontFamily: 'var(--font-mono)',
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.25)',
           }}
         >
-          <Link to="/" style={{ color: isActive('/') ? 'var(--accent-primary)' : 'var(--text-secondary)' }}>
+          <Link
+            to="/"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              color: isActive('/') ? 'var(--accent-primary)' : 'var(--text-secondary)',
+              minHeight: '44px',
+              display: 'flex',
+              alignItems: 'center',
+              textDecoration: 'none',
+              fontSize: '1rem',
+            }}
+          >
             // ana sayfa
           </Link>
-          <Link to="/etkinlikler" style={{ color: isActive('/etkinlikler') ? 'var(--accent-primary)' : 'var(--text-secondary)' }}>
+          <Link
+            to="/etkinlikler"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              color: isActive('/etkinlikler') ? 'var(--accent-primary)' : 'var(--text-secondary)',
+              minHeight: '44px',
+              display: 'flex',
+              alignItems: 'center',
+              textDecoration: 'none',
+              fontSize: '1rem',
+            }}
+          >
             // etkinlikler
           </Link>
-          <Link to="/kariyer" style={{ color: isActive('/kariyer') ? 'var(--accent-primary)' : 'var(--text-secondary)' }}>
+          <Link
+            to="/kariyer"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              color: isActive('/kariyer') ? 'var(--accent-primary)' : 'var(--text-secondary)',
+              minHeight: '44px',
+              display: 'flex',
+              alignItems: 'center',
+              textDecoration: 'none',
+              fontSize: '1rem',
+            }}
+          >
             // kariyer
           </Link>
-          <Link to="/projeler" style={{ color: isActive('/projeler') ? 'var(--accent-primary)' : 'var(--text-secondary)' }}>
+          <Link
+            to="/projeler"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              color: isActive('/projeler') ? 'var(--accent-primary)' : 'var(--text-secondary)',
+              minHeight: '44px',
+              display: 'flex',
+              alignItems: 'center',
+              textDecoration: 'none',
+              fontSize: '1rem',
+            }}
+          >
             // projeler
           </Link>
-          <Link to="/admin" style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+          <Link
+            to="/admin"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              color: 'var(--text-muted)',
+              fontSize: '0.85rem',
+              minHeight: '44px',
+              display: 'flex',
+              alignItems: 'center',
+              textDecoration: 'none',
+            }}
+          >
             // [admin paneli]
           </Link>
         </div>

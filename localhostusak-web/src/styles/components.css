@@ -21,6 +21,8 @@
   position: relative;
   transition: all var(--transition-normal);
   user-select: none;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .btn-primary {
@@ -82,6 +84,36 @@
 
 .btn-full {
   width: 100%;
+}
+
+@media (max-width: 640px) {
+  .btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.925rem;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.35;
+  }
+
+  .btn-lg {
+    padding: 0.85rem 1.35rem;
+    font-size: 1rem;
+  }
+
+  .hero-actions,
+  .cta-actions,
+  .page-hero-actions {
+    flex-direction: column !important;
+    width: 100% !important;
+    align-items: stretch !important;
+  }
+
+  .hero-actions .btn,
+  .cta-actions .btn,
+  .page-hero-actions .btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -270,6 +302,10 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 .countdown-box {
@@ -279,6 +315,9 @@
   padding: 1.25rem 0.75rem;
   text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .countdown-num {
@@ -288,6 +327,7 @@
   color: var(--accent-primary);
   line-height: 1;
   margin-bottom: 0.35rem;
+  word-break: keep-all;
 }
 
 .countdown-label {
@@ -296,6 +336,39 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--text-muted);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .countdown-grid {
+    gap: 0.5rem;
+  }
+  .countdown-box {
+    padding: 0.75rem 0.25rem;
+  }
+  .countdown-num {
+    font-size: clamp(1.2rem, 5vw, 1.75rem);
+  }
+  .countdown-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+  }
+}
+
+@media (max-width: 380px) {
+  .countdown-grid {
+    gap: 0.35rem;
+  }
+  .countdown-box {
+    padding: 0.5rem 0.15rem;
+  }
+  .countdown-num {
+    font-size: 1.1rem;
+  }
+  .countdown-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.02em;
+  }
 }
 
 /* --------------------------------------------------------------------------

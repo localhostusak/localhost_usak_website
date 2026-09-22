@@ -45,7 +45,7 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
   return (
     <div
       className="spotlight-card card circuit-border"
-      style={{ padding: '3rem 2.5rem', position: 'relative', marginBottom: '3rem' }}
+      style={{ marginBottom: '3rem' }}
     >
       <span className="hud-corner-tl" aria-hidden="true" />
       <span className="hud-corner-tr" aria-hidden="true" />
@@ -124,15 +124,7 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
           )}
         </div>
 
-        <div
-          style={{
-            background: 'var(--surface-elevated)',
-            padding: '2rem',
-            borderRadius: 'var(--radius-md)',
-            border: '1px solid var(--border-circuit)',
-            textAlign: 'center',
-          }}
-        >
+        <div className="spotlight-countdown-card">
           <div
             style={{
               fontFamily: 'var(--font-mono)',

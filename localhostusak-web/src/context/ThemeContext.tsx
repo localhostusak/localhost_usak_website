@@ -87,7 +87,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return () => mediaQuery.removeEventListener('change', handleSystemThemeChange);
   }, []);
 
-  // Setup fracture canvas
+  // Setup fracture canvas with DPR scaling
   useEffect(() => {
     const canvas = document.createElement('canvas');
     canvas.className = 'breach-canvas-overlay';
@@ -95,8 +95,16 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     canvasRef.current = canvas;
 
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(dpr, dpr);
+      }
     };
     resize();
     window.addEventListener('resize', resize);
@@ -108,6 +116,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   const spawnFloatingEmojis = (x: number, y: number, emojis: string[], count: number) => {
+    const screenW = window.innerWidth;
+    const screenH = window.innerHeight;
+
     for (let i = 0; i < count; i++) {
       const el = document.createElement('div');
       el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
@@ -122,9 +133,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       document.body.appendChild(el);
 
       const angle = Math.random() * Math.PI * 2;
-      const dist = Math.random() * 160 + 60;
-      const targetX = x + Math.cos(angle) * dist;
-      const targetY = y + Math.sin(angle) * dist - 80;
+      const dist = Math.random() * 120 + 35;
+      let targetX = x + Math.cos(angle) * dist;
+      let targetY = y + Math.sin(angle) * dist - 50;
+
+      // Viewport bounds clamp to prevent overflowing or causing horizontal scroll
+      targetX = Math.max(16, Math.min(screenW - 36, targetX));
+      targetY = Math.max(16, Math.min(screenH - 36, targetY));
 
       requestAnimationFrame(() => {
         el.style.transform = `translate(${targetX - x}px, ${targetY - y}px) scale(0)`;
@@ -174,11 +189,12 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const applyScreenShake = (className: string) => {
-    document.body.classList.remove('shake-level-1', 'shake-level-2');
-    void document.body.offsetWidth; // Force reflow
-    document.body.classList.add(className);
+    const target = document.getElementById('root') || document.body;
+    target.classList.remove('shake-level-1', 'shake-level-2');
+    void target.offsetWidth; // Force reflow
+    target.classList.add(className);
     setTimeout(() => {
-      document.body.classList.remove(className);
+      target.classList.remove(className);
     }, 600);
   };
 
@@ -203,7 +219,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const toggleTheme = useCallback(
     (x?: number, y?: number) => {
-      const posX = x ?? (typeof window !== 'undefined' ? window.innerWidth - 120 : 800);
+      const posX = x ?? (typeof window !== 'undefined' ? window.innerWidth - 60 : 800);
       const posY = y ?? 38;
       const targetTheme: Theme = theme === 'modern' ? 'pixel' : 'modern';
 
