@@ -46,45 +46,79 @@ export const SponsorsSection: React.FC = () => {
           />
         ) : sponsors.length > 0 ? (
           <div>
-            {/* Infinite Horizontal Logo Marquee */}
+            {/* Infinite Horizontal Logo Marquee with Edge Feathering */}
             <div className="marquee-wrapper" aria-label="Sponsorlar Kayan Şerit">
               <div className="marquee-track">
-                {marqueeItems.map((sponsor, idx) => (
-                  <a
-                    key={`${sponsor.id}-${idx}`}
-                    href={sponsor.websiteUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="marquee-item"
-                    title={`${sponsor.name} web sitesini ziyaret et`}
-                  >
-                    {sponsor.logoUrl ? (
-                      <img
-                        src={sponsor.logoUrl}
-                        alt={sponsor.name}
-                        className="marquee-logo"
-                        loading="lazy"
-                        onError={(e) => {
-                          const target = e.currentTarget;
-                          target.style.display = 'none';
-                          const fallback = target.nextElementSibling as HTMLElement | null;
-                          if (fallback) fallback.style.display = 'inline-block';
-                        }}
-                      />
-                    ) : null}
-                    <span
-                      className="marquee-name"
-                      style={{ display: sponsor.logoUrl ? 'none' : 'inline-block' }}
+                {marqueeItems.map((sponsor, idx) => {
+                  const tier = sponsor.tier || 'community';
+                  const tierSizeClass = `tier-size-${tier}`;
+                  return (
+                    <a
+                      key={`${sponsor.id}-${idx}`}
+                      href={sponsor.websiteUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`sponsor-card-block ${tierSizeClass}`}
+                      title={`${sponsor.name} (${tier.toUpperCase()}) web sitesini ziyaret et`}
                     >
-                      {sponsor.name}
-                    </span>
-                    {sponsor.tier === 'gold' && (
-                      <span className="tier-badge tier-gold-badge" style={{ fontSize: '0.68rem', padding: '0.15rem 0.5rem' }}>
-                        Gold
-                      </span>
-                    )}
-                  </a>
-                ))}
+                      <div className="sponsor-card-logo-box">
+                        {sponsor.logoUrl ? (
+                          <img
+                            src={sponsor.logoUrl}
+                            alt={sponsor.name}
+                            loading="lazy"
+                            onError={(e) => {
+                              const target = e.currentTarget;
+                              target.style.display = 'none';
+                              const fallback = target.nextElementSibling as HTMLElement | null;
+                              if (fallback) fallback.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        <div
+                          style={{
+                            display: sponsor.logoUrl ? 'none' : 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '54px',
+                            height: '54px',
+                            borderRadius: '12px',
+                            background: 'var(--bg-elevated)',
+                            fontWeight: 800,
+                            fontSize: '1.2rem',
+                            color: 'var(--text-primary)',
+                          }}
+                        >
+                          {sponsor.name.slice(0, 2).toUpperCase()}
+                        </div>
+                      </div>
+
+                      <div className="sponsor-card-footer">
+                        <span className="sponsor-card-name">{sponsor.name}</span>
+                        {tier === 'gold' && (
+                          <span className="tier-badge tier-gold-badge" style={{ fontSize: '0.68rem', padding: '0.15rem 0.6rem' }}>
+                            Altın Sponsor
+                          </span>
+                        )}
+                        {tier === 'silver' && (
+                          <span className="tier-badge tier-silver-badge" style={{ fontSize: '0.66rem', padding: '0.15rem 0.55rem' }}>
+                            Gümüş Sponsor
+                          </span>
+                        )}
+                        {tier === 'bronze' && (
+                          <span className="tier-badge tier-bronze-badge" style={{ fontSize: '0.64rem', padding: '0.15rem 0.5rem' }}>
+                            Bronz Sponsor
+                          </span>
+                        )}
+                        {tier === 'community' && (
+                          <span className="sponsor-card-sub">
+                            Destekçi ↗
+                          </span>
+                        )}
+                      </div>
+                    </a>
+                  );
+                })}
               </div>
             </div>
 

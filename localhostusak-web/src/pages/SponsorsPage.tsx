@@ -19,27 +19,29 @@ export const SponsorsPage: React.FC = () => {
     description: seoPages['/sponsorlar'].description,
   });
 
-  const goldSponsors = sponsors.filter((s) => s.tier === 'gold');
-  const silverSponsors = sponsors.filter((s) => s.tier === 'silver');
-  const bronzeSponsors = sponsors.filter((s) => s.tier === 'bronze');
-  const communitySponsors = sponsors.filter((s) => !s.tier || s.tier === 'community');
+  const goldSponsors = React.useMemo(() => sponsors.filter((s) => s.tier === 'gold'), [sponsors]);
+  const silverSponsors = React.useMemo(() => sponsors.filter((s) => s.tier === 'silver'), [sponsors]);
+  const bronzeSponsors = React.useMemo(() => sponsors.filter((s) => s.tier === 'bronze'), [sponsors]);
+  const communitySponsors = React.useMemo(() => sponsors.filter((s) => !s.tier || s.tier === 'community'), [sponsors]);
 
-  const renderSponsorCard = (sponsor: SponsorItem, tierClass: string) => (
-    <a
-      key={sponsor.id}
-      href={sponsor.websiteUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`sponsor-card card ${tierClass}`}
-      title={`${sponsor.name} web sitesini ziyaret et`}
-    >
-      <div className="sponsor-card-inner">
-        <div className="sponsor-logo-container" style={{ minHeight: '80px' }}>
+  const renderSponsorCard = (sponsor: SponsorItem) => {
+    const tier = sponsor.tier || 'community';
+    const tierSizeClass = `tier-size-${tier}`;
+
+    return (
+      <a
+        key={sponsor.id}
+        href={sponsor.websiteUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`sponsor-card-block ${tierSizeClass} sponsor-grid-card`}
+        title={`${sponsor.name} (${tier.toUpperCase()}) web sitesini ziyaret et`}
+      >
+        <div className="sponsor-card-logo-box">
           {sponsor.logoUrl ? (
             <img
               src={sponsor.logoUrl}
               alt={sponsor.name}
-              className="sponsor-logo-img"
               loading="lazy"
               onError={(e) => {
                 const target = e.currentTarget;
@@ -50,28 +52,37 @@ export const SponsorsPage: React.FC = () => {
             />
           ) : null}
           <div
-            className="sponsor-logo-fallback"
-            style={{ display: sponsor.logoUrl ? 'none' : 'flex' }}
+            style={{
+              display: sponsor.logoUrl ? 'none' : 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '54px',
+              height: '54px',
+              borderRadius: '12px',
+              background: 'var(--bg-elevated)',
+              fontWeight: 800,
+              fontSize: '1.2rem',
+              color: 'var(--text-primary)',
+            }}
           >
-            <span>{sponsor.name.slice(0, 2).toUpperCase()}</span>
+            {sponsor.name.slice(0, 2).toUpperCase()}
           </div>
         </div>
 
-        <div className="sponsor-info">
-          <h3 className="sponsor-name">{sponsor.name}</h3>
-          <div className="sponsor-link-badge">
-            <span>Web Sitesini Ziyaret Et</span>
-            <ExternalLink size={14} className="sponsor-external-icon" />
+        <div className="sponsor-card-footer">
+          <span className="sponsor-card-name">{sponsor.name}</span>
+          <div className="sponsor-card-sub">
+            <span>Web Sitesini İncele</span>
+            <ExternalLink size={12} />
           </div>
         </div>
-      </div>
-    </a>
-  );
+      </a>
+    );
+  };
 
   return (
     <div>
       <PageHero
-        tag="DESTEKÇİLERİMİZ & SPONSORLAR"
         title="Topluluğumuza Güç Katan"
         highlightText="Değerli Sponsorlarımız"
         description="Uşak'ta teknoloji, mühendislik ve yazılım ekosistemini birlikte büyüttüğümüz kurumsal ortaklarımız ve topluluk destekçilerimiz."
@@ -96,11 +107,11 @@ export const SponsorsPage: React.FC = () => {
 
             {/* 1. ALTIN SPONSORLAR (GOLD) */}
             <section>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.75rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1.75rem' }}>
                 <span className="tier-badge tier-gold-badge">
-                  <Award size={14} /> Altın Sponsorlar
+                  <Award size={15} /> Altın Sponsorlar ({goldSponsors.length})
                 </span>
-                <div style={{ height: '1px', flex: 1, background: 'var(--accent-gold-border)', opacity: 0.5 }} />
+                <div style={{ height: '1px', flex: 1, background: 'var(--accent-gold-border)', opacity: 0.4 }} />
               </div>
 
               {goldSponsors.length > 0 ? (
@@ -111,7 +122,7 @@ export const SponsorsPage: React.FC = () => {
                     gap: '1.75rem',
                   }}
                 >
-                  {goldSponsors.map((s) => renderSponsorCard(s, 'sponsor-card-gold'))}
+                  {goldSponsors.map(renderSponsorCard)}
                 </div>
               ) : (
                 <div
@@ -132,11 +143,11 @@ export const SponsorsPage: React.FC = () => {
 
             {/* 2. GÜMÜŞ SPONSORLAR (SILVER) */}
             <section>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.75rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1.75rem' }}>
                 <span className="tier-badge tier-silver-badge">
-                  <Shield size={14} /> Gümüş Sponsorlar
+                  <Shield size={15} /> Gümüş Sponsorlar ({silverSponsors.length})
                 </span>
-                <div style={{ height: '1px', flex: 1, background: 'var(--accent-silver-border)', opacity: 0.5 }} />
+                <div style={{ height: '1px', flex: 1, background: 'var(--accent-silver-border)', opacity: 0.4 }} />
               </div>
 
               {silverSponsors.length > 0 ? (
@@ -147,7 +158,7 @@ export const SponsorsPage: React.FC = () => {
                     gap: '1.5rem',
                   }}
                 >
-                  {silverSponsors.map((s) => renderSponsorCard(s, 'sponsor-card-silver'))}
+                  {silverSponsors.map(renderSponsorCard)}
                 </div>
               ) : (
                 <div
@@ -168,11 +179,11 @@ export const SponsorsPage: React.FC = () => {
 
             {/* 3. BRONZ SPONSORLAR (BRONZE) */}
             <section>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.75rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1.75rem' }}>
                 <span className="tier-badge tier-bronze-badge">
-                  <Sparkles size={14} /> Bronz Sponsorlar
+                  <Sparkles size={15} /> Bronz Sponsorlar ({bronzeSponsors.length})
                 </span>
-                <div style={{ height: '1px', flex: 1, background: 'var(--accent-bronze-border)', opacity: 0.5 }} />
+                <div style={{ height: '1px', flex: 1, background: 'var(--accent-bronze-border)', opacity: 0.4 }} />
               </div>
 
               {bronzeSponsors.length > 0 ? (
@@ -183,7 +194,7 @@ export const SponsorsPage: React.FC = () => {
                     gap: '1.25rem',
                   }}
                 >
-                  {bronzeSponsors.map((s) => renderSponsorCard(s, 'sponsor-card-bronze'))}
+                  {bronzeSponsors.map(renderSponsorCard)}
                 </div>
               ) : (
                 <div
@@ -204,9 +215,9 @@ export const SponsorsPage: React.FC = () => {
 
             {/* 4. TOPLULUK DESTEKÇİLERİ (COMMUNITY) */}
             <section>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.75rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1.75rem' }}>
                 <span className="tier-badge tier-community-badge">
-                  <Heart size={14} /> Topluluk Destekçileri
+                  <Heart size={15} /> Topluluk Destekçileri ({communitySponsors.length})
                 </span>
                 <div style={{ height: '1px', flex: 1, background: 'var(--border-subtle)', opacity: 0.7 }} />
               </div>
@@ -219,7 +230,7 @@ export const SponsorsPage: React.FC = () => {
                     gap: '1.25rem',
                   }}
                 >
-                  {communitySponsors.map((s) => renderSponsorCard(s, ''))}
+                  {communitySponsors.map(renderSponsorCard)}
                 </div>
               ) : (
                 <div

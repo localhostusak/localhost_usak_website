@@ -108,17 +108,23 @@ Modern, geometrik ve editoryal ağırlıklı sans-serif aileleri kullanılır.
 Payload CMS (`localhostusak-cms/src/collections/Sponsors.ts`) mimarisindeki tier yapısı frontend'e tam yansıtılır:
 
 1. 🥇 **Altın Sponsor (Gold - `gold`):**
-   - En prestijli konum. Geniş kart yapısı, zarif şampanya altını ışıltılı kenarlık (`#D4AF37`), hafif amber aura, logo ve sponsor unvanı.
+   - En prestijli vitrin (`width: 215px`, `min-height: 200px`).
+   - Zarif şampanya altını ışıltılı kenarlık (`#D4AF37`), hafif altın aura (`box-shadow: 0 8px 24px rgba(212, 175, 55, 0.2)`), üstte ferah logo alanı, altta sponsor ismi ve altın rozet.
 2. 🥈 **Gümüş Sponsor (Silver - `silver`):**
-   - Orta ölçekli kartlar, platin/gümüş metalik kenarlık dokusu (`#9AA5B1`).
+   - Dengeli vitrin (`width: 210px`, `min-height: 198px`), platin/gümüş metalik kenarlık dokusu (`#9AA5B1`) ve gümüş ışıltı.
 3. 🥉 **Bronz Sponsor (Bronze - `bronze`):**
-   - Kompakt kartlar, sıcak bakır tonlarında kenarlık (`#B87333`).
+   - Kompakt vitrin (`width: 205px`, `min-height: 195px`), sıcak bakır/amber tonlarında kenarlık (`#B87333`) ve ışıltı.
 4. 🤝 **Topluluk Destekçisi (Community - `community`):**
-   - Sade, temiz logo ızgarası.
+   - Minimal zarif vitrin (`width: 200px`, `min-height: 192px`), sade ve şık cam dokusu.
+
+**Vurucu Kart Formu ve Kenar Yumuşatma (Fade) Kuralları:**
+- **Minimal & Uyumlu Boyut Farkı:** Tierlar arasındaki boyut farkı gözü yormayacak şekilde son derece minimaldir (yalnızca 3-5px delta). Hiyerarşi boyutla değil; kenarlık kalitesi, ışıltı, rozet ve zemin efektleriyle sağlanır.
+- **Kenar Fade Geçişi:** Kayan şeritlerde kartların çıktığı ve kaybolduğu sol ve sağ sınırlarda keskin kesilmeler kesinlikle yasaktır. Hem CSS `mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent)` hem de `::before` / `::after` explicit gradient overlayleri kullanılarak hem aydınlık hem karanlık temada pürüzsüz yumuşak geçiş sağlanır.
+- **Dikey/Kare Hiyerarşik Kart:** Kartlar yatay basık şeritler yerine; üstte büyük logo kutusu, altta ortalanmış sponsor adı ve bağlantı/rozet barındıran dikey/kare oranında tasarlanır.
 
 **Sayfa Dağılımı:**
-- **Ana Sayfa:** Sürekli kayan akıcı bant (Marquee / Infinite Slider) ve "Tüm Sponsorları İncele" bağlantısı.
-- **Özel Sayfa (`/sponsorlar`):** Tier seviyelerine göre kategorize edilmiş detaylı sponsor galerisi, sponsor olma kriterleri ve doğrudan iletişim/başvuru modalı/bağlantısı.
+- **Ana Sayfa:** Sürekli kayan akıcı şerit (Marquee Ticker, hover ile duraklama) ve "Tüm Sponsorlarımız & Sponsorluk Paketleri" butonu.
+- **Özel Sayfa (`/sponsorlar`):** Tier seviyelerine göre ayrılmış temiz ve ferah **Izgara (Grid)** yerleşimi (Gold, Silver, Bronze, Community blokları); sayfa altında doğrudan WhatsApp & E-posta sponsorluk CTA kutusu.
 
 ---
 
