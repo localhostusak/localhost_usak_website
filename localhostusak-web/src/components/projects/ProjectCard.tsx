@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ExternalLink, Heart, Users, MessageCircle } from 'lucide-react';
+import { ExternalLink, Heart, Users } from 'lucide-react';
 import { ProjectItem, ProjectType } from '../../types/project';
+import { WhatsAppIcon } from '../shared';
 import { soundFX } from '../../utils/audioFx';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
@@ -190,15 +191,15 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onLike }) => 
             href={links.whatsappProjects}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-secondary btn-sm"
-            style={{ flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem' }}
+            className="btn btn-whatsapp btn-sm"
+            style={{ flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.45rem' }}
             onClick={(e) => {
               e.preventDefault();
               openWhatsAppWithRules(links.whatsappProjects, 'Projeler Grubu');
             }}
           >
+            <WhatsAppIcon size={14} />
             <span>Ekiple İletişime Geç</span>
-            <MessageCircle size={14} />
           </a>
         )}
       </div>

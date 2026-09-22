@@ -35,6 +35,15 @@
   --accent-blue-glow: rgba(59, 130, 246, 0.2);
   --accent-success: #267A56;
 
+  /* WhatsApp Brand Tokens (Dark Mode) */
+  --whatsapp-bg: linear-gradient(135deg, #1E7E55 0%, #155E3F 100%);
+  --whatsapp-bg-hover: linear-gradient(135deg, #239464 0%, #186E4A 100%);
+  --whatsapp-text: #FFFDFC;
+  --whatsapp-border: rgba(255, 255, 255, 0.16);
+  --whatsapp-glow: rgba(30, 126, 85, 0.28);
+  --whatsapp-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(30, 126, 85, 0.22);
+  --whatsapp-shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.35), 0 4px 14px rgba(35, 148, 100, 0.32);
+
   /* Sponsor Tier Accents */
   --accent-gold: #D4AF37;
   --accent-gold-bg: rgba(212, 175, 55, 0.12);
@@ -131,6 +140,15 @@
   --accent-blue-glow: rgba(37, 99, 235, 0.18);
   --accent-success: #267A56;
   --coffee-brown: #50443B;
+
+  /* WhatsApp Brand Tokens (Light Mode - Warm Cream & Linen Calibrated) */
+  --whatsapp-bg: linear-gradient(135deg, #1C8B57 0%, #157246 100%);
+  --whatsapp-bg-hover: linear-gradient(135deg, #167448 0%, #0F5C37 100%);
+  --whatsapp-text: #FFFDFC;
+  --whatsapp-border: rgba(21, 114, 70, 0.25);
+  --whatsapp-glow: rgba(28, 139, 87, 0.2);
+  --whatsapp-shadow: 0 4px 14px rgba(28, 139, 87, 0.22), 0 1px 3px rgba(40, 32, 24, 0.08);
+  --whatsapp-shadow-hover: 0 6px 20px rgba(28, 139, 87, 0.32), 0 2px 6px rgba(40, 32, 24, 0.12);
 
   /* Sponsor Tier Accents (Light Mode calibrated) */
   --accent-gold: #B8860B;

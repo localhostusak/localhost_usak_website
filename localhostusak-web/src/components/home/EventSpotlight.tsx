@@ -1,13 +1,12 @@
 import React, { useMemo } from 'react';
-import { Calendar, MapPin, Coffee, Download, MessageCircle, ExternalLink, AlertTriangle, Loader2 } from 'lucide-react';
-import { CountdownTimer } from '../shared/CountdownTimer';
+import { Calendar, MapPin, Coffee, Download, ExternalLink, AlertTriangle, Loader2 } from 'lucide-react';
+import { CountdownTimer, WhatsAppIcon, EmptyState } from '../shared';
 import { downloadICS, openGoogleCalendar } from '../../utils/calendarExport';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 import { fetchEvents } from '../../services/api';
 import { EventItem } from '../../types/event';
 import { useCmsCollection } from '../../hooks/useCmsCollection';
-import { EmptyState } from '../shared/EmptyState';
 
 export const EventSpotlight: React.FC = () => {
   const { links } = useLinks();
@@ -226,7 +225,7 @@ export const EventSpotlight: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-whatsapp btn-full"
-                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.55rem' }}
                   onClick={(e) => {
                     e.preventDefault();
                     openWhatsAppWithRules(
@@ -235,8 +234,8 @@ export const EventSpotlight: React.FC = () => {
                     );
                   }}
                 >
+                  <WhatsAppIcon size={18} />
                   <span>WhatsApp Grubuna Katıl</span>
-                  <MessageCircle size={16} />
                 </a>}
               </div>
             </div>

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Calendar, MapPin, Users, Download, MessageCircle, ExternalLink } from 'lucide-react';
+import { Calendar, MapPin, Users, Download, ExternalLink } from 'lucide-react';
 import { EventItem, EventType } from '../../types/event';
-import { CountdownTimer } from '../shared/CountdownTimer';
+import { CountdownTimer, WhatsAppIcon } from '../shared';
 import { downloadICS, openGoogleCalendar } from '../../utils/calendarExport';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
@@ -170,14 +170,14 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-whatsapp btn-full"
-              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.55rem' }}
               onClick={(e) => {
                 e.preventDefault();
                 openWhatsAppWithRules(event.whatsappLink || links.whatsappCoworking, 'WhatsApp Coworking Masası');
               }}
             >
+              <WhatsAppIcon size={18} />
               <span>WhatsApp Coworking Masasına Katıl</span>
-              <MessageCircle size={16} />
             </a>}
           </div>
         </div>

@@ -1,7 +1,7 @@
 import React from 'react';
-import { MessageCircle } from 'lucide-react';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
+import { WhatsAppIcon } from '../shared';
 
 export const ProjectCTA: React.FC = () => {
   const { links } = useLinks();
@@ -47,7 +47,7 @@ export const ProjectCTA: React.FC = () => {
             openWhatsAppWithRules(links.whatsappProjects, 'Projeler Grubu');
           }}
         >
-          <MessageCircle size={20} />
+          <WhatsAppIcon size={20} />
           <span>WhatsApp Projeler Grubuna Katıl</span>
         </a>
       </div>

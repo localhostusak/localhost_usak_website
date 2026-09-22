@@ -4,3 +4,4 @@ export * from './EmptyState';
 export * from './FilterBar';
 export * from './SkeletonCard';
 export * from './WhatsAppRulesModal';
+export * from './WhatsAppIcon';

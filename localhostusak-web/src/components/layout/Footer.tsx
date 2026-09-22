@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MessageCircle, MapPin } from 'lucide-react';
+import { MapPin } from 'lucide-react';
+import { WhatsAppIcon } from '../shared';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 import { useGeneralSettings } from '../../context/GeneralSettingsContext';
@@ -137,7 +138,7 @@ export const Footer: React.FC = () => {
                     openWhatsAppWithRules(links.whatsappGeneral, 'Genel Topluluk Grubu');
                   }}
                 >
-                  <MessageCircle size={16} style={{ color: '#22c55e' }} />
+                  <WhatsAppIcon size={16} style={{ color: 'var(--accent-success)' }} />
                   <span>WhatsApp Topluluğu</span>
                 </a>
               </li>}

@@ -1,7 +1,7 @@
 import React from 'react';
-import { MessageCircle } from 'lucide-react';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
+import { WhatsAppIcon } from '../shared';
 
 export const CareerCTA: React.FC = () => {
   const { links } = useLinks();
@@ -39,7 +39,7 @@ export const CareerCTA: React.FC = () => {
             openWhatsAppWithRules(links.whatsappCareers, 'Kariyer & İlanlar Grubu');
           }}
         >
-          <MessageCircle size={20} />
+          <WhatsAppIcon size={20} />
           <span>WhatsApp Kariyer Grubuna Katıl</span>
         </a>
       </div>

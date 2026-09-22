@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, MessageSquare } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import { WhatsAppIcon } from '../shared';
 import { useTheme } from '../../context/ThemeContext';
 import { useGeneralSettings } from '../../context/GeneralSettingsContext';
 import { useLinks } from '../../context/LinksContext';
@@ -149,7 +150,7 @@ export const Navbar: React.FC = () => {
             onClick={() => openWhatsAppWithRules(links.whatsappGeneral, 'Navbar')}
             aria-label="WhatsApp Topluluğuna Katıl"
           >
-            <MessageSquare size={15} />
+            <WhatsAppIcon size={15} />
             <span>Topluluğa Katıl</span>
           </button>
 
@@ -359,7 +360,7 @@ export const Navbar: React.FC = () => {
           {/* Mobile WhatsApp CTA Button */}
           <button
             type="button"
-            className="btn btn-primary btn-full"
+            className="btn btn-whatsapp btn-full"
             onClick={() => {
               setMobileMenuOpen(false);
               openWhatsAppWithRules(links.whatsappGeneral, 'Mobil Menü');
@@ -369,14 +370,14 @@ export const Navbar: React.FC = () => {
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '0.5rem',
+              gap: '0.55rem',
               padding: '0.75rem 1rem',
               borderRadius: 'var(--radius-full)',
               fontWeight: 600,
               fontSize: '0.95rem',
             }}
           >
-            <MessageSquare size={16} />
+            <WhatsAppIcon size={16} />
             <span>Topluluğa Katıl</span>
           </button>
         </div>

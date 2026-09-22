@@ -3,6 +3,7 @@ import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 import { useSiteSettings } from '../../context/SiteSettingsContext';
 import { renderCleanIcon } from '../../utils/cleanIcon';
+import { WhatsAppIcon } from '../shared';
 
 export const ValuesBento: React.FC = () => {
   const { links } = useLinks();
@@ -67,14 +68,15 @@ export const ValuesBento: React.FC = () => {
                       href={links.whatsappGeneral}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn btn-primary btn-sm"
+                      className="btn btn-whatsapp btn-sm"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
                       onClick={(e) => {
                         e.preventDefault();
                         openWhatsAppWithRules(links.whatsappGeneral, 'Genel Topluluk Grubu');
                       }}
                     >
+                      <WhatsAppIcon size={14} />
                       <span>İlk Adımı At: WhatsApp'a Katıl</span>
-                      <span>→</span>
                     </a>
                   </div>
                 )}

@@ -1,6 +1,7 @@
 import React from 'react';
-import { ExternalLink, MessageCircle } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { CareerItem, CareerType } from '../../types/career';
+import { WhatsAppIcon } from '../shared';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 
@@ -127,15 +128,15 @@ export const CareerCard: React.FC<CareerCardProps> = ({ career }) => {
             href={links.whatsappCareers}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-primary btn-sm"
-            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem' }}
+            className="btn btn-whatsapp btn-sm"
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.45rem' }}
             onClick={(e) => {
               e.preventDefault();
               openWhatsAppWithRules(links.whatsappCareers, 'Kariyer & İlanlar');
             }}
           >
+            <WhatsAppIcon size={14} />
             <span>Detay / İletişim</span>
-            <MessageCircle size={14} />
           </a>
         ) : null}
 

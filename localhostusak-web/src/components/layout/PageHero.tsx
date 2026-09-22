@@ -1,7 +1,7 @@
 import React from 'react';
-import { MessageCircle } from 'lucide-react';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
+import { WhatsAppIcon } from '../shared';
 
 interface PageHeroProps {
   tag?: string;
@@ -51,7 +51,7 @@ export const PageHero: React.FC<PageHeroProps> = ({
                 openWhatsAppWithRules(effectiveUrl, whatsappLabel);
               }}
             >
-              <MessageCircle size={20} />
+              <WhatsAppIcon size={20} />
               <span>{whatsappLabel}</span>
             </a>
           )}

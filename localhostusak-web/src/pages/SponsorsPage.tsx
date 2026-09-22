@@ -1,6 +1,7 @@
 import React from 'react';
-import { ExternalLink, Award, Shield, Heart, Sparkles, MessageCircle, Mail, AlertTriangle, Loader2 } from 'lucide-react';
+import { ExternalLink, Award, Shield, Heart, Sparkles, Mail, AlertTriangle, Loader2 } from 'lucide-react';
 import { PageHero } from '../components/layout/PageHero';
+import { WhatsAppIcon } from '../components/shared';
 import { SponsorItem } from '../types/sponsor';
 import { fetchSponsors } from '../services/api';
 import { useCmsCollection } from '../hooks/useCmsCollection';
@@ -283,11 +284,11 @@ export const SponsorsPage: React.FC = () => {
                   {links.whatsappGeneral && (
                     <button
                       type="button"
-                      className="btn btn-primary"
+                      className="btn btn-whatsapp"
                       onClick={() => openWhatsAppWithRules(links.whatsappGeneral, 'Sponsorluk Talebi')}
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '0.55rem' }}
                     >
-                      <MessageCircle size={18} />
+                      <WhatsAppIcon size={18} />
                       <span>WhatsApp ile İletişime Geçin</span>
                     </button>
                   )}
