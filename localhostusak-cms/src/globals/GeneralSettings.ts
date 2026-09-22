@@ -18,7 +18,7 @@ export const GeneralSettings: GlobalConfig = {
           name: 'siteTitle',
           type: 'text',
           label: 'Varsayılan Site Başlığı',
-          defaultValue: "localhostusak — Uşak'ın Teknoloji ve Tasarım Topluluğu",
+          defaultValue: "localhostusak — Uşağın Teknoloji ve Tasarım Topluluğu",
           required: true,
         },
         {
@@ -83,7 +83,7 @@ export const GeneralSettings: GlobalConfig = {
           type: 'textarea',
           label: 'Marka Sloganı / Açıklaması',
           defaultValue:
-            "Uşak'ın yerel teknoloji, yazılım ve tasarım ekosistemini büyüten açık ve bağımsız topluluk.",
+            "Uşağın yerel teknoloji, yazılım ve tasarım ekosistemini büyüten açık ve bağımsız topluluk.",
         },
         {
           name: 'locationCoordinates',

@@ -215,7 +215,7 @@ async function seed() {
       data: {
         hero: {
           cityCoordinates: '38.6823° N, 29.4082° E',
-          title: "Uşak'ın Teknoloji ve",
+          title: "Uşağın Teknoloji ve",
           titleHighlight: 'Tasarım Topluluğu',
           subtitle: 'connect • build • collaborate • grow',
           description:
@@ -246,7 +246,7 @@ async function seed() {
             icon: '☕',
             title: 'Kahve Eşliğinde Coworking',
             description:
-              "Uşak'ın en keyifli kafelerinde toplanıp hem çalışıyor hem sosyalleşiyoruz. Odaklanma ve verimlilik masada artıyor.",
+              "Uşağın en keyifli kafelerinde toplanıp hem çalışıyor hem sosyalleşiyoruz. Odaklanma ve verimlilik masada artıyor.",
             tags: 'Coffee: ∞ | Bugs: 0',
           },
           {
@@ -348,7 +348,7 @@ async function seed() {
       slug: 'general-settings',
       data: {
         meta: {
-          siteTitle: "localhostusak — Uşak'ın Teknoloji ve Tasarım Topluluğu",
+          siteTitle: "localhostusak — Uşağın Teknoloji ve Tasarım Topluluğu",
           defaultDescription:
             "Uşak'taki yazılımcılar, tasarımcılar, remote çalışanlar ve öğrenciler için açık, samimi ve üretken teknoloji topluluğu. Kahveni al, laptopunu getir!",
           keywords:
@@ -361,7 +361,7 @@ async function seed() {
         },
         footer: {
           tagline:
-            "Uşak'ın yerel teknoloji, yazılım ve tasarım ekosistemini büyüten açık ve bağımsız topluluk.",
+            "Uşağın yerel teknoloji, yazılım ve tasarım ekosistemini büyüten açık ve bağımsız topluluk.",
           locationCoordinates: '38.6823° N, 29.4082° E',
           copyrightText: "© 2026 localhostusak • Uşak'ta sevgiyle kodlandı 🧡",
         },

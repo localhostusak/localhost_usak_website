@@ -16,7 +16,7 @@ const DEFAULT_GENERAL_SETTINGS: GeneralSettingsData = {
   },
   footer: {
     tagline:
-      "Uşak'ın yerel teknoloji, yazılım ve tasarım ekosistemini büyüten açık ve bağımsız topluluk.",
+      "Uşağın yerel teknoloji, yazılım ve tasarım ekosistemini büyüten açık ve bağımsız topluluk.",
     locationCoordinates: '38.6823° N, 29.4082° E',
     copyrightText: "© 2026 localhostusak • Uşak'ta sevgiyle kodlandı 🧡",
   },

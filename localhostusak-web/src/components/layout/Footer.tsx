@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
 
   const tagline =
     settings?.footer?.tagline ||
-    "Uşak'ın yerel teknoloji, yazılım ve tasarım ekosistemini büyüten açık ve bağımsız topluluk.";
+    "Uşağın yerel teknoloji, yazılım ve tasarım ekosistemini büyüten açık ve bağımsız topluluk.";
   const locationCoordinates = settings?.footer?.locationCoordinates || '38.6823° N, 29.4082° E';
 
   return (

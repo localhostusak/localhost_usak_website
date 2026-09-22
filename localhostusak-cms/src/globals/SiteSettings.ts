@@ -24,7 +24,7 @@ export const SiteSettings: GlobalConfig = {
           name: 'title',
           type: 'text',
           label: 'Ana Başlık (1. Satır)',
-          defaultValue: "Uşak'ın Teknoloji ve",
+          defaultValue: "Uşağın Teknoloji ve",
         },
         {
           name: 'titleHighlight',
