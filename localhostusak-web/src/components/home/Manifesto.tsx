@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, Coffee, Sparkles, Globe, ArrowRight } from 'lucide-react';
+import { Users, Coffee, Sparkles, Globe, ArrowRight, Calendar, Code2, Briefcase } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const Manifesto: React.FC = () => {
@@ -102,13 +102,96 @@ export const Manifesto: React.FC = () => {
                   fontSize: '1rem',
                   color: 'var(--text-secondary)',
                   lineHeight: 1.75,
-                  marginBottom: '2rem',
+                  marginBottom: '1.5rem',
                 }}
               >
                 Burada resmi unvanlar, sıkıcı seminerler veya ticari satış sunumları yok. Kahvemizi alıyoruz,
                 laptoplarımızı açıyoruz; hem kendi projelerimizi üretiyor hem de birbirimize destek olarak
                 şehrimizin dijital potansiyelini açığa çıkarıyoruz.
               </p>
+
+              {/* Topluluk Masamızda Neler Var? (SEO & Dahili Bağlantılar) */}
+              <div style={{ marginBottom: '1.75rem' }}>
+                <div
+                  style={{
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    color: 'var(--text-muted)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.06em',
+                    marginBottom: '0.65rem',
+                  }}
+                >
+                  Topluluk Masamızda Neler Var?
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.55rem' }}>
+                  <Link
+                    to="/etkinlikler"
+                    className="badge"
+                    style={{
+                      background: 'var(--bg-surface)',
+                      border: '1px solid var(--border-subtle)',
+                      padding: '0.4rem 0.85rem',
+                      borderRadius: 'var(--radius-full)',
+                      fontSize: '0.825rem',
+                      fontWeight: 600,
+                      color: 'var(--text-primary)',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.45rem',
+                      textDecoration: 'none',
+                      transition: 'all var(--transition-fast)',
+                    }}
+                  >
+                    <Calendar size={13} style={{ color: 'var(--accent-primary)' }} />
+                    <span>Coworking & Buluşmalar</span>
+                  </Link>
+
+                  <Link
+                    to="/projeler"
+                    className="badge"
+                    style={{
+                      background: 'var(--bg-surface)',
+                      border: '1px solid var(--border-subtle)',
+                      padding: '0.4rem 0.85rem',
+                      borderRadius: 'var(--radius-full)',
+                      fontSize: '0.825rem',
+                      fontWeight: 600,
+                      color: 'var(--text-primary)',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.45rem',
+                      textDecoration: 'none',
+                      transition: 'all var(--transition-fast)',
+                    }}
+                  >
+                    <Code2 size={13} style={{ color: 'var(--accent-primary)' }} />
+                    <span>Açık Kaynak Projeler</span>
+                  </Link>
+
+                  <Link
+                    to="/kariyer"
+                    className="badge"
+                    style={{
+                      background: 'var(--bg-surface)',
+                      border: '1px solid var(--border-subtle)',
+                      padding: '0.4rem 0.85rem',
+                      borderRadius: 'var(--radius-full)',
+                      fontSize: '0.825rem',
+                      fontWeight: 600,
+                      color: 'var(--text-primary)',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.45rem',
+                      textDecoration: 'none',
+                      transition: 'all var(--transition-fast)',
+                    }}
+                  >
+                    <Briefcase size={13} style={{ color: 'var(--accent-primary)' }} />
+                    <span>Kariyer & İlanlar</span>
+                  </Link>
+                </div>
+              </div>
             </div>
 
             {/* Bottom Highlight Quote Box */}

@@ -413,10 +413,21 @@
   transition: all var(--transition-normal);
 }
 
+.persona-icon-box svg {
+  transition: color var(--transition-normal), stroke var(--transition-normal), transform var(--transition-normal);
+}
+
 .persona-card:hover .persona-icon-box {
   background: var(--accent-primary);
-  color: #FFFFFF;
-  box-shadow: 0 0 20px var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: #11141B;
+  box-shadow: 0 6px 20px var(--accent-glow);
+}
+
+.persona-card:hover .persona-icon-box svg {
+  color: #11141B !important;
+  stroke: #11141B !important;
+  transform: scale(1.08);
 }
 
 .persona-title {

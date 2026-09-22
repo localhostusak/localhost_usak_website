@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { HeroSection } from '../components/home/HeroSection';
 import { Manifesto } from '../components/home/Manifesto';
 import { ValuesBento } from '../components/home/ValuesBento';
@@ -27,11 +26,6 @@ export const HomePage: React.FC = () => {
       <HeroSection />
       {/* 2. Misyon Vizyon */}
       <Manifesto />
-      <section className="container" style={{ paddingBlock: '3rem', lineHeight: 1.8 }}>
-        <h2>Uşak'ta yazılım, mühendislik ve birlikte üretim</h2>
-        <p>Uşak teknoloji topluluğu localhostusak; yazılımcıları, mühendisleri, tasarımcıları ve öğrencileri aynı masada buluşturur. Deneyimini paylaşmak, yeni beceriler öğrenmek veya bir projeye ekip arkadaşı bulmak için aramıza katılabilirsin.</p>
-        <p><Link to="/etkinlikler">Uşak coworking ve teknoloji buluşmalarını</Link> takip et, <Link to="/projeler">açık kaynak yazılım projelerini</Link> keşfet veya <Link to="/kariyer">iş ilanları, staj ve kariyer paylaşımlarına</Link> göz at. Yeni içerikler topluluk tarafından eklendikçe bu sayfalarda görünür.</p>
-      </section>
       {/* 3. Değerlerimiz */}
       <ValuesBento />
       {/* 4. Kimler Katılabilir */}
