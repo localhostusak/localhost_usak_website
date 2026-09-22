@@ -7,6 +7,7 @@ import { SiteSettingsProvider } from './context/SiteSettingsContext';
 import { GeneralSettingsProvider } from './context/GeneralSettingsContext';
 import { WhatsAppModalProvider } from './context/WhatsAppModalContext';
 import { Navbar } from './components/layout/Navbar';
+import { PullToRefresh } from './components/layout/PullToRefresh';
 import { Footer } from './components/layout/Footer';
 import { FloatingCTA } from './components/layout/FloatingCTA';
 import { InteractiveCanvasBackground } from './components/layout/InteractiveCanvasBackground';
@@ -82,6 +83,7 @@ const AppContent: React.FC = () => {
       <ScrollToTop />
       <InteractiveCanvasBackground />
       <LevelUnlockedToast />
+      <PullToRefresh />
       <Navbar />
 
       <Routes>
