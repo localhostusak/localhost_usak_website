@@ -936,21 +936,27 @@
 /* --------------------------------------------------------------------------
    Sponsor Marquee & Showcase Animations
    -------------------------------------------------------------------------- */
+.values-section,
 .sponsors-section {
   position: relative;
-  background: var(--bg-secondary);
   border-top: 1px solid var(--border-subtle);
   border-bottom: 1px solid var(--border-subtle);
   --marquee-fade-color: var(--bg-secondary);
 }
 
+[data-theme="modern"] .values-section,
+[data-theme="dark"] .values-section,
 [data-theme="modern"] .sponsors-section,
 [data-theme="dark"] .sponsors-section {
+  background: rgba(18, 21, 27, 0.65);
   --marquee-fade-color: #12151B;
 }
 
+[data-theme="pixel"] .values-section,
+[data-theme="light"] .values-section,
 [data-theme="pixel"] .sponsors-section,
 [data-theme="light"] .sponsors-section {
+  background: rgba(245, 242, 235, 0.72);
   --marquee-fade-color: #F5F2EB;
 }
 

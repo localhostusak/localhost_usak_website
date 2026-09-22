@@ -1,173 +1,18 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, MapPin } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 import { useSiteSettings } from '../../context/SiteSettingsContext';
 
 export const HeroSection: React.FC = () => {
-  const { theme } = useTheme();
   const { links } = useLinks();
   const { openWhatsAppWithRules } = useWhatsAppModal();
   const { settings } = useSiteSettings();
   const hero = settings.hero;
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let width: number, height: number;
-    let animationFrameId: number;
-    const particleCount = 45;
-    const mouse: { x: number | null; y: number | null; radius: number } = {
-      x: null,
-      y: null,
-      radius: 140,
-    };
-
-    class Particle {
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      radius: number;
-      isBlue: boolean;
-
-      constructor() {
-        this.x = Math.random() * (width || 800);
-        this.y = Math.random() * (height || 600);
-        this.vx = (Math.random() - 0.5) * 0.8;
-        this.vy = (Math.random() - 0.5) * 0.8;
-        this.radius = Math.random() * 2 + 1.5;
-        this.isBlue = Math.random() > 0.75;
-      }
-
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-
-        if (this.x < 0 || this.x > width) this.vx *= -1;
-        if (this.y < 0 || this.y > height) this.vy *= -1;
-
-        if (mouse.x !== null && mouse.y !== null) {
-          const dx = mouse.x - this.x;
-          const dy = mouse.y - this.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < mouse.radius) {
-            const force = (mouse.radius - dist) / mouse.radius;
-            this.x -= (dx / dist) * force * 3;
-            this.y -= (dy / dist) * force * 3;
-          }
-        }
-      }
-
-      draw(isPixel: boolean) {
-        if (!ctx) return;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        if (isPixel) {
-          ctx.fillStyle = this.isBlue ? 'rgba(37, 99, 235, 0.7)' : 'rgba(227, 93, 20, 0.75)';
-          ctx.shadowBlur = 4;
-          ctx.shadowColor = this.isBlue ? 'rgba(37, 99, 235, 0.3)' : 'rgba(227, 93, 20, 0.3)';
-        } else {
-          ctx.fillStyle = this.isBlue ? 'rgba(59, 130, 246, 0.85)' : 'rgba(227, 93, 20, 0.9)';
-          ctx.shadowBlur = 8;
-          ctx.shadowColor = this.isBlue ? 'rgba(59, 130, 246, 0.4)' : 'rgba(227, 93, 20, 0.4)';
-        }
-        ctx.fill();
-      }
-    }
-
-    let particles: Particle[] = [];
-
-    const resize = () => {
-      if (!canvas || !canvas.parentElement) return;
-      const rect = canvas.parentElement.getBoundingClientRect();
-      width = canvas.width = rect.width;
-      height = canvas.height = rect.height;
-      particles = [];
-      for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle());
-      }
-    };
-
-    const animate = () => {
-      if (!ctx) return;
-      ctx.clearRect(0, 0, width, height);
-      const isPixel = theme === 'pixel';
-
-      // Draw connection lines
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < 110) {
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-
-            if (isPixel) {
-              ctx.strokeStyle = `rgba(227, 93, 20, ${0.12 * (1 - dist / 110)})`;
-              ctx.lineWidth = 0.75;
-            } else {
-              ctx.strokeStyle = `rgba(227, 93, 20, ${0.2 * (1 - dist / 110)})`;
-              ctx.lineWidth = 0.8;
-            }
-            ctx.stroke();
-          }
-        }
-      }
-
-      particles.forEach((p) => {
-        p.update();
-        p.draw(isPixel);
-      });
-
-      animationFrameId = requestAnimationFrame(animate);
-    };
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
-      if (
-        e.clientX >= rect.left &&
-        e.clientX <= rect.right &&
-        e.clientY >= rect.top &&
-        e.clientY <= rect.bottom
-      ) {
-        mouse.x = e.clientX - rect.left;
-        mouse.y = e.clientY - rect.top;
-      } else {
-        mouse.x = null;
-        mouse.y = null;
-      }
-    };
-
-    window.addEventListener('resize', resize);
-    window.addEventListener('mousemove', handleMouseMove);
-
-    resize();
-    animate();
-
-    return () => {
-      window.removeEventListener('resize', resize);
-      window.removeEventListener('mousemove', handleMouseMove);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, [theme]);
 
   return (
     <section className="section hero-section" id="hero">
-      {/* Interactive Constellation / Circuit Background Canvas */}
-      <div className="hero-canvas-container" aria-hidden="true">
-        <canvas id="hero-canvas" ref={canvasRef} />
-      </div>
 
       {/* Glowing Ambient Background Orbs */}
       <div className="hero-glow-orb" aria-hidden="true" />

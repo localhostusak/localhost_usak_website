@@ -12,7 +12,7 @@ export const ValuesBento: React.FC = () => {
   if (values.length === 0) return null;
 
   return (
-    <section className="section" id="values" style={{ background: 'var(--bg-secondary)' }}>
+    <section className="section values-section" id="values">
       <div className="container">
         <div className="section-header">
           <span className="section-tag">DEĞERLERİMİZ</span>

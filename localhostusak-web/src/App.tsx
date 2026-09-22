@@ -9,6 +9,7 @@ import { WhatsAppModalProvider } from './context/WhatsAppModalContext';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { FloatingCTA } from './components/layout/FloatingCTA';
+import { InteractiveCanvasBackground } from './components/layout/InteractiveCanvasBackground';
 
 import { HomePage } from './pages/HomePage';
 import { EventsPage } from './pages/EventsPage';
@@ -79,6 +80,7 @@ const AppContent: React.FC = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <InteractiveCanvasBackground />
       <LevelUnlockedToast />
       <Navbar />
 
