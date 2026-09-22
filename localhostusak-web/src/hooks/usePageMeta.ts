@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import pages from '../seo/pages.json';
 
-const site = 'https://localhostusak.tech';
+const site = 'https://localhostusak.com';
 interface PageMetaOptions { title?: string; description?: string; noindex?: boolean }
 
 export function usePageMeta({ title, description, noindex = false }: PageMetaOptions = {}) {

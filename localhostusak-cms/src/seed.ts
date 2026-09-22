@@ -249,11 +249,11 @@ async function seed() {
       data: {
         hero: {
           cityCoordinates: '38.6823° N, 29.4082° E',
-          title: "Uşak'ın Teknoloji ve",
-          titleHighlight: 'Tasarım Topluluğu',
-          subtitle: 'connect • build • collaborate • grow',
+          title: "Uşak'ta Teknoloji",
+          titleHighlight: 'Etrafında Buluş',
+          subtitle: 'CONNECT • BUILD • COLLABORATE • GROW',
           description:
-            'Kahveni al, laptopunu getir, aramıza katıl. Deneyimli olmak şart değil; merakın ve öğrenme isteğin varsa masada sana da yer var.',
+            'Teknolojiye ilgi duyan, üreten ve gelişmek isteyen insanları bir araya getiren lokal topluluk. Kahveni al, laptopunu getir, masada yerini al.',
         },
         stats: [
           { target: 150, prefix: '', suffix: '+', label: 'Topluluk Üyesi' },
@@ -382,9 +382,9 @@ async function seed() {
       slug: 'general-settings',
       data: {
         meta: {
-          siteTitle: "localhostusak — Uşak'ın Teknoloji ve Tasarım Topluluğu",
+          siteTitle: 'Uşak Teknoloji ve Yazılım Topluluğu | localhostusak',
           defaultDescription:
-            "Uşak'taki yazılımcılar, tasarımcılar, remote çalışanlar ve öğrenciler için açık, samimi ve üretken teknoloji topluluğu. Kahveni al, laptopunu getir!",
+            "Uşak'ta yazılımcılar, mühendisler ve teknoloji meraklıları için açık topluluk. Coworking buluşmaları, açık kaynak projeleri ve kariyer paylaşımları.",
           keywords:
             'Uşak yazılım, Uşak teknoloji, localhostusak, developer community, UI UX Uşak, Uşak meetup, remote çalışma, coworking',
         },
@@ -395,9 +395,9 @@ async function seed() {
         },
         footer: {
           tagline:
-            "Uşak'ın yerel teknoloji, yazılım ve tasarım ekosistemini büyüten açık ve bağımsız topluluk.",
+            "Uşak'ın yerel teknoloji ve yazılım ekosistemini büyüten açık ve bağımsız topluluk.",
           locationCoordinates: '38.6823° N, 29.4082° E',
-          copyrightText: "© 2026 localhostusak • Uşak'ta sevgiyle kodlandı 🧡",
+          copyrightText: "© 2026 localhostusak • Uşak'ta geliştirildi",
         },
       },
     })

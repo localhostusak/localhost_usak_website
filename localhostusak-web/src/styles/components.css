@@ -756,17 +756,18 @@
 
 /* Pixel / Light Theme Adjustments */
 [data-theme="pixel"] .theme-toggle-btn {
-  border-radius: 0;
-  border: 2px solid var(--pixel-black);
-  background: #FFFDF8;
-  color: var(--pixel-black);
-  box-shadow: 2px 2px 0px var(--pixel-black);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-medium);
+  background: var(--surface-elevated);
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 [data-theme="pixel"] .theme-toggle-btn:hover {
-  background: #FFF0DB;
-  box-shadow: 3px 3px 0px var(--pixel-black);
-  transform: translate(-1px, -1px);
+  background: var(--bg-card-hover);
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 14px rgba(227, 93, 20, 0.2);
+  transform: translateY(-1px);
 }
 
 [data-theme="pixel"] .theme-sky-icon {
@@ -792,13 +793,13 @@
 }
 
 [data-theme="pixel"] .theme-toggle-btn.crack-stage-1 {
-  border-color: var(--pixel-orange);
-  box-shadow: 2px 2px 0px var(--pixel-black), 0 0 12px rgba(238, 108, 25, 0.45);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 12px rgba(227, 93, 20, 0.35);
 }
 
 [data-theme="pixel"] .theme-toggle-btn.crack-stage-2 {
   border-color: #E63946;
-  box-shadow: 3px 3px 0px var(--pixel-black), 0 0 16px rgba(230, 57, 70, 0.6);
+  box-shadow: 0 0 16px rgba(230, 57, 70, 0.45);
 }
 
 /* --------------------------------------------------------------------------

@@ -48,6 +48,8 @@ export default buildConfig({
     ProjectsPageSettings,
   ],
   cors: [
+    'https://localhostusak.com',
+    'https://www.localhostusak.com',
     'https://localhostusak.tech',
     'https://www.localhostusak.tech',
     'http://rwqqhpeag4mw5peahi5ru5s6.31.77.112.167.sslip.io',
