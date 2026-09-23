@@ -272,7 +272,7 @@ async function seed() {
             author: 'Ekosistem',
           },
           {
-            quote: 'Unvanlar ve kurumsal hiyerarşiler kapıda kalır. Burada öğrenci de kıdemli mühendis de aynı masada eşittir.',
+            quote: 'Unvanlar ve kurumsal hiyerarşiler kapıda kalır. Yeni başlayandan kıdemli mühendise herkes aynı masada eşittir.',
             tag: 'SIFIR HİYERARŞİ & EŞİT MASA',
             author: 'Temel İlke',
           },
@@ -288,7 +288,7 @@ async function seed() {
             icon: '🧡',
             title: 'Resmiyetten Uzak, Samimi Bir Masa',
             description:
-              'Buluşmalarımız kurumsal konferans formatında değil. Kimse kravat takmıyor, kimse unvan satmıyor. En tecrübeli yazılımcı da yeni başlayan öğrenci de aynı masada yan yana kahvesini yudumluyor.',
+              'Buluşmalarımız kurumsal konferans formatında değil. Kimse kravat takmıyor, kimse unvan satmıyor. En tecrübeli yazılımcı da yeni başlayan da aynı masada yan yana kahvesini yudumluyor.',
             tags: '#Samimiyet, #Eşitlik, #Yardımlaşma',
           },
           {

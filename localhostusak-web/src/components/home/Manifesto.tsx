@@ -21,7 +21,7 @@ const DEFAULT_VISION_MESSAGES: SiteVisionMessageItem[] = [
     author: 'Ekosistem',
   },
   {
-    quote: 'Unvanlar ve kurumsal hiyerarşiler kapıda kalır. Burada öğrenci de kıdemli mühendis de aynı masada eşittir.',
+    quote: 'Unvanlar ve kurumsal hiyerarşiler kapıda kalır. Yeni başlayandan kıdemli mühendise herkes aynı masada eşittir.',
     tag: 'SIFIR HİYERARŞİ & EŞİT MASA',
     author: 'Temel İlke',
   },
@@ -52,7 +52,7 @@ export const Manifesto: React.FC = () => {
     {
       icon: <Users size={22} style={{ color: 'var(--accent-primary)' }} />,
       title: 'Sıfır Hiyerarşi & Eşit Masa',
-      desc: 'Unvanlar kapıda kalır. Öğrenciden kıdemli mühendise herkes aynı masada eşit söz hakkına ve samimiyete sahiptir.',
+      desc: 'Unvanlar kapıda kalır. Tecrübe seviyesi fark etmeksizin herkes aynı masada eşit söz hakkına ve samimiyete sahiptir.',
     },
     {
       icon: <Coffee size={22} style={{ color: 'var(--accent-primary)' }} />,
