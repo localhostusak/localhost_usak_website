@@ -1,16 +1,53 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, MapPin } from 'lucide-react';
 import { WhatsAppIcon } from '../shared';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 import { useSiteSettings } from '../../context/SiteSettingsContext';
+import { SiteVisionMessageItem } from '../../services/api';
+
+const DEFAULT_HERO_VISION: SiteVisionMessageItem[] = [
+  {
+    quote: 'Resmiyetten uzak, samimi bir masa. Good Code, Better People.',
+    tag: 'TOPLULUK VİZYONU',
+  },
+  {
+    quote: "Uşak'ta sürdürülebilir, samimi ve profesyonel bir teknoloji ekosistemi oluşturmak.",
+    tag: 'YOL HARİTAMIZ & VİZYONUMUZ',
+  },
+  {
+    quote: 'Kahveni al, masaya otur. Birlikte düşündüğümüzde ve ürettiğimizde çok daha güçlüyüz.',
+    tag: 'GOOD CODE, BETTER PEOPLE',
+  },
+  {
+    quote: "Büyük şehirlerdeki teknoloji enerjisini Uşak'ın üretken yetenekleriyle buluşturuyoruz.",
+    tag: 'YEREL DAYANIŞMA, KÜRESEL VİZYON',
+  },
+];
 
 export const HeroSection: React.FC = () => {
   const { links } = useLinks();
   const { openWhatsAppWithRules } = useWhatsAppModal();
   const { settings } = useSiteSettings();
   const hero = settings.hero;
+
+  const visionList =
+    settings.visionMessages && settings.visionMessages.length > 0
+      ? settings.visionMessages
+      : DEFAULT_HERO_VISION;
+
+  const [activeVisionIdx, setActiveVisionIdx] = useState(0);
+
+  useEffect(() => {
+    if (visionList.length <= 1) return;
+    const timer = setInterval(() => {
+      setActiveVisionIdx((prev) => (prev + 1) % visionList.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [visionList.length]);
+
+  const activeVision = visionList[activeVisionIdx] || visionList[0];
 
   return (
     <section className="section hero-section" id="hero">
@@ -21,16 +58,16 @@ export const HeroSection: React.FC = () => {
 
       <div className="container hero-content">
         <div style={{ maxWidth: '860px', margin: '0 auto', textAlign: 'center' }}>
-          {/* Location Pill */}
-          <div style={{ marginBottom: '1.5rem' }}>
-            <div className="location-pill">
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
-                <MapPin size={14} style={{ color: 'var(--accent-primary)' }} /> U Ş A K
-              </span>
-              <span style={{ opacity: 0.4 }}>|</span>
-              <span style={{ fontSize: '0.8rem', color: 'var(--accent-primary)' }}>
-                {hero?.cityCoordinates || '38.6823° N, 29.4082° E'}
-              </span>
+          {/* Topluluk Logosu Rozeti */}
+          <div style={{ marginBottom: '1.75rem', display: 'flex', justifyContent: 'center' }}>
+            <div className="hero-logo-emblem" aria-label="Localhost Uşak Topluluk Logosu">
+              <img
+                src="/logo.png"
+                alt="Localhost Uşak"
+                className="hero-logo-emblem-img"
+                width={76}
+                height={76}
+              />
             </div>
           </div>
 
@@ -128,8 +165,8 @@ export const HeroSection: React.FC = () => {
             </a>}
           </div>
 
-          {/* Reference Community Motto Pill Preview */}
-          <div>
+          {/* Topluluk Vizyonu Kartı (Dinamik Dönen Mesajlar) */}
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
             <div
               className="card"
               style={{
@@ -169,12 +206,33 @@ export const HeroSection: React.FC = () => {
                     marginBottom: '0.2rem',
                   }}
                 >
-                  TOPLULUK VİZYONU
+                  {activeVision.tag || 'TOPLULUK VİZYONU'}
                 </div>
-                <div style={{ color: 'var(--text-primary)', fontWeight: 600, lineHeight: 1.4 }}>
-                  "Resmiyetten uzak, samimi bir masa. Good Code, Better People."
+                <div
+                  key={activeVisionIdx}
+                  style={{
+                    color: 'var(--text-primary)',
+                    fontWeight: 600,
+                    lineHeight: 1.4,
+                    animation: 'fadeIn 0.4s ease-out forwards',
+                  }}
+                >
+                  "{activeVision.quote}"
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Uşak ve Koordinat Kartı (Topluluk Vizyonu ile Manifesto Arasında) */}
+          <div style={{ marginTop: '1.75rem', display: 'flex', justifyContent: 'center' }}>
+            <div className="location-pill">
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                <MapPin size={14} style={{ color: 'var(--accent-primary)' }} /> U Ş A K
+              </span>
+              <span style={{ opacity: 0.4 }}>|</span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--accent-primary)' }}>
+                {hero?.cityCoordinates || '38.6823° N, 29.4082° E'}
+              </span>
             </div>
           </div>
         </div>

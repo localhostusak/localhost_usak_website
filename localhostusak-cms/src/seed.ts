@@ -255,6 +255,28 @@ async function seed() {
           description:
             'Teknolojiye ilgi duyan, üreten ve gelişmek isteyen insanları bir araya getiren lokal topluluk. Kahveni al, laptopunu getir, masada yerini al.',
         },
+        visionMessages: [
+          {
+            quote: "Uşak'ta sürdürülebilir, samimi ve profesyonel bir teknoloji ekosistemi oluşturmak.",
+            tag: 'YOL HARİTAMIZ & VİZYONUMUZ',
+            author: 'Localhost Uşak',
+          },
+          {
+            quote: 'Kahveni al, masaya otur. Birlikte düşündüğümüzde ve ürettiğimizde çok daha güçlüyüz.',
+            tag: 'GOOD CODE, BETTER PEOPLE',
+            author: 'Açık Masa Felsefesi',
+          },
+          {
+            quote: "Büyük şehirlerdeki teknoloji ve girişimcilik enerjisini Uşak'ın üretken yetenekleriyle buluşturuyoruz.",
+            tag: 'YEREL DAYANIŞMA, KÜRESEL VİZYON',
+            author: 'Ekosistem',
+          },
+          {
+            quote: 'Unvanlar ve kurumsal hiyerarşiler kapıda kalır. Burada öğrenci de kıdemli mühendis de aynı masada eşittir.',
+            tag: 'SIFIR HİYERARŞİ & EŞİT MASA',
+            author: 'Temel İlke',
+          },
+        ],
         stats: [
           { target: 150, prefix: '', suffix: '+', label: 'Topluluk Üyesi' },
           { target: 3, prefix: '#', suffix: '', label: 'Başarılı Buluşma' },

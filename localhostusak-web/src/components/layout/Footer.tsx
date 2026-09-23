@@ -22,17 +22,17 @@ export const Footer: React.FC = () => {
         <div className="footer-grid">
           {/* Col 1: Brand & Slogan */}
           <div>
-            <div className="brand-logo" style={{ marginBottom: '1.25rem' }}>
+            <Link to="/" className="brand-logo" aria-label="Localhost Uşak Ana Sayfa" style={{ marginBottom: '1.25rem' }}>
               <img
                 src="/logo.png"
-                alt="localhost[uşak]"
+                alt="Localhost Uşak"
                 className="brand-logo-img"
-                style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'contain' }}
+                style={{ width: '42px', height: '42px', borderRadius: '50%', objectFit: 'contain' }}
               />
-              <span>
-                localhost<span className="brand-highlight">[uşak]</span>
+              <span className="brand-logo-text">
+                Localhost <span className="brand-highlight">Uşak</span>
               </span>
-            </div>
+            </Link>
             <p
               style={{
                 color: 'var(--text-secondary)',

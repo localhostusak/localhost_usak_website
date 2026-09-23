@@ -263,8 +263,16 @@ export interface SiteCareerResource {
   tag?: string;
 }
 
+export interface SiteVisionMessageItem {
+  id?: string;
+  quote: string;
+  tag?: string;
+  author?: string;
+}
+
 export interface SiteSettingsData {
   hero?: SiteHeroSettings;
+  visionMessages?: SiteVisionMessageItem[];
   stats?: SiteStatItem[];
   values?: SiteValueItem[];
   personas?: SitePersonaItem[];

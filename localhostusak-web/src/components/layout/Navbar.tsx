@@ -54,6 +54,12 @@ export const Navbar: React.FC = () => {
 
   const isAnnouncementVisible = Boolean(settings?.header?.announcementActive && settings?.header?.announcementText);
 
+  // Sync fixed navbar height to document root so page content is never hidden
+  useEffect(() => {
+    const totalHeight = isAnnouncementVisible ? 108 : 72;
+    document.documentElement.style.setProperty('--navbar-total-height', `${totalHeight}px`);
+  }, [isAnnouncementVisible]);
+
   return (
     <header className={`navbar-wrapper ${isScrolled ? 'nav-scrolled' : ''}`} id="main-nav">
       {isAnnouncementVisible && (
@@ -87,16 +93,16 @@ export const Navbar: React.FC = () => {
       <div className="container nav-container">
         {/* Brand Logo Column */}
         <div className="nav-brand-wrapper">
-          <Link to="/" className="brand-logo" id="nav-brand-logo" aria-label="localhostusak Ana Sayfa">
+          <Link to="/" className="brand-logo" id="nav-brand-logo" aria-label="Localhost Uşak Ana Sayfa">
             <img
               src="/logo.png"
-              alt="localhost[uşak]"
+              alt="Localhost Uşak"
               className="brand-logo-img"
-              width={32}
-              height={32}
+              width={42}
+              height={42}
             />
             <span className="brand-logo-text">
-              localhost<span className="brand-highlight">[uşak]</span>
+              Localhost <span className="brand-highlight">Uşak</span>
             </span>
           </Link>
         </div>

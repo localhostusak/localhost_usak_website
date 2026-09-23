@@ -482,25 +482,190 @@
   box-shadow: none !important;
 }
 
-@media (max-width: 520px) {
+/* --------------------------------------------------------------------------
+   Mobile & Tablet Responsive Overhaul
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .wa-rules-modal-overlay {
+    padding: max(0.5rem, env(safe-area-inset-top)) max(0.5rem, env(safe-area-inset-right)) max(0.5rem, env(safe-area-inset-bottom)) max(0.5rem, env(safe-area-inset-left));
+  }
+
+  .wa-rules-modal-card {
+    max-height: 94dvh;
+    height: 94dvh;
+    max-width: 100%;
+    border-radius: var(--radius-md);
+  }
+
   .wa-rules-header {
-    padding: 1.25rem 1.25rem 1rem 1.25rem;
+    padding: 0.85rem 1rem 0.65rem 1rem;
+  }
+
+  .wa-rules-header-meta {
+    margin-bottom: 0.25rem;
+  }
+
+  .wa-rules-tag {
+    font-size: 0.68rem;
+  }
+
+  .wa-rules-group-badge {
+    font-size: 0.68rem;
+    padding: 0.15rem 0.5rem;
+  }
+
+  .wa-rules-title {
+    font-size: 1.15rem;
+    line-height: 1.25;
+  }
+
+  .wa-rules-close-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.85rem;
+  }
+
+  .wa-rules-subtitle {
+    font-size: 0.775rem;
+    line-height: 1.38;
+    margin: 0.35rem 0 0 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .wa-rules-progress-track {
+    margin-top: 0.5rem;
+    height: 3px;
   }
 
   .wa-rules-scroll-area {
-    padding: 1rem 1.25rem;
+    padding: 0.75rem 0.85rem;
+    gap: 0.75rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .wa-rules-grid {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .wa-rule-card {
+    padding: 0.75rem 0.85rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .wa-rule-card-header {
+    margin-bottom: 0.35rem;
+  }
+
+  .wa-rule-icon-wrapper {
+    width: 32px;
+    height: 32px;
+  }
+
+  .wa-rule-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .wa-rule-badge {
+    font-size: 0.68rem;
+  }
+
+  .wa-rule-item-title {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .wa-rule-item-desc {
+    font-size: 0.825rem;
+    line-height: 1.48;
+    color: var(--text-primary);
+    opacity: 0.9;
+  }
+
+  .wa-rules-motto {
+    margin-top: 0.25rem;
+    padding: 0.75rem;
+  }
+
+  .wa-rules-motto-callout {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .wa-rules-motto-triad {
+    font-size: 0.7rem;
+    gap: 0.4rem;
+  }
+
+  .wa-rules-scroll-indicator {
+    margin: 0 0.85rem 0.35rem 0.85rem;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
   }
 
   .wa-rules-footer {
-    padding: 1rem 1.25rem 1.25rem 1.25rem;
+    padding: 0.75rem 0.85rem 0.85rem 0.85rem;
+    gap: 0.65rem;
+  }
+
+  .wa-rules-checkbox-container {
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--radius-xs);
+  }
+
+  .wa-rules-checkbox-label {
+    gap: 0.65rem;
+  }
+
+  .wa-rules-checkbox-custom {
+    width: 20px;
+    height: 20px;
+    margin-top: 1px;
+  }
+
+  .wa-rules-checkbox-text {
+    font-size: 0.82rem;
+    line-height: 1.35;
+  }
+
+  .wa-rules-unlock-hint,
+  .wa-rules-unlocked-hint {
+    font-size: 0.72rem;
   }
 
   .wa-rules-actions {
-    flex-direction: column-reverse;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
     width: 100%;
   }
 
-  .wa-rules-actions .btn {
+  .wa-rules-cancel-btn {
+    flex: 0 0 auto;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.825rem;
+  }
+
+  .wa-rules-confirm-btn {
+    flex: 1 1 auto;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.825rem;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 380px) {
+  .wa-rules-actions {
+    flex-direction: column-reverse;
+  }
+
+  .wa-rules-cancel-btn,
+  .wa-rules-confirm-btn {
     width: 100%;
     justify-content: center;
   }

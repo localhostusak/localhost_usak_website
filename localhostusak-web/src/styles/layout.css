@@ -146,11 +146,17 @@
    Specific Layout Enhancements for Navbar, Hero, Spotlight & Footer
    -------------------------------------------------------------------------- */
 .navbar-wrapper {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
   width: 100%;
   transition: all var(--transition-normal);
+}
+
+body {
+  padding-top: var(--navbar-total-height, var(--nav-height, 72px));
 }
 
 .navbar-wrapper.nav-scrolled {
@@ -203,22 +209,32 @@
 }
 
 .brand-logo-img {
-  width: 32px;
-  height: 32px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   object-fit: contain;
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform var(--transition-fast);
+}
+
+.brand-logo:hover .brand-logo-img {
+  transform: scale(1.05);
 }
 
 .brand-logo-text {
   display: inline-flex;
   align-items: center;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
   line-height: 1;
 }
 
 .brand-logo .brand-highlight {
   color: var(--accent-primary);
   font-weight: 800;
+  margin-left: 0.25rem;
 }
 
 /* Center Nav Links Column (Modern Glass Pill) */

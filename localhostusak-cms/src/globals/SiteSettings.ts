@@ -48,6 +48,34 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
 
+    // 1.5 Topluluk Vizyon Mesajları (Otomatik Dönen Vizyon Kartı)
+    {
+      name: 'visionMessages',
+      type: 'array',
+      label: '1.5 Topluluk Vizyon Mesajları (Otomatik Rotasyon)',
+      admin: {
+        description: 'Manifesto & Misyon kartında periyodik olarak otomatik değişen vizyon sözleri.',
+      },
+      fields: [
+        {
+          name: 'quote',
+          type: 'textarea',
+          label: 'Vizyon Mesajı / Söz',
+          required: true,
+        },
+        {
+          name: 'tag',
+          type: 'text',
+          label: 'Vurgu / Etiket (Örn: #Vizyonumuz veya Good Code, Better People)',
+        },
+        {
+          name: 'author',
+          type: 'text',
+          label: 'Kaynak / İbare (Opsiyonel)',
+        },
+      ],
+    },
+
     // 2. Scoreboard & Rakamlarla Topluluk
     {
       name: 'stats',
