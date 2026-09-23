@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { AlertTriangle, Loader2, Briefcase } from 'lucide-react';
 import { PageHero } from '../components/layout/PageHero';
 import { FilterBar, FilterOption } from '../components/shared/FilterBar';
 import { CareerCard } from '../components/careers/CareerCard';
@@ -38,18 +39,18 @@ export const CareersPage: React.FC = () => {
   }, []);
 
   const primaryOptions: FilterOption[] = [
-    { id: 'all', label: 'Tüm İlanlar', icon: '⚡' },
-    { id: 'job', label: 'İş İlanı', icon: '💼' },
-    { id: 'internship', label: 'Staj', icon: '🎓' },
-    { id: 'freelance', label: 'Freelance', icon: '🌍' },
-    { id: 'mentorship', label: 'Mentorluk', icon: '🤝' },
+    { id: 'all', label: 'Tüm İlanlar' },
+    { id: 'job', label: 'İş İlanı' },
+    { id: 'internship', label: 'Staj' },
+    { id: 'freelance', label: 'Freelance' },
+    { id: 'mentorship', label: 'Mentorluk' },
   ];
 
   const secondaryOptions: FilterOption[] = [
     { id: 'all', label: 'Tüm Çalışma Şekilleri' },
-    { id: 'remote', label: 'Remote', icon: '🌐' },
-    { id: 'hybrid', label: 'Hibrit', icon: '🏢' },
-    { id: 'onsite', label: 'Ofis', icon: '📍' },
+    { id: 'remote', label: 'Remote' },
+    { id: 'hybrid', label: 'Hibrit' },
+    { id: 'onsite', label: 'Ofis' },
   ];
 
   const filteredCareers = useMemo(() => {
@@ -70,7 +71,6 @@ export const CareersPage: React.FC = () => {
   return (
     <main>
       <PageHero
-        tag={settings?.hero?.tag || "// KARİYER & FIRSAT PANOSU"}
         title={settings?.hero?.title || "Uşak Yazılım Kariyeri,"}
         highlightText={settings?.hero?.highlightText || "İş İlanları ve Staj"}
         description={settings?.hero?.description || "Topluluk üyelerinin paylaştığı iş ilanları, staj fırsatları, freelance projeler ve ücretsiz mentorluk eşleşmeleri."}
@@ -102,12 +102,22 @@ export const CareersPage: React.FC = () => {
         </div>
 
         {isLoading ? (
-          <EmptyState icon="⏳" title="İlanlar Yükleniyor" description="Güncel fırsatlar getiriliyor." />
+          <EmptyState
+            icon={<Loader2 size={40} style={{ animation: 'spin 1.5s linear infinite', color: 'var(--text-muted)' }} />}
+            title="İlanlar Yükleniyor"
+            description="Güncel fırsatlar getiriliyor."
+          />
         ) : error ? (
-          <EmptyState icon="⚠️" title="İlanlara Ulaşılamadı" description="İçerik şu anda yüklenemiyor. Biraz sonra tekrar deneyebilirsin." actionText="Tekrar Dene" onAction={retry} />
+          <EmptyState
+            icon={<AlertTriangle size={40} style={{ color: '#FF6600' }} />}
+            title="İlanlara Ulaşılamadı"
+            description="İçerik şu anda yüklenemiyor. Biraz sonra tekrar deneyebilirsin."
+            actionText="Tekrar Dene"
+            onAction={retry}
+          />
         ) : filteredCareers.length === 0 ? (
           <EmptyState
-            icon="💼"
+            icon={<Briefcase size={40} style={{ color: 'var(--text-muted)' }} />}
             title={careers.length === 0 ? 'Henüz Aktif İlan Yok' : 'İlan Bulunamadı'}
             description={careers.length === 0 ? 'Yeni kariyer fırsatları eklendiğinde burada görünecek.' : 'Seçtiğin kriterlere uygun açık kariyer ilanı bulunmuyor. Filtreleri temizleyerek tüm ilanları listeleyebilirsin.'}
             actionText={careers.length === 0 ? undefined : 'Filtreleri Sıfırla'}

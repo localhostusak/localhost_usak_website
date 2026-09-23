@@ -1,19 +1,22 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { Coffee } from 'lucide-react';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { LinksProvider } from './context/LinksContext';
 import { SiteSettingsProvider } from './context/SiteSettingsContext';
 import { GeneralSettingsProvider } from './context/GeneralSettingsContext';
 import { WhatsAppModalProvider } from './context/WhatsAppModalContext';
 import { Navbar } from './components/layout/Navbar';
+import { PullToRefresh } from './components/layout/PullToRefresh';
 import { Footer } from './components/layout/Footer';
 import { FloatingCTA } from './components/layout/FloatingCTA';
+import { InteractiveCanvasBackground } from './components/layout/InteractiveCanvasBackground';
 
-import { EnglishPage } from './pages/EnglishPage';
 import { HomePage } from './pages/HomePage';
 import { EventsPage } from './pages/EventsPage';
 import { CareersPage } from './pages/CareersPage';
 import { ProjectsPage } from './pages/ProjectsPage';
+import { SponsorsPage } from './pages/SponsorsPage';
 import { AdminPage } from './pages/AdminPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ErrorBoundary } from './components/shared/ErrorBoundary';
@@ -23,8 +26,7 @@ import './styles/tokens.css';
 import './styles/reset.css';
 import './styles/layout.css';
 import './styles/components.css';
-import './styles/modern-theme.css';
-import './styles/pixel-theme.css';
+import './styles/glassmorphism-theme.css';
 import './styles/animations.css';
 import './styles/subpages.css';
 import './styles/whatsapp-rules-modal.css';
@@ -38,7 +40,7 @@ const ScrollToTop: React.FC = () => {
   return null;
 };
 
-// Toast notification component for both Retro Kafe and Cyber HUD modes
+// Toast notification component for Light (Cream) and Dark (Obsidian) modes
 const LevelUnlockedToast: React.FC = () => {
   const { isUnlockedToastVisible, closeToast, toastTheme } = useTheme();
 
@@ -52,22 +54,21 @@ const LevelUnlockedToast: React.FC = () => {
     >
       {toastTheme === 'pixel' ? (
         <>
-          <span className="toast-badge-icon">☕</span>
+          <span className="toast-badge-icon"><Coffee size={18} /></span>
           <div className="toast-content">
-            <strong className="toast-title">LEVEL UNLOCKED: COZY RETRO MODE! 🕹️</strong>
+            <strong className="toast-title">AYDINLIK MOD DEVREDE</strong>
             <div className="toast-subtitle">
-              Uşak kafe masasına hoş geldin!
+              Sıcak krem & fildişi paletine geçildi.
             </div>
           </div>
         </>
       ) : (
         <>
-          <span className="toast-badge-icon modern-glyph">&gt;_</span>
+          <span className="toast-badge-icon modern-glyph">✦</span>
           <div className="toast-content">
-            <div className="toast-status-tag">// SYSTEM RESTORED: HUD ONLINE</div>
-            <strong className="toast-title">CYBER HUD MODE ACTIVATED ⚡</strong>
+            <strong className="toast-title">KARANLIK MOD DEVREDE</strong>
             <div className="toast-subtitle">
-              Terminal oturumu başlatıldı. Uşak tech stack devrede.
+              Derin arduvaz & obsidyen paletine geçildi.
             </div>
           </div>
         </>
@@ -80,7 +81,9 @@ const AppContent: React.FC = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <InteractiveCanvasBackground />
       <LevelUnlockedToast />
+      <PullToRefresh />
       <Navbar />
 
       <Routes>
@@ -88,7 +91,7 @@ const AppContent: React.FC = () => {
         <Route path="/etkinlikler" element={<EventsPage />} />
         <Route path="/kariyer" element={<CareersPage />} />
         <Route path="/projeler" element={<ProjectsPage />} />
-        <Route path="/en" element={<EnglishPage />} />
+        <Route path="/sponsorlar" element={<SponsorsPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

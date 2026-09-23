@@ -1,6 +1,7 @@
 import React from 'react';
+import { Calendar, MapPin, Users, Download, ExternalLink } from 'lucide-react';
 import { EventItem, EventType } from '../../types/event';
-import { CountdownTimer } from '../shared/CountdownTimer';
+import { CountdownTimer, WhatsAppIcon } from '../shared';
 import { downloadICS, openGoogleCalendar } from '../../utils/calendarExport';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
@@ -45,7 +46,7 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
   return (
     <div
       className="spotlight-card card circuit-border"
-      style={{ padding: '3rem 2.5rem', position: 'relative', marginBottom: '3rem' }}
+      style={{ marginBottom: '3rem' }}
     >
       <span className="hud-corner-tl" aria-hidden="true" />
       <span className="hud-corner-tr" aria-hidden="true" />
@@ -63,7 +64,7 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
                 border: `1px solid ${eventType ? eventType.colorModern : 'var(--accent-primary)'}`,
               }}
             >
-              {eventType?.icon} {eventType?.label || event.typeId}
+              {eventType?.label || event.typeId}
             </span>
             <span className="badge badge-blue">YÜZ YÜZE</span>
             <span className="badge badge-live">KATILIM ÜCRETSİZ</span>
@@ -79,13 +80,13 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
 
           <div className="meetup-meta-list">
             <div className="meetup-meta-item">
-              <span className="meta-icon">📅</span>
+              <span className="meta-icon"><Calendar size={18} /></span>
               <div>
                 <strong>Tarih:</strong> {formattedDate}
               </div>
             </div>
             <div className="meetup-meta-item">
-              <span className="meta-icon">📍</span>
+              <span className="meta-icon"><MapPin size={18} /></span>
               <div>
                 <strong>Mekan:</strong> {event.location}
                 {event.mapUrl && (
@@ -98,15 +99,20 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
                       fontSize: '0.85rem',
                       marginLeft: '0.5rem',
                       textDecoration: 'underline',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.2rem',
                     }}
                   >
-                    (Haritada Gör ↗)
+                    <span>(Haritada Gör</span>
+                    <ExternalLink size={12} />
+                    <span>)</span>
                   </a>
                 )}
               </div>
             </div>
             <div className="meetup-meta-item">
-              <span className="meta-icon">👥</span>
+              <span className="meta-icon"><Users size={18} /></span>
               <div>
                 <strong>Kontenjan & Katılım:</strong> {event.attendees} Kişi Masada (Kapasite: {event.capacity || 'Sınırsız'})
               </div>
@@ -124,15 +130,7 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
           )}
         </div>
 
-        <div
-          style={{
-            background: 'var(--surface-elevated)',
-            padding: '2rem',
-            borderRadius: 'var(--radius-md)',
-            border: '1px solid var(--border-circuit)',
-            textAlign: 'center',
-          }}
-        >
+        <div className="spotlight-countdown-card">
           <div
             style={{
               fontFamily: 'var(--font-mono)',
@@ -143,7 +141,7 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
               textTransform: 'uppercase',
             }}
           >
-            ⏳ BULUŞMAYA KALAN SÜRE
+            BULUŞMAYA KALAN SÜRE
           </div>
 
           <CountdownTimer targetDate={event.dateStart} />
@@ -153,30 +151,33 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
               type="button"
               className="btn btn-primary btn-full"
               onClick={handleDownloadICS}
+              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
             >
               <span>Takvime Ekle (.ICS)</span>
-              <span>📥</span>
+              <Download size={16} />
             </button>
             <button
               type="button"
               className="btn btn-secondary btn-full"
               onClick={handleGoogleCalendar}
+              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
             >
               <span>Google Takvim'e Kaydet</span>
-              <span>📅</span>
+              <Calendar size={16} />
             </button>
             {(event.whatsappLink || links.whatsappCoworking) && <a
               href={event.whatsappLink || links.whatsappCoworking}
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-whatsapp btn-full"
+              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.55rem' }}
               onClick={(e) => {
                 e.preventDefault();
                 openWhatsAppWithRules(event.whatsappLink || links.whatsappCoworking, 'WhatsApp Coworking Masası');
               }}
             >
+              <WhatsAppIcon size={18} />
               <span>WhatsApp Coworking Masasına Katıl</span>
-              <span>💬</span>
             </a>}
           </div>
         </div>

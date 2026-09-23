@@ -793,6 +793,17 @@ export interface SiteSetting {
     description?: string | null;
   };
   /**
+   * Manifesto & Misyon kartında periyodik olarak otomatik değişen vizyon sözleri.
+   */
+  visionMessages?:
+    | {
+        quote: string;
+        tag?: string | null;
+        author?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
    * Ana sayfadaki sayaç kartları (Örn: 150+ Topluluk Üyesi)
    */
   stats?:
@@ -964,6 +975,14 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         titleHighlight?: T;
         subtitle?: T;
         description?: T;
+      };
+  visionMessages?:
+    | T
+    | {
+        quote?: T;
+        tag?: T;
+        author?: T;
+        id?: T;
       };
   stats?:
     | T

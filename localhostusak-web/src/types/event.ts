@@ -1,7 +1,7 @@
 export interface EventType {
   id: string;           // "cowork" | "workshop" | "talk" | dynamic ID
   label: string;        // "Cowork" | "Workshop" | "Talk"
-  icon: string;         // "☕" | "🛠️" | "🎤"
+  icon: string;         // "coffee" | "wrench" | "mic"
   colorModern: string;  // e.g. "#FF6600"
   colorPixel: string;   // e.g. "#EE6C19"
   isDefault?: boolean;

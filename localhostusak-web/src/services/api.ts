@@ -2,6 +2,7 @@ import { EventItem, EventType } from '../types/event';
 import { CareerItem } from '../types/career';
 import { ProjectItem } from '../types/project';
 import { SponsorItem } from '../types/sponsor';
+import { MOCK_SPONSORS } from '../data/mockSponsors';
 import { CommunityLinks } from '../constants/links';
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api';
@@ -18,7 +19,7 @@ function configuredUrl(url: unknown): url is string {
 }
 
 function absoluteMediaUrl(url: string): string {
-  if (/^https?:\/\//i.test(url)) return url;
+  if (/^(https?|data):/i.test(url)) return url;
   return new URL(url, new URL(API_BASE, window.location.origin)).toString();
 }
 
@@ -105,7 +106,7 @@ export async function fetchEventTypes(): Promise<EventType[]> {
   return docs.map((doc: any) => ({
     id: doc.slug || String(doc.id),
     label: doc.label,
-    icon: doc.icon || '☕',
+    icon: doc.icon || 'coffee',
     colorModern: doc.colorModern || '#FF6600',
     colorPixel: doc.colorPixel || '#EE6C19',
     isDefault: doc.isDefault,
@@ -177,19 +178,28 @@ export async function likeProject(id: number | string): Promise<number | null> {
 }
 
 export async function fetchSponsors(): Promise<SponsorItem[]> {
-  const res = await fetch(`${API_BASE}/sponsors?limit=100&where[isActive][equals]=true&sort=sortOrder`);
-  if (!res.ok) throw new Error('Sponsors could not be fetched');
-  const data = await res.json();
-  const docs = Array.isArray(data) ? data : data.docs || [];
+  try {
+    const res = await fetch(`${API_BASE}/sponsors?limit=100&where[isActive][equals]=true&sort=sortOrder`);
+    if (!res.ok) return MOCK_SPONSORS;
+    const data = await res.json();
+    const docs = Array.isArray(data) ? data : data.docs || [];
 
-  return docs.map((doc: any) => ({
-    id: doc.id,
-    name: doc.name,
-    logoUrl: normalizeMediaUrl(doc.logo, doc.logoUrl),
-    websiteUrl: doc.websiteUrl,
-    sortOrder: doc.sortOrder || 0,
-    isActive: doc.isActive !== false,
-  }));
+    if (docs.length === 0) {
+      return MOCK_SPONSORS;
+    }
+
+    return docs.map((doc: any) => ({
+      id: doc.id,
+      name: doc.name,
+      tier: doc.tier || 'community',
+      logoUrl: normalizeMediaUrl(doc.logo, doc.logoUrl),
+      websiteUrl: doc.websiteUrl,
+      sortOrder: doc.sortOrder || 0,
+      isActive: doc.isActive !== false,
+    }));
+  } catch {
+    return MOCK_SPONSORS;
+  }
 }
 
 export async function fetchCommunityLinks(): Promise<Partial<CommunityLinks> | null> {
@@ -253,8 +263,16 @@ export interface SiteCareerResource {
   tag?: string;
 }
 
+export interface SiteVisionMessageItem {
+  id?: string;
+  quote: string;
+  tag?: string;
+  author?: string;
+}
+
 export interface SiteSettingsData {
   hero?: SiteHeroSettings;
+  visionMessages?: SiteVisionMessageItem[];
   stats?: SiteStatItem[];
   values?: SiteValueItem[];
   personas?: SitePersonaItem[];

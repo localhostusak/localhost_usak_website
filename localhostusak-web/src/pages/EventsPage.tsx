@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Calendar, AlertTriangle, Loader2 } from 'lucide-react';
 import { PageHero } from '../components/layout/PageHero';
 import { FilterBar, FilterOption } from '../components/shared/FilterBar';
 import { EventSpotlightCard } from '../components/events/EventSpotlightCard';
@@ -46,11 +47,10 @@ export const EventsPage: React.FC = () => {
 
   // Primary options
   const primaryOptions: FilterOption[] = [
-    { id: 'all', label: 'Tüm Tipler', icon: '⚡' },
+    { id: 'all', label: 'Tüm Tipler' },
     ...eventTypes.map((t) => ({
       id: t.id,
       label: t.label,
-      icon: t.icon,
     })),
   ];
 
@@ -92,7 +92,6 @@ export const EventsPage: React.FC = () => {
   return (
     <main>
       <PageHero
-        tag={settings?.hero?.tag || "// ETKİNLİK TAKVİMİ & COWORKING"}
         title={settings?.hero?.title || "Uşak Teknoloji Etkinlikleri,"}
         highlightText={settings?.hero?.highlightText || "Coworking ve Buluşmalar"}
         description={settings?.hero?.description || "Kahveni al, etkinliğini seç, masada yerini al. Yazılım, tasarım, yapay zeka ve serbest çalışma Uşak'ta aynı masada."}
@@ -129,12 +128,22 @@ export const EventsPage: React.FC = () => {
         </div>
 
         {isLoading ? (
-          <EmptyState icon="⏳" title="Etkinlikler Yükleniyor" description="Güncel etkinlikler getiriliyor." />
+          <EmptyState
+            icon={<Loader2 size={40} style={{ animation: 'spin 1.5s linear infinite', color: 'var(--text-muted)' }} />}
+            title="Etkinlikler Yükleniyor"
+            description="Güncel etkinlikler getiriliyor."
+          />
         ) : error ? (
-          <EmptyState icon="⚠️" title="Etkinliklere Ulaşılamadı" description="İçerik şu anda yüklenemiyor. Biraz sonra tekrar deneyebilirsin." actionText="Tekrar Dene" onAction={retry} />
+          <EmptyState
+            icon={<AlertTriangle size={40} style={{ color: '#FF6600' }} />}
+            title="Etkinliklere Ulaşılamadı"
+            description="İçerik şu anda yüklenemiyor. Biraz sonra tekrar deneyebilirsin."
+            actionText="Tekrar Dene"
+            onAction={retry}
+          />
         ) : filteredEvents.length === 0 ? (
           <EmptyState
-            icon="📅"
+            icon={<Calendar size={40} style={{ color: 'var(--text-muted)' }} />}
             title={events.length === 0 ? 'Henüz Buluşma Yok' : 'Buluşma Bulunamadı'}
             description={events.length === 0 ? 'Yeni buluşmalar duyurulduğunda burada görünecek.' : 'Seçtiğin kriterlere uygun etkinlik bulunmuyor. Filtreleri sıfırlayarak tüm etkinlikleri görebilirsin.'}
             actionText={events.length === 0 ? undefined : 'Filtreleri Sıfırla'}

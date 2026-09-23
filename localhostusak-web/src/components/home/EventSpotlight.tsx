@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
-import { CountdownTimer } from '../shared/CountdownTimer';
+import { Calendar, MapPin, Coffee, Download, ExternalLink, AlertTriangle, Loader2 } from 'lucide-react';
+import { CountdownTimer, WhatsAppIcon, EmptyState } from '../shared';
 import { downloadICS, openGoogleCalendar } from '../../utils/calendarExport';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 import { fetchEvents } from '../../services/api';
 import { EventItem } from '../../types/event';
 import { useCmsCollection } from '../../hooks/useCmsCollection';
-import { EmptyState } from '../shared/EmptyState';
 
 export const EventSpotlight: React.FC = () => {
   const { links } = useLinks();
@@ -26,7 +26,15 @@ export const EventSpotlight: React.FC = () => {
       <section className="section" id="events" style={{ background: 'var(--bg-secondary)' }}>
         <div className="container">
           <EmptyState
-            icon={error ? '⚠️' : isLoading ? '⏳' : '📅'}
+            icon={
+              error ? (
+                <AlertTriangle size={40} style={{ color: '#FF6600' }} />
+              ) : isLoading ? (
+                <Loader2 size={40} style={{ animation: 'spin 1.5s linear infinite', color: 'var(--text-muted)' }} />
+              ) : (
+                <Calendar size={40} style={{ color: 'var(--text-muted)' }} />
+              )
+            }
             title={error ? 'Etkinliklere Ulaşılamadı' : isLoading ? 'Etkinlikler Yükleniyor' : 'Yeni Buluşmalar Yakında'}
             description={error ? 'Güncel etkinlikler şu anda yüklenemiyor.' : isLoading ? 'Güncel etkinlikler getiriliyor.' : 'Yaklaşan bir etkinlik duyurulduğunda burada paylaşacağız.'}
             actionText={error ? 'Tekrar Dene' : undefined}
@@ -88,10 +96,7 @@ export const EventSpotlight: React.FC = () => {
           </p>
         </div>
 
-        <div
-          className="spotlight-card card circuit-border"
-          style={{ padding: '3rem 2.5rem', position: 'relative' }}
-        >
+        <div className="spotlight-card card circuit-border">
           {/* Corner HUD Markers (Modern) */}
           <span className="hud-corner-tl" aria-hidden="true" />
           <span className="hud-corner-tr" aria-hidden="true" />
@@ -120,13 +125,13 @@ export const EventSpotlight: React.FC = () => {
               {/* Meetup Metadata List */}
               <div className="meetup-meta-list">
                 <div className="meetup-meta-item">
-                  <span className="meta-icon">📅</span>
+                  <span className="meta-icon"><Calendar size={18} /></span>
                   <div>
                     <strong>Tarih:</strong> {formattedDate}
                   </div>
                 </div>
                 <div className="meetup-meta-item">
-                  <span className="meta-icon">📍</span>
+                  <span className="meta-icon"><MapPin size={18} /></span>
                   <div>
                     <strong>Mekan:</strong> {eventLocation}
                     {eventMapUrl && (
@@ -139,15 +144,20 @@ export const EventSpotlight: React.FC = () => {
                           fontSize: '0.85rem',
                           marginLeft: '0.5rem',
                           textDecoration: 'underline',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.2rem',
                         }}
                       >
-                        (Haritada Gör ↗)
+                        <span>(Haritada Gör</span>
+                        <ExternalLink size={12} />
+                        <span>)</span>
                       </a>
                     )}
                   </div>
                 </div>
                 <div className="meetup-meta-item">
-                  <span className="meta-icon">☕</span>
+                  <span className="meta-icon"><Coffee size={18} /></span>
                   <div>
                     <strong>Format:</strong> Serbest Çalışma, Proje Paylaşımı, Tanışma & Sohbet
                   </div>
@@ -165,15 +175,7 @@ export const EventSpotlight: React.FC = () => {
             </div>
 
             {/* Right Countdown & Action Card */}
-            <div
-              style={{
-                background: 'var(--surface-elevated)',
-                padding: '2rem',
-                borderRadius: 'var(--radius-md)',
-                border: '1px solid var(--border-circuit)',
-                textAlign: 'center',
-              }}
-            >
+            <div className="spotlight-countdown-card">
               <div
                 style={{
                   fontFamily: 'var(--font-mono)',
@@ -184,7 +186,7 @@ export const EventSpotlight: React.FC = () => {
                   textTransform: 'uppercase',
                 }}
               >
-                ⏳ BULUŞMAYA KALAN SÜRE
+                BULUŞMAYA KALAN SÜRE
               </div>
 
               {/* Live Countdown Grid */}
@@ -203,24 +205,27 @@ export const EventSpotlight: React.FC = () => {
                   className="btn btn-primary btn-full"
                   id="btn-add-calendar"
                   onClick={handleDownloadICS}
+                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
                 >
                   <span>Takvime Ekle (.ICS)</span>
-                  <span>📥</span>
+                  <Download size={16} />
                 </button>
                 <button
                   type="button"
                   className="btn btn-secondary btn-full"
                   id="btn-google-calendar"
                   onClick={handleGoogleCalendar}
+                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
                 >
                   <span>Google Takvim'e Kaydet</span>
-                  <span>📅</span>
+                  <Calendar size={16} />
                 </button>
                 {(links.whatsappCoworking || links.whatsappGeneral) && <a
                   href={links.whatsappCoworking || links.whatsappGeneral}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-whatsapp btn-full"
+                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.55rem' }}
                   onClick={(e) => {
                     e.preventDefault();
                     openWhatsAppWithRules(
@@ -229,8 +234,8 @@ export const EventSpotlight: React.FC = () => {
                     );
                   }}
                 >
+                  <WhatsAppIcon size={18} />
                   <span>WhatsApp Grubuna Katıl</span>
-                  <span>💬</span>
                 </a>}
               </div>
             </div>
