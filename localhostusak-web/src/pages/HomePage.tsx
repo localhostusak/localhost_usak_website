@@ -7,6 +7,7 @@ import { EventSpotlight } from '../components/home/EventSpotlight';
 import { FlowSteps } from '../components/home/FlowSteps';
 import { SponsorsSection } from '../components/home/SponsorsSection';
 import { StatsSection } from '../components/home/StatsSection';
+import { InstagramFeed } from '../components/home/InstagramFeed';
 import { BigCTA } from '../components/home/BigCTA';
 import { useGeneralSettings } from '../context/GeneralSettingsContext';
 import seoPages from '../seo/pages.json';
@@ -34,7 +35,9 @@ export const HomePage: React.FC = () => {
       <EventSpotlight />
       {/* 6. Buluşma Formatı */}
       <FlowSteps />
-      {/* 7. Sponsorlarımız */}
+      {/* 7. Instagram */}
+      <InstagramFeed />
+      {/* 8. Sponsorlarımız */}
       <SponsorsSection />
       {/* 8. Scoreboard */}
       <StatsSection />

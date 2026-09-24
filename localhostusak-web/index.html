@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- Early System Theme Detection -->
+  <!-- Early Theme Detection: Always dark (modern) unless user manually switched this session -->
   <script>
     (function() {
       try {
@@ -12,8 +12,7 @@
         localStorage.removeItem('localhostusak_theme_manual');
         var manual = sessionStorage.getItem('localhostusak_theme_manual');
         var saved = sessionStorage.getItem('localhostusak_theme');
-        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        var theme = (manual === 'true' && saved) ? saved : (prefersDark ? 'modern' : 'pixel');
+        var theme = (manual === 'true' && (saved === 'modern' || saved === 'pixel')) ? saved : 'modern';
         document.documentElement.setAttribute('data-theme', theme);
       } catch (e) {}
     })();

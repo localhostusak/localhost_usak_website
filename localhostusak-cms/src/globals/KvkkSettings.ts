@@ -74,7 +74,7 @@ export const KvkkSettings: GlobalConfig = {
           name: 'contactEmail',
           type: 'text',
           label: 'Yetkili Başvuru E-Postası',
-          defaultValue: 'iletisim@localhostusak.com',
+          defaultValue: 'localhostusak@gmail.com',
           required: true,
         },
       ],

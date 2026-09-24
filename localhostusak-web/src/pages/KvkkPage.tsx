@@ -103,7 +103,7 @@ export const KvkkPage: React.FC = () => {
   const declarationText = settings?.consent?.declarationText ||
     `Localhost Uşak Kişisel Verilerin Korunması Aydınlatma Metni ve Etkinlik Muvafakatnamesi'ni okuduğumu, etkinliklerde çekilen fotoğraf/video kayıtlarımın topluluk tanıtımı kapsamında dijital mecralarda yayınlanmasına ve kişisel verilerimin bu metinde belirtilen amaç ve ilkeler doğrultusunda işlenmesine özgür irademle açık rıza veriyorum.`;
 
-  const contactEmail = settings?.documentMeta?.contactEmail || 'iletisim@localhostusak.com';
+  const contactEmail = settings?.documentMeta?.contactEmail || 'localhostusak@gmail.com';
 
   const handleCopyDeclaration = async () => {
     try {

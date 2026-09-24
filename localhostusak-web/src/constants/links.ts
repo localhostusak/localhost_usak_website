@@ -21,7 +21,7 @@ export interface CommunityLinks {
 }
 
 export const DEFAULT_COMMUNITY_LINKS: CommunityLinks = {
-  whatsappGeneral: '',
+  whatsappGeneral: 'https://chat.whatsapp.com/I8eMGS58Gtz3dSn9J2mINa',
   whatsappProjects: '',
   whatsappCareers: '',
   whatsappCoworking: '',

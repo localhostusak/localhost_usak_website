@@ -458,3 +458,23 @@ export async function fetchKvkkSettings(): Promise<KvkkSettingsData | null> {
   }
 }
 
+// ─── Instagram ─────────────────────────────────────────────────────────────
+
+export interface InstagramPost {
+  id: string;
+  media_type: 'IMAGE' | 'VIDEO' | 'CAROUSEL_ALBUM';
+  media_url: string;
+  thumbnail_url?: string;
+  permalink: string;
+  caption?: string;
+  timestamp: string;
+}
+
+export async function fetchInstagramPosts(): Promise<InstagramPost[]> {
+  const base = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+  const url = `${base}/instagram/posts`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Instagram fetch failed');
+  const json = await res.json();
+  return (json.posts ?? []) as InstagramPost[];
+}

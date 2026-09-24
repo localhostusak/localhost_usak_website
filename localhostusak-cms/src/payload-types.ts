@@ -105,6 +105,7 @@ export interface Config {
     'events-page-settings': EventsPageSetting;
     'careers-page-settings': CareersPageSetting;
     'projects-page-settings': ProjectsPageSetting;
+    'kvkk-settings': KvkkSetting;
   };
   globalsSelect: {
     'general-settings': GeneralSettingsSelect<false> | GeneralSettingsSelect<true>;
@@ -112,6 +113,7 @@ export interface Config {
     'events-page-settings': EventsPageSettingsSelect<false> | EventsPageSettingsSelect<true>;
     'careers-page-settings': CareersPageSettingsSelect<false> | CareersPageSettingsSelect<true>;
     'projects-page-settings': ProjectsPageSettingsSelect<false> | ProjectsPageSettingsSelect<true>;
+    'kvkk-settings': KvkkSettingsSelect<false> | KvkkSettingsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -933,6 +935,48 @@ export interface ProjectsPageSetting {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "kvkk-settings".
+ */
+export interface KvkkSetting {
+  id: number;
+  hero: {
+    tag: string;
+    title: string;
+    highlightText: string;
+    description: string;
+  };
+  documentMeta: {
+    badgeText?: string | null;
+    lastUpdated?: string | null;
+    version?: string | null;
+    contactEmail: string;
+  };
+  leadText: string;
+  callouts?: {
+    photoVideoTitle?: string | null;
+    photoVideoText?: string | null;
+    intellectualPropertyTitle?: string | null;
+    intellectualPropertyText?: string | null;
+  };
+  consent: {
+    badge?: string | null;
+    declarationText: string;
+    dateNote?: string | null;
+    dataControllerName?: string | null;
+  };
+  sections?:
+    | {
+        id: string;
+        num: string;
+        title: string;
+        content?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "general-settings_select".
  */
 export interface GeneralSettingsSelect<T extends boolean = true> {
@@ -1123,6 +1167,56 @@ export interface ProjectsPageSettingsSelect<T extends boolean = true> {
     | {
         title?: T;
         description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "kvkk-settings_select".
+ */
+export interface KvkkSettingsSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        tag?: T;
+        title?: T;
+        highlightText?: T;
+        description?: T;
+      };
+  documentMeta?:
+    | T
+    | {
+        badgeText?: T;
+        lastUpdated?: T;
+        version?: T;
+        contactEmail?: T;
+      };
+  leadText?: T;
+  callouts?:
+    | T
+    | {
+        photoVideoTitle?: T;
+        photoVideoText?: T;
+        intellectualPropertyTitle?: T;
+        intellectualPropertyText?: T;
+      };
+  consent?:
+    | T
+    | {
+        badge?: T;
+        declarationText?: T;
+        dateNote?: T;
+        dataControllerName?: T;
+      };
+  sections?:
+    | T
+    | {
+        id?: T;
+        num?: T;
+        title?: T;
+        content?: T;
       };
   updatedAt?: T;
   createdAt?: T;

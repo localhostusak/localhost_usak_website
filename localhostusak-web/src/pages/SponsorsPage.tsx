@@ -293,7 +293,7 @@ export const SponsorsPage: React.FC = () => {
                     </button>
                   )}
                   <a
-                    href="mailto:iletisim@localhostusak.com?subject=Sponsorluk%20Hakk%C4%B1nda"
+                    href="mailto:localhostusak@gmail.com?subject=Sponsorluk%20Hakk%C4%B1nda"
                     className="btn btn-secondary"
                     style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
                   >
