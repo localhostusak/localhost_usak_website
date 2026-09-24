@@ -409,3 +409,52 @@ export async function fetchProjectsPageSettings(): Promise<ProjectsPageSettingsD
     return null;
   }
 }
+
+// --- KVKK & Hukuki Ayarlar ---
+export interface KvkkSectionData {
+  id: string;
+  num: string;
+  title: string;
+  content?: string;
+}
+
+export interface KvkkSettingsData {
+  hero?: {
+    tag?: string;
+    title?: string;
+    highlightText?: string;
+    description?: string;
+  };
+  documentMeta?: {
+    badgeText?: string;
+    lastUpdated?: string;
+    version?: string;
+    contactEmail?: string;
+  };
+  leadText?: string;
+  callouts?: {
+    photoVideoTitle?: string;
+    photoVideoText?: string;
+    intellectualPropertyTitle?: string;
+    intellectualPropertyText?: string;
+  };
+  consent?: {
+    badge?: string;
+    declarationText?: string;
+    dateNote?: string;
+    dataControllerName?: string;
+  };
+  sections?: KvkkSectionData[];
+}
+
+export async function fetchKvkkSettings(): Promise<KvkkSettingsData | null> {
+  try {
+    const res = await fetch(`${API_BASE}/globals/kvkk-settings`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data as KvkkSettingsData;
+  } catch {
+    return null;
+  }
+}
+

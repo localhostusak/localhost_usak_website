@@ -17,8 +17,9 @@ import {
 import { PageHero } from '../components/layout/PageHero';
 import { usePageMeta } from '../hooks/usePageMeta';
 import seoPages from '../seo/pages.json';
+import { fetchKvkkSettings, KvkkSettingsData } from '../services/api';
 
-const SECTIONS = [
+const DEFAULT_SECTIONS = [
   { id: 'genel-bakis', num: '01', title: 'Veri Sorumlusu & Kapsam' },
   { id: 'islenen-veriler', num: '02', title: 'İşlenen Kişisel Veriler' },
   { id: 'isleme-amaclari', num: '03', title: 'İşlenme Amaçları' },
@@ -35,12 +36,26 @@ const SECTIONS = [
 export const KvkkPage: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('genel-bakis');
+  const [settings, setSettings] = useState<KvkkSettingsData | null>(null);
 
   // SEO metadata
   usePageMeta({
     title: (seoPages as Record<string, { title: string; description: string }>)["/kvkk"]?.title || "KVKK Aydınlatma Metni ve Muvafakatname | localhostusak",
     description: (seoPages as Record<string, { title: string; description: string }>)["/kvkk"]?.description || "Localhost Uşak Teknoloji ve Yazılım Topluluğu 6698 sayılı KVKK kapsamındaki kişisel verilerin korunması aydınlatma metni ve etkinlik muvafakatnamesi.",
   });
+
+  // Fetch dynamic settings from Payload CMS
+  useEffect(() => {
+    fetchKvkkSettings().then((data) => {
+      if (data) setSettings(data);
+    }).catch(() => {
+      // Fallback to static defaults
+    });
+  }, []);
+
+  const sections = settings?.sections && settings.sections.length > 0
+    ? settings.sections
+    : DEFAULT_SECTIONS;
 
   // Dynamic Scroll Spy: track currently viewed section
   useEffect(() => {
@@ -50,12 +65,12 @@ export const KvkkPage: React.FC = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const scrollPosition = window.scrollY + 140; // Offset for sticky navigation
-          for (let i = SECTIONS.length - 1; i >= 0; i--) {
-            const element = document.getElementById(SECTIONS[i].id);
+          for (let i = sections.length - 1; i >= 0; i--) {
+            const element = document.getElementById(sections[i].id);
             if (element) {
               const top = element.offsetTop;
               if (scrollPosition >= top) {
-                setActiveSection(SECTIONS[i].id);
+                setActiveSection(sections[i].id);
                 break;
               }
             }
@@ -70,7 +85,7 @@ export const KvkkPage: React.FC = () => {
     handleScroll(); // Trigger once on mount
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [sections]);
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
@@ -85,7 +100,10 @@ export const KvkkPage: React.FC = () => {
     }
   };
 
-  const declarationText = `Localhost Uşak Kişisel Verilerin Korunması Aydınlatma Metni ve Etkinlik Muvafakatnamesi'ni okuduğumu, etkinliklerde çekilen fotoğraf/video kayıtlarımın topluluk tanıtımı kapsamında dijital mecralarda yayınlanmasına ve kişisel verilerimin bu metinde belirtilen amaç ve ilkeler doğrultusunda işlenmesine özgür irademle açık rıza veriyorum.`;
+  const declarationText = settings?.consent?.declarationText ||
+    `Localhost Uşak Kişisel Verilerin Korunması Aydınlatma Metni ve Etkinlik Muvafakatnamesi'ni okuduğumu, etkinliklerde çekilen fotoğraf/video kayıtlarımın topluluk tanıtımı kapsamında dijital mecralarda yayınlanmasına ve kişisel verilerimin bu metinde belirtilen amaç ve ilkeler doğrultusunda işlenmesine özgür irademle açık rıza veriyorum.`;
+
+  const contactEmail = settings?.documentMeta?.contactEmail || 'iletisim@localhostusak.com';
 
   const handleCopyDeclaration = async () => {
     try {
@@ -100,10 +118,10 @@ export const KvkkPage: React.FC = () => {
   return (
     <main className="kvkk-page">
       <PageHero
-        tag="HUKUKİ BİLGİLENDİRME // 6698 SAYILI KANUN"
-        title="Kişisel Verilerin Korunması ve"
-        highlightText="Aydınlatma Metni"
-        description="Localhost Uşak Teknoloji ve Yazılım Topluluğu üyelerinin, etkinlik katılımcılarının ve web sitesi ziyaretçilerimizin kişisel verilerinin korunması, işlenmesi ve etkinlik muvafakatnamesi."
+        tag={settings?.hero?.tag || "HUKUKİ BİLGİLENDİRME // 6698 SAYILI KANUN"}
+        title={settings?.hero?.title || "Kişisel Verilerin Korunması ve"}
+        highlightText={settings?.hero?.highlightText || "Aydınlatma Metni"}
+        description={settings?.hero?.description || "Localhost Uşak Teknoloji ve Yazılım Topluluğu üyelerinin, etkinlik katılımcılarının ve web sitesi ziyaretçilerimizin kişisel verilerinin korunması, işlenmesi ve etkinlik muvafakatnamesi."}
         secondaryAction={
           <Link to="/" className="btn btn-secondary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
             <ArrowLeft size={16} />
@@ -118,13 +136,13 @@ export const KvkkPage: React.FC = () => {
           <div className="kvkk-header-meta">
             <div className="kvkk-badge-group">
               <span className="kvkk-pill-badge">
-                <ShieldCheck size={14} /> 6698 SAYILI KVKK UYUMLU
+                <ShieldCheck size={14} /> {settings?.documentMeta?.badgeText || '6698 SAYILI KVKK UYUMLU'}
               </span>
               <span className="kvkk-pill-badge kvkk-pill-badge-neutral">
-                Son Güncelleme: 2026
+                Son Güncelleme: {settings?.documentMeta?.lastUpdated || '2026'}
               </span>
               <span className="kvkk-pill-badge kvkk-pill-badge-neutral">
-                Sürüm 1.1
+                {settings?.documentMeta?.version || 'Sürüm 1.1'}
               </span>
             </div>
 
@@ -140,22 +158,26 @@ export const KvkkPage: React.FC = () => {
               </button>
 
               <a
-                href="mailto:iletisim@localhostusak.com?subject=KVKK%20Hakk%C4%B1nda%20Bilgi%20Talebi"
+                href={`mailto:${contactEmail}?subject=KVKK%20Hakk%C4%B1nda%20Bilgi%20Talebi`}
                 className="kvkk-action-btn"
                 title="Yönetime e-posta gönder"
               >
                 <Mail size={14} />
-                <span>iletisim@localhostusak.com</span>
+                <span>{contactEmail}</span>
               </a>
             </div>
           </div>
 
           <p className="kvkk-lead-text">
-            Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) uyarınca veri sorumlusu sıfatıyla
-            <strong> Localhost Uşak Bağımsız Teknoloji ve Yazılım Topluluğu</strong> (“Localhost Uşak” veya “Topluluk”)
-            tarafından; web sitemizi (<span style={{ color: 'var(--accent-primary)' }}>localhostusak.com</span>) ziyaret edenlerin,
-            topluluk üyelerimizin, fiziki etkinlik ve coworking buluşmalarına katılan yazılımcı ve öğrencilerin,
-            projelerini sergileyen ve kariyer panosunu kullanan paydaşlarımızın aydınlatılması amacıyla hazırlanmıştır.
+            {settings?.leadText || (
+              <>
+                Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) uyarınca veri sorumlusu sıfatıyla
+                <strong> Localhost Uşak Bağımsız Teknoloji ve Yazılım Topluluğu</strong> (“Localhost Uşak” veya “Topluluk”)
+                tarafından; web sitemizi (<span style={{ color: 'var(--accent-primary)' }}>localhostusak.com</span>) ziyaret edenlerin,
+                topluluk üyelerimizin, fiziki etkinlik ve coworking buluşmalarına katılan yazılımcı ve öğrencilerin,
+                projelerini sergileyen ve kariyer panosunu kullanan paydaşlarımızın aydınlatılması amacıyla hazırlanmıştır.
+              </>
+            )}
           </p>
         </section>
 
@@ -166,7 +188,7 @@ export const KvkkPage: React.FC = () => {
             <span>KONU BAŞLIKLARI</span>
           </div>
           <div className="kvkk-mobile-chips-track">
-            {SECTIONS.map((sec) => (
+            {sections.map((sec) => (
               <a
                 key={sec.id}
                 href={`#${sec.id}`}
@@ -190,7 +212,7 @@ export const KvkkPage: React.FC = () => {
                 <span>İÇİNDEKİLER</span>
               </div>
               <ul className="kvkk-toc-list">
-                {SECTIONS.map((sec) => (
+                {sections.map((sec) => (
                   <li key={sec.id}>
                     <a
                       href={`#${sec.id}`}
@@ -213,7 +235,7 @@ export const KvkkPage: React.FC = () => {
                 doğrudan ulaşabilirsiniz.
               </p>
               <a
-                href="mailto:iletisim@localhostusak.com"
+                href={`mailto:${contactEmail}`}
                 className="btn btn-secondary"
                 style={{ fontSize: '0.85rem', padding: '0.5rem 1rem', width: '100%', justifyContent: 'center' }}
               >
@@ -269,13 +291,17 @@ export const KvkkPage: React.FC = () => {
               <div className="kvkk-callout-box media-highlight">
                 <div className="kvkk-callout-title">
                   <Camera size={18} style={{ color: 'var(--accent-amber)' }} />
-                  <span>Önemli Bilgilendirme: Etkinlik Fotoğraf ve Video Çekimleri</span>
+                  <span>{settings?.callouts?.photoVideoTitle || 'Önemli Bilgilendirme: Etkinlik Fotoğraf ve Video Çekimleri'}</span>
                 </div>
                 <p className="kvkk-callout-text">
-                  Localhost Uşak etkinlikleri, Uşak yerelindeki teknoloji ekosistemini görünür kılmak ve açık topluluk ruhunu teşvik etmek amacıyla
-                  fotoğraflanmakta ve kayda alınmaktadır. Bu görsel/işitsel materyaller; <strong>ticari olmayan amaçlarla</strong>, topluluğu tanıtmak,
-                  yapılan atölyeleri arşivlemek ve katılımcıların başarılarını paylaşmak üzere resmi web sitemizde (<code>localhostusak.com</code>),
-                  sosyal medya kanallarımızda (Instagram, X, LinkedIn, YouTube, GitHub) ve topluluk bültenlerinde süresiz olarak yayınlanabilir.
+                  {settings?.callouts?.photoVideoText || (
+                    <>
+                      Localhost Uşak etkinlikleri, Uşak yerelindeki teknoloji ekosistemini görünür kılmak ve açık topluluk ruhunu teşvik etmek amacıyla
+                      fotoğraflanmakta ve kayda alınmaktadır. Bu görsel/işitsel materyaller; <strong>ticari olmayan amaçlarla</strong>, topluluğu tanıtmak,
+                      yapılan atölyeleri arşivlemek ve katılımcıların başarılarını paylaşmak üzere resmi web sitemizde (<code>localhostusak.com</code>),
+                      sosyal medya kanallarımızda (Instagram, X, LinkedIn, YouTube, GitHub) ve topluluk bültenlerinde süresiz olarak yayınlanabilir.
+                    </>
+                  )}
                 </p>
               </div>
             </section>
@@ -369,12 +395,16 @@ export const KvkkPage: React.FC = () => {
               <div className="kvkk-callout-box ip-highlight">
                 <div className="kvkk-callout-title">
                   <ShieldCheck size={18} style={{ color: 'var(--accent-blue)' }} />
-                  <span>Fikri Mülkiyet Teminatı: Kodlar ve Projeler Geliştiriciye Aittir</span>
+                  <span>{settings?.callouts?.intellectualPropertyTitle || 'Fikri Mülkiyet Teminatı: Kodlar ve Projeler Geliştiriciye Aittir'}</span>
                 </div>
                 <p className="kvkk-callout-text">
-                  Projelerin tüm fikri ve sınai mülkiyet hakları, münhasıran projeyi üreten geliştiriciye, ekibe veya ilgili açık kaynak lisansına aittir.
-                  Localhost Uşak; paylaşılan projeleri topluluk vitrininde, web sitesinde, haber bültenlerinde ve sosyal medyada sahibini açıkça belirterek
-                  <strong> bedelsiz olarak tanıtma, sergileme ve yayınlama hakkına</strong> sahiptir.
+                  {settings?.callouts?.intellectualPropertyText || (
+                    <>
+                      Projelerin tüm fikri ve sınai mülkiyet hakları, münhasıran projeyi üreten geliştiriciye, ekibe veya ilgili açık kaynak lisansına aittir.
+                      Localhost Uşak; paylaşılan projeleri topluluk vitrininde, web sitesinde, haber bültenlerinde ve sosyal medyada sahibini açıkça belirterek
+                      <strong> bedelsiz olarak tanıtma, sergileme ve yayınlama hakkına</strong> sahiptir.
+                    </>
+                  )}
                 </p>
               </div>
             </section>
@@ -427,7 +457,7 @@ export const KvkkPage: React.FC = () => {
               </div>
               <p className="kvkk-body-text">
                 Yukarıda sıralanan haklarınıza ilişkin taleplerinizi; kimliğinizi teyit eden belgelerle birlikte topluluğumuzun resmi iletişim e-posta adresi
-                olan <strong><a href="mailto:iletisim@localhostusak.com" style={{ color: 'var(--accent-primary)' }}>iletisim@localhostusak.com</a></strong> adresine
+                olan <strong><a href={`mailto:${contactEmail}`} style={{ color: 'var(--accent-primary)' }}>{contactEmail}</a></strong> adresine
                 iletebilirsiniz.
               </p>
               <p className="kvkk-body-text">
@@ -449,7 +479,7 @@ export const KvkkPage: React.FC = () => {
               <div className="kvkk-consent-box">
                 <div className="kvkk-consent-badge">
                   <ShieldCheck size={16} />
-                  <span>ETKİNLİK VE TOPLULUK MUVAFAKATNAMESİ</span>
+                  <span>{settings?.consent?.badge || 'ETKİNLİK VE TOPLULUK MUVAFAKATNAMESİ'}</span>
                 </div>
 
                 <blockquote className="kvkk-consent-quote">
@@ -458,9 +488,9 @@ export const KvkkPage: React.FC = () => {
 
                 <div className="kvkk-consent-footer">
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-                    <span>Onay Tarihi: <strong>Etkinlik / Grup Katılım Anı</strong></span>
+                    <span>Onay Tarihi: <strong>{settings?.consent?.dateNote || 'Etkinlik / Grup Katılım Anı'}</strong></span>
                     <span>•</span>
-                    <span>Veri Sorumlusu: <strong>Localhost Uşak</strong></span>
+                    <span>Veri Sorumlusu: <strong>{settings?.consent?.dataControllerName || 'Localhost Uşak'}</strong></span>
                   </div>
 
                   <button
