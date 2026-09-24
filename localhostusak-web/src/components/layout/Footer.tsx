@@ -97,6 +97,9 @@ export const Footer: React.FC = () => {
               <li>
                 <Link to="/sponsorlar" style={{ color: 'inherit' }}>Sponsorlarımız</Link>
               </li>
+              <li>
+                <Link to="/kvkk" style={{ color: 'inherit' }}>KVKK & Aydınlatma</Link>
+              </li>
             </ul>
           </div>
 
@@ -190,8 +193,22 @@ export const Footer: React.FC = () => {
 
         {/* Bottom Terminal Line & Copyright */}
         <div className="footer-bottom">
-          <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
             <span>connect • build • share • collaborate</span>
+            <span style={{ opacity: 0.35 }}>|</span>
+            <Link
+              to="/kvkk"
+              style={{
+                color: 'inherit',
+                fontSize: '0.85rem',
+                textDecoration: 'none',
+                transition: 'color var(--transition-fast)',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--accent-primary)')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'inherit')}
+            >
+              KVKK Aydınlatma Metni
+            </Link>
           </div>
           <div>
             <span>{settings?.footer?.copyrightText || "© 2026 localhostusak • Uşak'ta geliştirildi"}</span>

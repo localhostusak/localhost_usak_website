@@ -334,6 +334,31 @@ export const WhatsAppRulesModal: React.FC<WhatsAppRulesModalProps> = ({
               <span>Onayla ve Gruba Katıl</span>
             </button>
           </div>
+
+          <div
+            style={{
+              marginTop: '0.65rem',
+              textAlign: 'center',
+              fontSize: '0.75rem',
+              color: 'var(--text-muted)',
+              lineHeight: 1.4,
+            }}
+          >
+            <span>Topluluğumuza katılarak </span>
+            <a
+              href="/kvkk"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: 'var(--accent-primary)',
+                textDecoration: 'underline',
+                textUnderlineOffset: '2px',
+              }}
+            >
+              KVKK Aydınlatma Metni ve Muvafakatnamesi
+            </a>
+            <span> şartlarını kabul etmiş sayılırsınız.</span>
+          </div>
         </div>
       </div>
     </div>
