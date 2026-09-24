@@ -153,11 +153,11 @@ export const Navbar: React.FC = () => {
             type="button"
             className="nav-cta-btn"
             id="nav-btn-join"
-            onClick={() => openWhatsAppWithRules(links.whatsappGeneral, 'Navbar')}
+            onClick={() => openWhatsAppWithRules(links.whatsappGeneral || 'https://chat.whatsapp.com/I8eMGS58Gtz3dSn9J2mINa', 'Genel Topluluk Grubu')}
             aria-label="WhatsApp Topluluğuna Katıl"
           >
-            <WhatsAppIcon size={15} />
-            <span>Topluluğa Katıl</span>
+            <WhatsAppIcon size={17} />
+            <span>Topluluğumuza Katıl</span>
           </button>
 
           <button
@@ -369,7 +369,7 @@ export const Navbar: React.FC = () => {
             className="btn btn-whatsapp btn-full"
             onClick={() => {
               setMobileMenuOpen(false);
-              openWhatsAppWithRules(links.whatsappGeneral, 'Mobil Menü');
+              openWhatsAppWithRules(links.whatsappGeneral || 'https://chat.whatsapp.com/I8eMGS58Gtz3dSn9J2mINa', 'Genel Topluluk Grubu');
             }}
             style={{
               marginTop: '0.75rem',
@@ -384,7 +384,7 @@ export const Navbar: React.FC = () => {
             }}
           >
             <WhatsAppIcon size={16} />
-            <span>Topluluğa Katıl</span>
+            <span>Topluluğumuza Katıl</span>
           </button>
         </div>
       )}

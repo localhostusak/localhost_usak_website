@@ -10,13 +10,15 @@ export const SponsorsSection: React.FC = () => {
   const { items: sponsors, isLoading, error, retry } = useCmsCollection<SponsorItem>(fetchSponsors);
 
   // Duplicate sponsors for seamless marquee looping
+  const goldSponsors = React.useMemo(() => sponsors.filter(s => (s.tier || 'community') === 'gold'), [sponsors]);
+
   const marqueeItems = React.useMemo(() => {
-    if (!sponsors || sponsors.length === 0) return [];
-    if (sponsors.length < 6) {
-      return [...sponsors, ...sponsors, ...sponsors, ...sponsors];
+    if (!goldSponsors || goldSponsors.length === 0) return [];
+    if (goldSponsors.length < 6) {
+      return [...goldSponsors, ...goldSponsors, ...goldSponsors, ...goldSponsors];
     }
-    return [...sponsors, ...sponsors];
-  }, [sponsors]);
+    return [...goldSponsors, ...goldSponsors];
+  }, [goldSponsors]);
 
   return (
     <section className="section sponsors-section" id="sponsors" style={{ position: 'relative', overflow: 'hidden' }}>
@@ -46,8 +48,13 @@ export const SponsorsSection: React.FC = () => {
           />
         ) : sponsors.length > 0 ? (
           <div>
-            {/* If sponsor count <= 3, show clean static cards instead of sliding animation */}
-            {sponsors.length <= 3 ? (
+            {/* Ana sayfada sadece ALTIN sponsorlar gösterilir */}
+            {goldSponsors.length === 0 ? (
+              // Altın sponsor yoksa sadece butonu göster
+              <div style={{ textAlign: 'center', margin: '1rem 0 2rem' }}>
+                <p style={{ color: 'var(--text-muted)', marginBottom: '1rem', fontSize: '0.9rem' }}>Sponsorlarımızı keşfedin.</p>
+              </div>
+            ) : goldSponsors.length <= 3 ? (
               <div
                 className="sponsors-static-row"
                 style={{
@@ -60,8 +67,8 @@ export const SponsorsSection: React.FC = () => {
                   maxWidth: '960px',
                 }}
               >
-                {sponsors.map((sponsor) => {
-                  const tier = sponsor.tier || 'community';
+                {goldSponsors.map((sponsor) => {
+                  const tier = 'gold';
                   const tierSizeClass = `tier-size-${tier}`;
                   return (
                     <a
@@ -70,7 +77,7 @@ export const SponsorsSection: React.FC = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className={`sponsor-card-block ${tierSizeClass}`}
-                      title={`${sponsor.name} (${tier.toUpperCase()}) web sitesini ziyaret et`}
+                      title={`${sponsor.name} web sitesini ziyaret et`}
                       style={{ transform: 'none' }}
                     >
                       <div className="sponsor-card-logo-box">
@@ -107,26 +114,9 @@ export const SponsorsSection: React.FC = () => {
 
                       <div className="sponsor-card-footer">
                         <span className="sponsor-card-name">{sponsor.name}</span>
-                        {tier === 'gold' && (
-                          <span className="tier-badge tier-gold-badge" style={{ fontSize: '0.68rem', padding: '0.15rem 0.6rem' }}>
-                            Altın Sponsor
-                          </span>
-                        )}
-                        {tier === 'silver' && (
-                          <span className="tier-badge tier-silver-badge" style={{ fontSize: '0.66rem', padding: '0.15rem 0.55rem' }}>
-                            Gümüş Sponsor
-                          </span>
-                        )}
-                        {tier === 'bronze' && (
-                          <span className="tier-badge tier-bronze-badge" style={{ fontSize: '0.64rem', padding: '0.15rem 0.5rem' }}>
-                            Bronz Sponsor
-                          </span>
-                        )}
-                        {tier === 'community' && (
-                          <span className="sponsor-card-sub">
-                            Destekçi ↗
-                          </span>
-                        )}
+                        <span className="tier-badge tier-gold-badge" style={{ fontSize: '0.68rem', padding: '0.15rem 0.6rem' }}>
+                          Altın Sponsor
+                        </span>
                       </div>
                     </a>
                   );

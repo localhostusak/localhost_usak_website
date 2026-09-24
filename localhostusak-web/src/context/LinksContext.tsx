@@ -24,7 +24,13 @@ export const LinksProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       .then((data) => {
         if (!isMounted) return;
         if (data) {
-          const merged = { ...DEFAULT_COMMUNITY_LINKS, ...data };
+          const cleanData: Partial<CommunityLinks> = {};
+          for (const [k, v] of Object.entries(data)) {
+            if (v && typeof v === 'string' && v.trim().length > 0) {
+              cleanData[k as keyof CommunityLinks] = v.trim();
+            }
+          }
+          const merged = { ...DEFAULT_COMMUNITY_LINKS, ...cleanData };
           setLinks(merged);
         }
       })

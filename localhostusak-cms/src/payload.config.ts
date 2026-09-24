@@ -18,6 +18,7 @@ import { GeneralSettings } from './globals/GeneralSettings'
 import { EventsPageSettings } from './globals/EventsPageSettings'
 import { CareersPageSettings } from './globals/CareersPageSettings'
 import { ProjectsPageSettings } from './globals/ProjectsPageSettings'
+import { KvkkSettings } from './globals/KvkkSettings'
 import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
@@ -46,6 +47,7 @@ export default buildConfig({
     EventsPageSettings,
     CareersPageSettings,
     ProjectsPageSettings,
+    KvkkSettings,
   ],
   cors: [
     'https://localhostusak.com',

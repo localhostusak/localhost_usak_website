@@ -18,6 +18,7 @@ import { CareersPage } from './pages/CareersPage';
 import { ProjectsPage } from './pages/ProjectsPage';
 import { SponsorsPage } from './pages/SponsorsPage';
 import { AdminPage } from './pages/AdminPage';
+import { KvkkPage } from './pages/KvkkPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ErrorBoundary } from './components/shared/ErrorBoundary';
 
@@ -30,6 +31,7 @@ import './styles/glassmorphism-theme.css';
 import './styles/animations.css';
 import './styles/subpages.css';
 import './styles/whatsapp-rules-modal.css';
+import './styles/kvkk.css';
 
 // Auto scroll to top on page navigation
 const ScrollToTop: React.FC = () => {
@@ -92,6 +94,8 @@ const AppContent: React.FC = () => {
         <Route path="/kariyer" element={<CareersPage />} />
         <Route path="/projeler" element={<ProjectsPage />} />
         <Route path="/sponsorlar" element={<SponsorsPage />} />
+        <Route path="/kvkk" element={<KvkkPage />} />
+        <Route path="/kvkk-aydinlatma-metni" element={<KvkkPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

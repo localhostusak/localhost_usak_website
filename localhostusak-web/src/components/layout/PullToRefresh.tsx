@@ -6,7 +6,12 @@ const HIDDEN_Y = -60;
 const MAX_Y = 22;
 const TRIGGER_Y = 10;
 
-export const PullToRefresh: React.FC = () => {
+// Detect touch-capable devices (mobile/tablet only)
+const isTouchDevice = (): boolean =>
+  window.matchMedia('(pointer: coarse)').matches;
+
+// Inner component — sadece touch cihazlarda mount edilir
+const PullToRefreshInner: React.FC = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
@@ -20,7 +25,6 @@ export const PullToRefresh: React.FC = () => {
   const isRefreshingRef = useRef<boolean>(false);
   const rafId = useRef<number | null>(null);
   const accumulatedDelta = useRef<number>(0);
-  const gestureTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const touchStartY = useRef<number | null>(null);
 
   // Ensure navbar stays completely stationary
@@ -119,7 +123,7 @@ export const PullToRefresh: React.FC = () => {
     }
   }, []);
 
-  // 1. Touch Listeners (Mobile / iPad)
+  // Touch Listeners (Mobile / iPad only)
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
       if (window.scrollY <= 0 && !isRefreshingRef.current) {
@@ -164,12 +168,15 @@ export const PullToRefresh: React.FC = () => {
     };
   }, [updateDelta, handleRelease]);
 
-  // 2. Wheel / Trackpad Listeners (Passive, 100% native scrolling)
+  // Wheel / Trackpad Listeners — sadece mobil cihazlarda çalışır
+  // (Bu bileşen zaten isTouchDevice() kontrolünden sonra mount edilir)
   useEffect(() => {
+    const gestureTimer = { current: null as ReturnType<typeof setTimeout> | null };
+
     const handleWheel = (e: WheelEvent) => {
       if (isRefreshingRef.current) return;
 
-      // If user is scrolled down anywhere in page, native scroll runs unimpeded
+      // Sayfada aşağı kaydırılmışsa native scroll çalışsın
       if (window.scrollY > 0) {
         if (targetY.current > HIDDEN_Y) {
           targetY.current = HIDDEN_Y;
@@ -179,7 +186,7 @@ export const PullToRefresh: React.FC = () => {
         return;
       }
 
-      // If scrolling down into page, allow native scroll
+      // Aşağı scroll yapılıyorsa native scroll çalışsın
       if (e.deltaY > 0) {
         if (targetY.current > HIDDEN_Y) {
           targetY.current = HIDDEN_Y;
@@ -189,7 +196,7 @@ export const PullToRefresh: React.FC = () => {
         return;
       }
 
-      // If pulling down at top (deltaY < 0):
+      // Yukarı çekiliyorsa (deltaY < 0) — pull-to-refresh tetikle
       if (e.deltaY < 0) {
         accumulatedDelta.current += Math.abs(e.deltaY) * 0.25;
         updateDelta(accumulatedDelta.current);
@@ -233,4 +240,10 @@ export const PullToRefresh: React.FC = () => {
       </div>
     </div>
   );
+};
+
+// Wrapper — desktop'ta (pointer: fine) hiçbir şey render etmez
+export const PullToRefresh: React.FC = () => {
+  if (!isTouchDevice()) return null;
+  return <PullToRefreshInner />;
 };

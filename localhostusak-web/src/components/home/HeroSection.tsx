@@ -172,9 +172,11 @@ export const HeroSection: React.FC = () => {
               style={{
                 padding: '1.15rem 1.75rem',
                 display: 'inline-flex',
-                alignItems: 'center',
+                alignItems: 'flex-start',
                 gap: '1rem',
-                maxWidth: '620px',
+                width: '620px',
+                maxWidth: '100%',
+                minHeight: '88px',
                 border: '1px solid var(--border-medium)',
               }}
             >
@@ -190,11 +192,12 @@ export const HeroSection: React.FC = () => {
                   color: 'var(--accent-primary)',
                   flexShrink: 0,
                   fontSize: '1.1rem',
+                  marginTop: '0.1rem',
                 }}
               >
                 ✦
               </div>
-              <div style={{ textAlign: 'left', fontSize: '0.9rem' }}>
+              <div style={{ textAlign: 'left', fontSize: '0.9rem', flex: 1 }}>
                 <div
                   style={{
                     fontFamily: 'var(--font-heading)',
@@ -214,6 +217,9 @@ export const HeroSection: React.FC = () => {
                     color: 'var(--text-primary)',
                     fontWeight: 600,
                     lineHeight: 1.4,
+                    minHeight: '2.8em',
+                    display: 'flex',
+                    alignItems: 'center',
                     animation: 'fadeIn 0.4s ease-out forwards',
                   }}
                 >

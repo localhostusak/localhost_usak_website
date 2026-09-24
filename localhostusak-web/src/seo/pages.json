@@ -33,5 +33,12 @@
     "lang": "tr",
     "legacyTitle": "Sponsorlarımız & Destekçiler — localhostusak",
     "legacyDescription": "Uşak teknoloji topluluğu sponsorları ve kurumsal destekçileri."
+  },
+  "/kvkk": {
+    "title": "KVKK Aydınlatma Metni ve Muvafakatname | localhostusak",
+    "description": "Localhost Uşak Teknoloji ve Yazılım Topluluğu 6698 sayılı KVKK kapsamındaki kişisel verilerin korunması aydınlatma metni ve etkinlik muvafakatnamesi.",
+    "lang": "tr",
+    "legacyTitle": "KVKK Aydınlatma Metni ve Muvafakatname — localhostusak",
+    "legacyDescription": "Localhost Uşak 6698 sayılı KVKK kişisel verilerin korunması aydınlatma metni."
   }
 }

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useCallback } from 'react';
 import { WhatsAppRulesModal } from '../components/shared';
 
 interface WhatsAppModalContextType {
-  openWhatsAppWithRules: (targetUrl: string, groupLabel?: string) => void;
+  openWhatsAppWithRules: (targetUrl?: string, groupLabel?: string) => void;
   isRulesAccepted: boolean;
 }
 
@@ -23,19 +23,11 @@ export const WhatsAppModalProvider: React.FC<{ children: React.ReactNode }> = ({
   });
 
   const openWhatsAppWithRules = useCallback(
-    (url: string, label?: string) => {
-      if (!url) return;
+    (url?: string, label?: string) => {
+      const finalUrl = (url && url.trim()) || 'https://chat.whatsapp.com/I8eMGS58Gtz3dSn9J2mINa';
 
-      // Check session memory
-      const accepted = sessionStorage.getItem(RULES_ACCEPTED_STORAGE_KEY) === 'true';
-      if (accepted) {
-        // Already accepted in this session, open directly
-        window.open(url, '_blank', 'noopener,noreferrer');
-        return;
-      }
-
-      // Not accepted yet, show modal
-      setTargetUrl(url);
+      // Her zaman topluluk kuralları modalını göster
+      setTargetUrl(finalUrl);
       setGroupLabel(label);
       setIsOpen(true);
     },
