@@ -66,10 +66,9 @@ export const WhatsAppModalProvider: React.FC<{ children: React.ReactNode }> = ({
 };
 
 const defaultWhatsAppModalContext: WhatsAppModalContextType = {
-  openWhatsAppWithRules: (targetUrl: string) => {
-    if (targetUrl) {
-      window.open(targetUrl, '_blank', 'noopener,noreferrer');
-    }
+  openWhatsAppWithRules: (targetUrl?: string, _groupLabel?: string) => {
+    const finalUrl = (targetUrl && targetUrl.trim()) || 'https://chat.whatsapp.com/I8eMGS58Gtz3dSn9J2mINa';
+    window.open(finalUrl, '_blank', 'noopener,noreferrer');
   },
   isRulesAccepted: false,
 };
