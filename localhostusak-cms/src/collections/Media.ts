@@ -1,4 +1,3 @@
-import path from 'path'
 import type { CollectionConfig } from 'payload'
 
 export const Media: CollectionConfig = {
@@ -16,7 +15,5 @@ export const Media: CollectionConfig = {
       required: true,
     },
   ],
-  upload: {
-    staticDir: path.resolve(process.cwd(), 'media'),
-  },
+  upload: true,
 }
