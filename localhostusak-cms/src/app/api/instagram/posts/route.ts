@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 // ─── Basit bellek cache'i ───────────────────────────────────────────────────
-// Production'da Redis veya Payload'un cache mekanizması kullanılabilir
 let cache: {
   data: InstagramPost[] | null
   fetchedAt: number
@@ -19,22 +18,47 @@ export interface InstagramPost {
   timestamp: string
 }
 
-// ─── GET /api/instagram/posts ───────────────────────────────────────────────
-export async function GET(_req: NextRequest) {
-  // CORS — web frontenden erişim için
-  const headers = {
-    'Access-Control-Allow-Origin': process.env.WEB_URL || 'http://localhost:5173',
-    'Access-Control-Allow-Methods': 'GET',
+function getCorsHeaders(req: NextRequest): Record<string, string> {
+  const origin = req.headers.get('origin') || ''
+  const allowedOrigins = [
+    'https://localhostusak.tech',
+    'https://www.localhostusak.tech',
+    'https://localhostusak.com',
+    'https://www.localhostusak.com',
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    process.env.WEB_URL,
+  ].filter(Boolean) as string[]
+
+  const isAllowed =
+    allowedOrigins.includes(origin) ||
+    !origin ||
+    origin.endsWith('.localhostusak.tech') ||
+    origin.endsWith('.localhostusak.com')
+
+  const allowOrigin = isAllowed && origin ? origin : (allowedOrigins[0] || '*')
+
+  return {
+    'Access-Control-Allow-Origin': allowOrigin,
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Allow-Credentials': 'true',
     'Content-Type': 'application/json',
   }
+}
 
+// ─── GET /api/instagram/posts ───────────────────────────────────────────────
+export async function GET(req: NextRequest) {
+  const headers = getCorsHeaders(req)
   const token = process.env.INSTAGRAM_ACCESS_TOKEN
   const userId = process.env.INSTAGRAM_USER_ID
 
   if (!token || !userId) {
+    // 200 dönerek konsol kırmızı log kirliliğini ve CORS blokajını engelliyoruz
     return NextResponse.json(
-      { error: 'Instagram credentials not configured' },
-      { status: 500, headers }
+      { posts: [], message: 'Instagram credentials not configured' },
+      { status: 200, headers }
     )
   }
 
@@ -48,18 +72,17 @@ export async function GET(_req: NextRequest) {
     const fields = 'id,media_type,media_url,thumbnail_url,permalink,caption,timestamp'
     const url = `https://graph.instagram.com/${userId}/media?fields=${fields}&limit=3&access_token=${token}`
 
-    const res = await fetch(url, { next: { revalidate: 900 } }) // 15 dk Next.js cache
+    const res = await fetch(url, { next: { revalidate: 900 } })
 
     if (!res.ok) {
       const errBody = await res.text()
-      console.error('[Instagram API] Error:', res.status, errBody)
-      // Token geçersizse cache'deki eski veriyi dön
+      console.warn('[Instagram API] Warning:', res.status, errBody)
       if (cache.data) {
         return NextResponse.json({ posts: cache.data, cached: true, stale: true }, { headers })
       }
       return NextResponse.json(
-        { error: 'Instagram API error', detail: errBody },
-        { status: 502, headers }
+        { posts: [], error: 'Instagram API response error', detail: errBody },
+        { status: 200, headers }
       )
     }
 
@@ -76,20 +99,16 @@ export async function GET(_req: NextRequest) {
       return NextResponse.json({ posts: cache.data, cached: true, stale: true }, { headers })
     }
     return NextResponse.json(
-      { error: 'Failed to fetch Instagram posts' },
-      { status: 500, headers }
+      { posts: [], error: 'Failed to fetch Instagram posts' },
+      { status: 200, headers }
     )
   }
 }
 
 // OPTIONS — preflight için
-export async function OPTIONS() {
+export async function OPTIONS(req: NextRequest) {
   return new NextResponse(null, {
     status: 204,
-    headers: {
-      'Access-Control-Allow-Origin': process.env.WEB_URL || 'http://localhost:5173',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    },
+    headers: getCorsHeaders(req),
   })
 }

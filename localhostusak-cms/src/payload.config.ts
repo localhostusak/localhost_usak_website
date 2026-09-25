@@ -60,6 +60,15 @@ export default buildConfig({
     'http://localhost:3000',
     'http://127.0.0.1:3000',
   ],
+  csrf: [
+    'https://localhostusak.com',
+    'https://www.localhostusak.com',
+    'https://localhostusak.tech',
+    'https://www.localhostusak.tech',
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || (() => {
     if (process.env.NODE_ENV === 'production') {
@@ -74,6 +83,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
+    push: true,
     prodMigrations: migrations,
   }),
   sharp,
