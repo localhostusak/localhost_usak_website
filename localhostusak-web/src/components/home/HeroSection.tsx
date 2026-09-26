@@ -165,64 +165,17 @@ export const HeroSection: React.FC = () => {
             </a>}
           </div>
 
-          {/* Topluluk Vizyonu Kartı (Dinamik Dönen Mesajlar) */}
+          {/* Topluluk Vizyonu Kartı (Dinamik Dönen Mesajlar - Boyut Değişimini Önleyen Stabil Alan) */}
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <div
-              className="card"
-              style={{
-                padding: '1.15rem 1.75rem',
-                display: 'inline-flex',
-                alignItems: 'flex-start',
-                gap: '1rem',
-                width: '620px',
-                maxWidth: '100%',
-                minHeight: '88px',
-                border: '1px solid var(--border-medium)',
-              }}
-            >
-              <div
-                style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: 'var(--radius-sm)',
-                  background: 'rgba(227, 93, 20, 0.12)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'var(--accent-primary)',
-                  flexShrink: 0,
-                  fontSize: '1.1rem',
-                  marginTop: '0.1rem',
-                }}
-              >
+            <div className="hero-vision-card" aria-live="polite">
+              <div className="hero-vision-icon" aria-hidden="true">
                 ✦
               </div>
-              <div style={{ textAlign: 'left', fontSize: '0.9rem', flex: 1 }}>
-                <div
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    color: 'var(--accent-primary)',
-                    fontWeight: 700,
-                    fontSize: '0.75rem',
-                    letterSpacing: '0.06em',
-                    textTransform: 'uppercase',
-                    marginBottom: '0.2rem',
-                  }}
-                >
+              <div className="hero-vision-body">
+                <div className="hero-vision-tag">
                   {activeVision.tag || 'TOPLULUK VİZYONU'}
                 </div>
-                <div
-                  key={activeVisionIdx}
-                  style={{
-                    color: 'var(--text-primary)',
-                    fontWeight: 600,
-                    lineHeight: 1.4,
-                    minHeight: '2.8em',
-                    display: 'flex',
-                    alignItems: 'center',
-                    animation: 'fadeIn 0.4s ease-out forwards',
-                  }}
-                >
+                <div key={activeVisionIdx} className="hero-vision-quote">
                   "{activeVision.quote}"
                 </div>
               </div>
