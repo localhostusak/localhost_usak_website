@@ -251,43 +251,20 @@ export const Manifesto: React.FC = () => {
               </div>
             </div>
 
-            {/* Dynamic Rotating Vision Card */}
+            {/* Dynamic Rotating Vision Card (Zero Layout Shift) */}
             <div
               className="manifesto-vision-card"
               onMouseEnter={() => setIsVisionHovered(true)}
               onMouseLeave={() => setIsVisionHovered(false)}
-              style={{
-                background: 'linear-gradient(135deg, rgba(227, 93, 20, 0.08) 0%, var(--surface-elevated) 100%)',
-                border: '1px solid rgba(227, 93, 20, 0.25)',
-                borderRadius: 'var(--radius-md)',
-                padding: '0.95rem 1.15rem',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0.4rem',
-                position: 'relative',
-                transition: 'border-color var(--transition-normal), box-shadow var(--transition-normal)',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.06)',
-              }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
-                <span
-                  style={{
-                    fontSize: '0.72rem',
-                    color: 'var(--accent-primary)',
-                    fontWeight: 700,
-                    letterSpacing: '0.06em',
-                    textTransform: 'uppercase',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.35rem',
-                  }}
-                >
+              <div className="manifesto-vision-header">
+                <span className="manifesto-vision-tag">
                   <Quote size={12} style={{ transform: 'rotate(180deg)' }} />
                   <span>{activeVision.tag || 'TOPLULUK VİZYONU'}</span>
                 </span>
 
                 {/* Dot Pagination Controls */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <div className="manifesto-vision-dots">
                   {visionList.map((_, dotIdx) => (
                     <button
                       key={dotIdx}
@@ -309,36 +286,15 @@ export const Manifesto: React.FC = () => {
                 </div>
               </div>
 
-              <div
-                key={activeVisionIdx}
-                className="vision-quote-content"
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: '0.9rem',
-                  fontWeight: 700,
-                  color: 'var(--text-primary)',
-                  lineHeight: 1.4,
-                  minHeight: '2.2rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  animation: 'fadeIn 0.4s ease-out forwards',
-                }}
-              >
-                "{activeVision.quote}"
+              <div className="manifesto-vision-quote-wrap">
+                <div key={activeVisionIdx} className="manifesto-vision-quote">
+                  "{activeVision.quote}"
+                </div>
               </div>
 
-              {activeVision.author && (
-                <div
-                  style={{
-                    fontSize: '0.75rem',
-                    color: 'var(--text-muted)',
-                    fontWeight: 600,
-                    textAlign: 'right',
-                  }}
-                >
-                  — {activeVision.author}
-                </div>
-              )}
+              <div className="manifesto-vision-author">
+                {activeVision.author ? `— ${activeVision.author}` : ''}
+              </div>
             </div>
           </div>
 

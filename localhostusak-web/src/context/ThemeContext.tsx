@@ -21,24 +21,27 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 const STORAGE_KEY = 'localhostusak_theme';
 const MANUAL_OVERRIDE_KEY = 'localhostusak_theme_manual';
 
+// Kullanıcının yerel cihaz saatine göre tema belirleme:
+// Sabah 07:00 ile Akşam 19:00 arası: Beyaz / Aydınlık tema ('pixel' / light)
+// Akşam 19:00 ile Sabah 07:00 arası: Dark / Karanlık tema ('modern' / dark)
+export const getAutoThemeByTime = (): Theme => {
+  if (typeof window === 'undefined') return 'modern';
+  const hour = new Date().getHours();
+  return hour >= 7 && hour < 19 ? 'pixel' : 'modern';
+};
+
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
     if (typeof window !== 'undefined') {
-      try {
-        // Temizle — eski localStorage override'larını sil
-        localStorage.removeItem(STORAGE_KEY);
-        localStorage.removeItem(MANUAL_OVERRIDE_KEY);
-      } catch {}
-
-      // Kullanıcı bu oturumda manuel değiştirdiyse onu kullan
+      // Kullanıcı bu oturumda manuel tema butonuna bastıysa kullanıcının seçimine saygı duy
       const manual = sessionStorage.getItem(MANUAL_OVERRIDE_KEY);
       const saved = sessionStorage.getItem(STORAGE_KEY) as Theme | null;
       if (manual === 'true' && (saved === 'modern' || saved === 'pixel')) {
         return saved;
       }
     }
-    // Her zaman dark mode (modern) ile başla
-    return 'modern';
+    // Cihaz saatine göre otomatik tema seç (07:00 - 19:00 pixel/beyaz, 19:00 - 07:00 modern/dark)
+    return getAutoThemeByTime();
   });
 
   // data-theme attribute'u güncelle
@@ -46,6 +49,27 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     document.documentElement.setAttribute('data-theme', theme);
     sessionStorage.setItem(STORAGE_KEY, theme);
   }, [theme]);
+
+  // Cihaz saatini periyodik olarak kontrol et (kullanıcı manuel seçim yapmadıysa otomatik geçiş yap)
+  useEffect(() => {
+    const checkThemeTime = () => {
+      const manual = sessionStorage.getItem(MANUAL_OVERRIDE_KEY);
+      if (manual !== 'true') {
+        const expected = getAutoThemeByTime();
+        setThemeState((current) => (current !== expected ? expected : current));
+      }
+    };
+
+    const interval = setInterval(checkThemeTime, 60000);
+    window.addEventListener('visibilitychange', checkThemeTime);
+    window.addEventListener('focus', checkThemeTime);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('visibilitychange', checkThemeTime);
+      window.removeEventListener('focus', checkThemeTime);
+    };
+  }, []);
 
   const toggleTheme = useCallback((_x?: number, _y?: number) => {
     const next: Theme = theme === 'modern' ? 'pixel' : 'modern';
