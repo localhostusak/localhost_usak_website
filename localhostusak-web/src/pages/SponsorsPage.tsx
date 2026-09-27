@@ -87,7 +87,6 @@ export const SponsorsPage: React.FC = () => {
         title="Topluluğumuza Güç Katan"
         highlightText="Değerli Sponsorlarımız"
         description="Uşak'ta teknoloji, mühendislik ve yazılım ekosistemini birlikte büyüttüğümüz kurumsal ortaklarımız ve topluluk destekçilerimiz."
-        whatsappLabel="Sponsorluk Görüşmesi Başlat"
       />
 
       <div className="container" style={{ paddingBottom: '6rem' }}>

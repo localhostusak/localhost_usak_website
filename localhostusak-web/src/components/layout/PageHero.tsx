@@ -1,5 +1,4 @@
 import React from 'react';
-import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 import { WhatsAppIcon } from '../shared';
 
@@ -22,9 +21,8 @@ export const PageHero: React.FC<PageHeroProps> = ({
   whatsappLabel = "WhatsApp'a Katıl",
   secondaryAction,
 }) => {
-  const { links } = useLinks();
   const { openWhatsAppWithRules } = useWhatsAppModal();
-  const effectiveUrl = whatsappUrl || links.whatsappGeneral;
+  const effectiveUrl = whatsappUrl;
 
   return (
     <section className="page-hero">
