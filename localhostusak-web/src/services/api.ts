@@ -3,7 +3,7 @@ import { CareerItem } from '../types/career';
 import { ProjectItem } from '../types/project';
 import { SponsorItem } from '../types/sponsor';
 import { MOCK_SPONSORS } from '../data/mockSponsors';
-import { CommunityLinks } from '../constants/links';
+import { CommunityLinks, normalizeCommunityLinkKey } from '../constants/links';
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
@@ -209,13 +209,17 @@ export async function fetchCommunityLinks(): Promise<Partial<CommunityLinks> | n
     const data = await res.json();
     const docs = Array.isArray(data) ? data : data.docs || [];
 
-    const linkMap: Record<string, string> = {};
+    const linkMap: Partial<CommunityLinks> & Record<string, string> = {};
     for (const doc of docs) {
       if (doc.key && configuredUrl(doc.url)) {
+        const normalizedKey = normalizeCommunityLinkKey(doc.key);
+        if (normalizedKey) {
+          linkMap[normalizedKey] = doc.url;
+        }
         linkMap[doc.key] = doc.url;
       }
     }
-    return linkMap as Partial<CommunityLinks>;
+    return linkMap;
   } catch {
     return null;
   }
