@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, MapPin } from 'lucide-react';
+import { WhatsAppIcon } from '../shared';
 import { useLinks } from '../../context/LinksContext';
+import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 import { useSiteSettings } from '../../context/SiteSettingsContext';
 import { SiteVisionMessageItem } from '../../services/api';
 
@@ -26,6 +28,7 @@ const DEFAULT_HERO_VISION: SiteVisionMessageItem[] = [
 
 export const HeroSection: React.FC = () => {
   const { links } = useLinks();
+  const { openWhatsAppWithRules } = useWhatsAppModal();
   const { settings } = useSiteSettings();
   const hero = settings.hero;
 
@@ -125,6 +128,21 @@ export const HeroSection: React.FC = () => {
               marginBottom: '3.5rem',
             }}
           >
+            {links.whatsappGeneral && <a
+              href={links.whatsappGeneral}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-lg btn-whatsapp"
+              id="hero-btn-whatsapp"
+              onClick={(e) => {
+                e.preventDefault();
+                openWhatsAppWithRules(links.whatsappGeneral, 'Genel Topluluk Grubu');
+              }}
+            >
+              <WhatsAppIcon size={20} />
+              <span>WhatsApp Topluluğuna Katıl</span>
+            </a>}
+
             <Link to="/etkinlikler" className="btn btn-lg btn-primary" id="hero-btn-events" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem' }}>
               <span>Sıradaki Buluşma</span>
               <Calendar size={18} />

@@ -9,6 +9,7 @@ import { WhatsAppModalProvider } from './context/WhatsAppModalContext';
 import { Navbar } from './components/layout/Navbar';
 import { PullToRefresh } from './components/layout/PullToRefresh';
 import { Footer } from './components/layout/Footer';
+import { FloatingCTA } from './components/layout/FloatingCTA';
 import { InteractiveCanvasBackground } from './components/layout/InteractiveCanvasBackground';
 
 import { HomePage } from './pages/HomePage';
@@ -100,6 +101,7 @@ const AppContent: React.FC = () => {
       </Routes>
 
       <Footer />
+      <FloatingCTA />
     </BrowserRouter>
   );
 };

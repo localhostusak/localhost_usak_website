@@ -1,12 +1,16 @@
 import React, { useMemo } from 'react';
 import { Calendar, MapPin, Coffee, Download, ExternalLink, AlertTriangle, Loader2 } from 'lucide-react';
-import { CountdownTimer, EmptyState } from '../shared';
+import { CountdownTimer, WhatsAppIcon, EmptyState } from '../shared';
 import { downloadICS, openGoogleCalendar } from '../../utils/calendarExport';
+import { useLinks } from '../../context/LinksContext';
+import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 import { fetchEvents } from '../../services/api';
 import { EventItem } from '../../types/event';
 import { useCmsCollection } from '../../hooks/useCmsCollection';
 
 export const EventSpotlight: React.FC = () => {
+  const { links } = useLinks();
+  const { openWhatsAppWithRules } = useWhatsAppModal();
   const { items: events, isLoading, error, retry } = useCmsCollection<EventItem>(fetchEvents);
 
   // En yakın yaklaşan (upcoming) etkinliği tarihe göre en yakından uzağa sıralayarak seç:
@@ -216,6 +220,23 @@ export const EventSpotlight: React.FC = () => {
                   <span>Google Takvim'e Kaydet</span>
                   <Calendar size={16} />
                 </button>
+                {(links.whatsappCoworking || links.whatsappGeneral) && <a
+                  href={links.whatsappCoworking || links.whatsappGeneral}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-whatsapp btn-full"
+                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.55rem' }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openWhatsAppWithRules(
+                      links.whatsappCoworking || links.whatsappGeneral,
+                      'Coworking & Buluşma Grubu'
+                    );
+                  }}
+                >
+                  <WhatsAppIcon size={18} />
+                  <span>WhatsApp Grubuna Katıl</span>
+                </a>}
               </div>
             </div>
           </div>

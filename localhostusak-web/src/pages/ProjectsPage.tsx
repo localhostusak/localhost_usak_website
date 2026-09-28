@@ -7,6 +7,7 @@ import { ProjectCard } from '../components/projects/ProjectCard';
 import { ProjectCTA } from '../components/projects/ProjectCTA';
 import { EmptyState } from '../components/shared/EmptyState';
 import { ProjectItem } from '../types/project';
+import { useLinks } from '../context/LinksContext';
 
 import { fetchProjects, likeProject, fetchProjectsPageSettings, ProjectsPageSettingsData } from '../services/api';
 import seoPages from '../seo/pages.json';
@@ -14,6 +15,7 @@ import { usePageMeta } from '../hooks/usePageMeta';
 import { useCmsCollection } from '../hooks/useCmsCollection';
 
 export const ProjectsPage: React.FC = () => {
+  const { links } = useLinks();
   const { items: projects, isLoading, error, retry } = useCmsCollection<ProjectItem>(fetchProjects);
   const [selectedType, setSelectedType] = useState<string>('all');
   const [selectedTech, setSelectedTech] = useState<string>('all');
@@ -83,6 +85,8 @@ export const ProjectsPage: React.FC = () => {
         title={settings?.hero?.title || "Uşak Yazılım Projeleri,"}
         highlightText={settings?.hero?.highlightText || "Birlikte Üretiyoruz"}
         description={settings?.hero?.description || "Topluluk üyelerimizin geliştirdiği açık kaynak projeler, erken aşama girişimler ve birlikte üretmek için ekip arkadaşı arayanlar."}
+        whatsappUrl={settings?.whatsappCta?.overrideUrl || links.whatsappProjects}
+        whatsappLabel={settings?.whatsappCta?.buttonText || "WhatsApp Projeler Grubuna Katıl"}
       />
 
       <div className="container" style={{ paddingBottom: '4rem' }}>

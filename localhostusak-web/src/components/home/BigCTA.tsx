@@ -1,9 +1,12 @@
 import React from 'react';
 import { useLinks } from '../../context/LinksContext';
+import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
+import { WhatsAppIcon } from '../shared';
 
 export const BigCTA: React.FC = () => {
   const { links } = useLinks();
-  if (!links.instagram) return null;
+  const { openWhatsAppWithRules } = useWhatsAppModal();
+  if (!links.whatsappGeneral && !links.instagram) return null;
   return (
     <section className="section" id="cta" style={{ background: 'var(--bg-secondary)' }}>
       <div className="container">
@@ -43,6 +46,21 @@ export const BigCTA: React.FC = () => {
           </p>
 
           <div className="cta-actions" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1.25rem' }}>
+            {links.whatsappGeneral && <a
+              href={links.whatsappGeneral}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-lg btn-whatsapp"
+              id="cta-btn-whatsapp"
+              onClick={(e) => {
+                e.preventDefault();
+                openWhatsAppWithRules(links.whatsappGeneral, 'Genel Topluluk Grubu');
+              }}
+            >
+              <WhatsAppIcon size={20} />
+              <span>WhatsApp Topluluğuna Katıl</span>
+            </a>}
+
             {links.instagram && <a
               href={links.instagram}
               target="_blank"

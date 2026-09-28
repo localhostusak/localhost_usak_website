@@ -578,6 +578,53 @@
 }
 
 /* --------------------------------------------------------------------------
+   9. Floating Action Button (Scroll-Aware & Refined)
+   -------------------------------------------------------------------------- */
+.floating-cta {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 990;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1.35rem;
+  border-radius: var(--radius-full);
+  background: var(--whatsapp-bg);
+  color: var(--whatsapp-text);
+  border: 1px solid var(--whatsapp-border);
+  font-weight: 600;
+  font-size: 0.92rem;
+  box-shadow: var(--whatsapp-shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, background 0.2s ease;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  pointer-events: none;
+}
+
+.floating-cta.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.floating-cta:hover {
+  transform: translateY(-2px) scale(1.02);
+  background: var(--whatsapp-bg-hover);
+  color: var(--whatsapp-text);
+  box-shadow: var(--whatsapp-shadow-hover);
+}
+
+.floating-cta-icon {
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+}
+
+/* --------------------------------------------------------------------------
    10. Classic Theme Toggle Button with Celestial Icons & Eye-Catching Crack
    -------------------------------------------------------------------------- */
 .theme-toggle-btn {
