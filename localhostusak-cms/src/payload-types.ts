@@ -74,6 +74,7 @@ export interface Config {
     careers: Career;
     projects: Project;
     sponsors: Sponsor;
+    'team-members': TeamMember;
     'community-links': CommunityLink;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -89,6 +90,7 @@ export interface Config {
     careers: CareersSelect<false> | CareersSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     sponsors: SponsorsSelect<false> | SponsorsSelect<true>;
+    'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
     'community-links': CommunityLinksSelect<false> | CommunityLinksSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -426,6 +428,31 @@ export interface Sponsor {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-members".
+ */
+export interface TeamMember {
+  id: number;
+  name: string;
+  category: 'founder' | 'core' | 'contributor';
+  title?: string | null;
+  avatar?: (number | null) | Media;
+  bio?: string | null;
+  github?: string | null;
+  linkedin?: string | null;
+  x?: string | null;
+  /**
+   * Sıralama önceliği (Küçük sayılar önce çıkar)
+   */
+  sortOrder?: number | null;
+  /**
+   * Kişinin yayın izni alındıktan sonra işaretleyin.
+   */
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "community-links".
  */
 export interface CommunityLink {
@@ -501,6 +528,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'sponsors';
         value: number | Sponsor;
+      } | null)
+    | ({
+        relationTo: 'team-members';
+        value: number | TeamMember;
       } | null)
     | ({
         relationTo: 'community-links';
@@ -698,6 +729,24 @@ export interface SponsorsSelect<T extends boolean = true> {
   logo?: T;
   logoUrl?: T;
   websiteUrl?: T;
+  sortOrder?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-members_select".
+ */
+export interface TeamMembersSelect<T extends boolean = true> {
+  name?: T;
+  category?: T;
+  title?: T;
+  avatar?: T;
+  bio?: T;
+  github?: T;
+  linkedin?: T;
+  x?: T;
   sortOrder?: T;
   isActive?: T;
   updatedAt?: T;
