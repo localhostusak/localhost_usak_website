@@ -95,8 +95,6 @@ export const EventsPage: React.FC = () => {
         title={settings?.hero?.title || "Uşak Teknoloji Etkinlikleri,"}
         highlightText={settings?.hero?.highlightText || "Coworking ve Buluşmalar"}
         description={settings?.hero?.description || "Kahveni al, etkinliğini seç, masada yerini al. Yazılım, tasarım, yapay zeka ve serbest çalışma Uşak'ta aynı masada."}
-        whatsappUrl={settings?.whatsappCta?.overrideUrl || links.whatsappCoworking}
-        whatsappLabel={settings?.whatsappCta?.buttonText || "WhatsApp Coworking Grubuna Katıl"}
       />
 
       <div className="container" style={{ paddingBottom: '4rem' }}>

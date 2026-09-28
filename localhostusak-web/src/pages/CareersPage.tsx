@@ -4,10 +4,8 @@ import { PageHero } from '../components/layout/PageHero';
 import { FilterBar, FilterOption } from '../components/shared/FilterBar';
 import { CareerCard } from '../components/careers/CareerCard';
 import { CareerResources } from '../components/careers/CareerResources';
-import { CareerCTA } from '../components/careers/CareerCTA';
 import { EmptyState } from '../components/shared/EmptyState';
 import { CareerItem } from '../types/career';
-import { useLinks } from '../context/LinksContext';
 
 import { fetchCareers, fetchCareersPageSettings, CareersPageSettingsData } from '../services/api';
 import seoPages from '../seo/pages.json';
@@ -15,7 +13,6 @@ import { usePageMeta } from '../hooks/usePageMeta';
 import { useCmsCollection } from '../hooks/useCmsCollection';
 
 export const CareersPage: React.FC = () => {
-  const { links } = useLinks();
   const { items: careers, isLoading, error, retry } = useCmsCollection<CareerItem>(fetchCareers);
   const [selectedType, setSelectedType] = useState<string>('all');
   const [selectedWorkMode, setSelectedWorkMode] = useState<string>('all');
@@ -74,8 +71,6 @@ export const CareersPage: React.FC = () => {
         title={settings?.hero?.title || "Uşak Yazılım Kariyeri,"}
         highlightText={settings?.hero?.highlightText || "İş İlanları ve Staj"}
         description={settings?.hero?.description || "Topluluk üyelerinin paylaştığı iş ilanları, staj fırsatları, freelance projeler ve ücretsiz mentorluk eşleşmeleri."}
-        whatsappUrl={settings?.whatsappCta?.overrideUrl || links.whatsappCareers}
-        whatsappLabel={settings?.whatsappCta?.buttonText || "WhatsApp Kariyer Grubuna Katıl"}
       />
 
       <div className="container" style={{ paddingBottom: '4rem' }}>
@@ -137,9 +132,6 @@ export const CareersPage: React.FC = () => {
 
         {/* Career Resources Grid */}
         <CareerResources items={settings?.careerResources} />
-
-        {/* Career CTA */}
-        <CareerCTA />
       </div>
     </main>
   );
