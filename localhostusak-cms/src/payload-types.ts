@@ -232,7 +232,7 @@ export interface Event {
    * Etkinlik türü seçin
    */
   type: number | EventType;
-  status: 'upcoming' | 'completed' | 'cancelled';
+  status: 'upcoming' | 'open' | 'closed' | 'completed' | 'cancelled';
   dateStart: string;
   dateEnd?: string | null;
   /**
@@ -257,6 +257,10 @@ export interface Event {
    * Etkinlik / Topluluk WhatsApp grup linki
    */
   whatsappLink?: string | null;
+  /**
+   * Fotoğraf albümü, sunum veya özet yazısı linki (etkinlik sonrası)
+   */
+  recapUrl?: string | null;
   /**
    * Etiketler (Örn: #WebDev, #AIAgents)
    */
@@ -652,6 +656,7 @@ export interface EventsSelect<T extends boolean = true> {
   coverImage?: T;
   imageUrl?: T;
   whatsappLink?: T;
+  recapUrl?: T;
   tags?:
     | T
     | {
