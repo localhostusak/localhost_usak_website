@@ -1,10 +1,11 @@
 import React from 'react';
-import { Calendar, MapPin, Users, Download } from 'lucide-react';
+import { Calendar, MapPin, Users, Download, ExternalLink } from 'lucide-react';
 import { EventItem, EventType } from '../../types/event';
 import { WhatsAppIcon } from '../shared';
 import { downloadICS } from '../../utils/calendarExport';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
+import { getEventDisplayStatus } from '../../utils/eventStatus';
 
 interface EventCardProps {
   event: EventItem;
@@ -14,8 +15,7 @@ interface EventCardProps {
 export const EventCard: React.FC<EventCardProps> = ({ event, eventType }) => {
   const { links } = useLinks();
   const { openWhatsAppWithRules } = useWhatsAppModal();
-  const isUpcoming = event.status === 'upcoming' && new Date(event.dateStart).getTime() >= Date.now();
-  const isCancelled = event.status === 'cancelled';
+  const statusInfo = getEventDisplayStatus(event);
   const startDate = new Date(event.dateStart);
 
   const formattedDate = startDate.toLocaleDateString('tr-TR', {
@@ -38,8 +38,8 @@ export const EventCard: React.FC<EventCardProps> = ({ event, eventType }) => {
   };
 
   return (
-    <article className="card event-card circuit-border">
-      <div>
+    <article className={`card event-card circuit-border${statusInfo.isPast ? ' is-past' : ''}`}>
+      <div className="event-card-body">
         <div className="event-card-header">
           <span
             className="event-card-type-tag"
@@ -52,8 +52,8 @@ export const EventCard: React.FC<EventCardProps> = ({ event, eventType }) => {
             {eventType?.label || event.typeId}
           </span>
 
-          <span className={`badge ${isUpcoming ? 'badge-live' : 'badge-orange'}`}>
-            {isCancelled ? 'İPTAL EDİLDİ' : isUpcoming ? 'YAKLAŞAN' : 'TAMAMLANDI'}
+          <span className={`badge ${statusInfo.canRegister ? 'badge-live' : 'badge-orange'}`}>
+            {statusInfo.label}
           </span>
         </div>
 
@@ -118,7 +118,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, eventType }) => {
       </div>
 
       <div className="event-card-footer">
-        {isUpcoming ? (
+        {statusInfo.canRegister ? (
           <>
             <button
               type="button"
@@ -145,10 +145,26 @@ export const EventCard: React.FC<EventCardProps> = ({ event, eventType }) => {
               <span>Masada Yer Ayır</span>
             </a>}
           </>
+        ) : statusInfo.displayStatus === 'closed' ? (
+          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Kontenjan doldu</span>
         ) : (
-          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-            {isCancelled ? 'Etkinlik iptal edildi' : 'Etkinlik tamamlandı'}
-          </span>
+          <>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+              {statusInfo.displayStatus === 'cancelled' ? 'Etkinlik iptal edildi' : 'Etkinlik tamamlandı'}
+            </span>
+            {event.recapUrl && (
+              <a
+                href={event.recapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-secondary btn-sm"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+              >
+                <span>Etkinlik Özeti</span>
+                <ExternalLink size={14} />
+              </a>
+            )}
+          </>
         )}
       </div>
     </article>

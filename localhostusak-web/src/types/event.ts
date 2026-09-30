@@ -14,7 +14,7 @@ export interface EventItem {
   description: string;
   typeId: string;
   type?: EventType;
-  status: "upcoming" | "completed" | "cancelled";
+  status: "upcoming" | "open" | "closed" | "completed" | "cancelled";
   dateStart: string;    // ISO datetime or readable string
   dateEnd?: string;
   location: string;
@@ -23,6 +23,7 @@ export interface EventItem {
   attendees: number;
   imageUrl?: string;
   whatsappLink?: string;
+  recapUrl?: string;
   tags?: string[];
   createdAt: string;
 }

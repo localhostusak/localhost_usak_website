@@ -13,6 +13,7 @@ import { fetchEvents, fetchEventTypes, fetchEventsPageSettings, EventsPageSettin
 import seoPages from '../seo/pages.json';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useCmsCollection } from '../hooks/useCmsCollection';
+import { getEventDisplayStatus, isUpcomingGroup } from '../utils/eventStatus';
 
 export const EventsPage: React.FC = () => {
   const { links } = useLinks();
@@ -56,17 +57,19 @@ export const EventsPage: React.FC = () => {
 
   // Secondary options
   const secondaryOptions: FilterOption[] = [
-    { id: 'all', label: 'Tüm Durumlar' },
+    { id: 'all', label: 'Tümü' },
     { id: 'upcoming', label: 'Yaklaşan' },
-    { id: 'completed', label: 'Geçmiş' },
-    { id: 'cancelled', label: 'İptal Edildi' },
+    { id: 'past', label: 'Geçmiş Buluşmalar' },
   ];
 
   // Filter logic
   const filteredEvents = useMemo(() => {
     return events.filter((e) => {
       const matchType = selectedType === 'all' || e.typeId === selectedType;
-      const matchStatus = selectedStatus === 'all' || e.status === selectedStatus;
+      const matchStatus =
+        selectedStatus === 'all' ||
+        (selectedStatus === 'upcoming' && isUpcomingGroup(e)) ||
+        (selectedStatus === 'past' && getEventDisplayStatus(e).isPast);
       const matchSearch =
         searchQuery.trim() === '' ||
         e.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -77,10 +80,10 @@ export const EventsPage: React.FC = () => {
     });
   }, [events, selectedType, selectedStatus, searchQuery]);
 
-  // Spotlight event: En yakın yaklaşan etkinlik (tarihe göre sıralı)
+  // Spotlight event: En yakın "yaklaşan grup" (upcoming/open/closed, tarihi gelmemiş) etkinlik
   const spotlightEvent = useMemo(() => {
     const upcoming = events
-      .filter((e) => e.status === 'upcoming' && new Date(e.dateStart).getTime() >= Date.now())
+      .filter((e) => isUpcomingGroup(e))
       .sort((a, b) => new Date(a.dateStart).getTime() - new Date(b.dateStart).getTime());
     return upcoming[0];
   }, [events]);
@@ -114,7 +117,7 @@ export const EventsPage: React.FC = () => {
         />
 
         {/* Spotlight Event (if in 'all' or 'upcoming' filter and available) */}
-        {!isLoading && !error && selectedType === 'all' && selectedStatus !== 'completed' && selectedStatus !== 'cancelled' && searchQuery === '' && spotlightEvent && (
+        {!isLoading && !error && selectedType === 'all' && selectedStatus !== 'past' && searchQuery === '' && spotlightEvent && (
           <EventSpotlightCard event={spotlightEvent} eventType={typeMap.get(spotlightEvent.typeId)} />
         )}
 

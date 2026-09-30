@@ -4,6 +4,7 @@ import { ProjectItem } from '../types/project';
 import { SponsorItem } from '../types/sponsor';
 import { MOCK_SPONSORS } from '../data/mockSponsors';
 import { CommunityLinks } from '../constants/links';
+import { isUpcomingGroup } from '../utils/eventStatus';
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
@@ -54,6 +55,7 @@ export function normalizeEventDoc(doc: any): EventItem {
     attendees: doc.attendees || 0,
     imageUrl: normalizeMediaUrl(doc.coverImage, doc.imageUrl),
     whatsappLink: configuredUrl(doc.whatsappLink) ? doc.whatsappLink : undefined,
+    recapUrl: configuredUrl(doc.recapUrl) ? doc.recapUrl : undefined,
     tags: Array.isArray(doc.tags) ? doc.tags.map((t: any) => (typeof t === 'string' ? t : t.tag || t.name)) : [],
     createdAt: doc.createdAt || new Date().toISOString(),
   };
@@ -68,16 +70,18 @@ export async function fetchEvents(): Promise<EventItem[]> {
   const items = docs.map(normalizeEventDoc);
 
   // Sıralama mantığı:
-  // 1. Önce yaklaşan (upcoming) etkinlikler, tarihi EN YAKIN olan en başta (ASC)
-  // 2. Ardından tamamlanan (completed) etkinlikler, EN SON yapılan en başta (DESC)
+  // 1. Önce "yaklaşan grup" (upcoming/open/closed, tarihi gelmemiş), tarihi EN YAKIN olan en başta (ASC)
+  // 2. Ardından geri kalanlar (tamamlanan/iptal/tarihi geçmiş), EN SON yapılan en başta (DESC)
   return items.sort((a: EventItem, b: EventItem) => {
-    if (a.status === 'upcoming' && b.status !== 'upcoming') return -1;
-    if (a.status !== 'upcoming' && b.status === 'upcoming') return 1;
+    const aUpcoming = isUpcomingGroup(a);
+    const bUpcoming = isUpcomingGroup(b);
+    if (aUpcoming && !bUpcoming) return -1;
+    if (!aUpcoming && bUpcoming) return 1;
 
     const timeA = new Date(a.dateStart).getTime();
     const timeB = new Date(b.dateStart).getTime();
 
-    if (a.status === 'upcoming' && b.status === 'upcoming') {
+    if (aUpcoming && bUpcoming) {
       return timeA - timeB; // En yakın tarih ilk sırada
     }
     return timeB - timeA; // Geçmişte en son yapılan ilk sırada

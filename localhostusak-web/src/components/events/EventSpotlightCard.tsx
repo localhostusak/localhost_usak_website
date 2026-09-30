@@ -5,6 +5,7 @@ import { CountdownTimer, WhatsAppIcon } from '../shared';
 import { downloadICS, openGoogleCalendar } from '../../utils/calendarExport';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
+import { getEventDisplayStatus } from '../../utils/eventStatus';
 
 interface EventSpotlightCardProps {
   event: EventItem;
@@ -14,6 +15,7 @@ interface EventSpotlightCardProps {
 export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, eventType }) => {
   const { links } = useLinks();
   const { openWhatsAppWithRules } = useWhatsAppModal();
+  const statusInfo = getEventDisplayStatus(event);
   const startDate = new Date(event.dateStart);
 
   const formattedDate = startDate.toLocaleDateString('tr-TR', {
@@ -65,6 +67,9 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
               }}
             >
               {eventType?.label || event.typeId}
+            </span>
+            <span className={`badge ${statusInfo.canRegister ? 'badge-live' : 'badge-orange'}`}>
+              {statusInfo.label}
             </span>
             <span className="badge badge-blue">YÜZ YÜZE</span>
             <span className="badge badge-live">KATILIM ÜCRETSİZ</span>
@@ -165,20 +170,26 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
               <span>Google Takvim'e Kaydet</span>
               <Calendar size={16} />
             </button>
-            {(event.whatsappLink || links.whatsappCoworking) && <a
-              href={event.whatsappLink || links.whatsappCoworking}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-whatsapp btn-full"
-              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.55rem' }}
-              onClick={(e) => {
-                e.preventDefault();
-                openWhatsAppWithRules(event.whatsappLink || links.whatsappCoworking, 'WhatsApp Coworking Masası');
-              }}
-            >
-              <WhatsAppIcon size={18} />
-              <span>WhatsApp Coworking Masasına Katıl</span>
-            </a>}
+            {statusInfo.canRegister ? (
+              (event.whatsappLink || links.whatsappCoworking) && <a
+                href={event.whatsappLink || links.whatsappCoworking}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-whatsapp btn-full"
+                style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.55rem' }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  openWhatsAppWithRules(event.whatsappLink || links.whatsappCoworking, 'WhatsApp Coworking Masası');
+                }}
+              >
+                <WhatsAppIcon size={18} />
+                <span>WhatsApp Coworking Masasına Katıl</span>
+              </a>
+            ) : (
+              <span style={{ textAlign: 'center', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+                Kontenjan doldu
+              </span>
+            )}
           </div>
         </div>
       </div>

@@ -222,6 +222,20 @@
   }
 }
 
+/* Tarihi geçmiş / tamamlanmış etkinlik kartları: yalnızca opacity + grayscale ile
+   soluklaştırılır (renk token'ı gerektirmez, iki temada da tutarlı çalışır).
+   Footer (CTA/"Etkinlik Özeti" butonu) kasıtlı olarak etkilenmez. */
+.event-card.is-past .event-card-body {
+  opacity: 0.65;
+  filter: grayscale(0.35);
+  transition: opacity var(--transition-normal), filter var(--transition-normal);
+}
+
+.event-card.is-past:hover .event-card-body {
+  opacity: 0.85;
+  filter: grayscale(0.15);
+}
+
 /* --------------------------------------------------------------------------
    Careers (Job Board) Cards
    -------------------------------------------------------------------------- */
