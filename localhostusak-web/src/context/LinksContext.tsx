@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { CommunityLinks, DEFAULT_COMMUNITY_LINKS } from '../constants/links';
+import { CommunityLinks, DEFAULT_COMMUNITY_LINKS, normalizeCommunityLinkKey } from '../constants/links';
 import { fetchCommunityLinks } from '../services/api';
 
 interface LinksContextType {
@@ -27,10 +27,20 @@ export const LinksProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           const cleanData: Partial<CommunityLinks> = {};
           for (const [k, v] of Object.entries(data)) {
             if (v && typeof v === 'string' && v.trim().length > 0) {
-              cleanData[k as keyof CommunityLinks] = v.trim();
+              const normalized = normalizeCommunityLinkKey(k);
+              if (normalized) {
+                cleanData[normalized] = v.trim();
+              }
             }
           }
-          const merged = { ...DEFAULT_COMMUNITY_LINKS, ...cleanData };
+          const merged: CommunityLinks = {
+            ...DEFAULT_COMMUNITY_LINKS,
+            ...cleanData,
+            whatsapp_general: cleanData.whatsappGeneral || DEFAULT_COMMUNITY_LINKS.whatsappGeneral,
+            whatsapp_projects: cleanData.whatsappProjects || DEFAULT_COMMUNITY_LINKS.whatsappProjects,
+            whatsapp_careers: cleanData.whatsappCareers || DEFAULT_COMMUNITY_LINKS.whatsappCareers,
+            whatsapp_coworking: cleanData.whatsappCoworking || DEFAULT_COMMUNITY_LINKS.whatsappCoworking,
+          };
           setLinks(merged);
         }
       })

@@ -8,7 +8,7 @@
  */
 
 export interface CommunityLinks {
-  // WhatsApp Grupları
+  // WhatsApp Grupları (camelCase)
   whatsappGeneral: string;
   whatsappProjects: string;
   whatsappCareers: string;
@@ -18,6 +18,12 @@ export interface CommunityLinks {
   instagram: string;
   github: string;
   x: string;
+
+  // Snake_case destekli takma adlar (Payload CMS ve dinamik erişim için)
+  whatsapp_general?: string;
+  whatsapp_projects?: string;
+  whatsapp_careers?: string;
+  whatsapp_coworking?: string;
 }
 
 export const DEFAULT_COMMUNITY_LINKS: CommunityLinks = {
@@ -29,6 +35,42 @@ export const DEFAULT_COMMUNITY_LINKS: CommunityLinks = {
   github: '',
   x: '',
 };
+
+export const COMMUNITY_KEY_MAP: Record<string, keyof CommunityLinks> = {
+  // WhatsApp Grupları
+  whatsapp_general: 'whatsappGeneral',
+  whatsappgeneral: 'whatsappGeneral',
+  whatsappGeneral: 'whatsappGeneral',
+  whatsapp_projects: 'whatsappProjects',
+  whatsappprojects: 'whatsappProjects',
+  whatsappProjects: 'whatsappProjects',
+  whatsapp_careers: 'whatsappCareers',
+  whatsappcareers: 'whatsappCareers',
+  whatsappCareers: 'whatsappCareers',
+  whatsapp_coworking: 'whatsappCoworking',
+  whatsappcoworking: 'whatsappCoworking',
+  whatsappCoworking: 'whatsappCoworking',
+  whatsapp_cowork: 'whatsappCoworking',
+  whatsappcowork: 'whatsappCoworking',
+
+  // Sosyal Medya & Depolar
+  instagram: 'instagram',
+  github: 'github',
+  x: 'x',
+  twitter: 'x',
+};
+
+export function normalizeCommunityLinkKey(rawKey: string): keyof CommunityLinks | null {
+  if (!rawKey) return null;
+  const direct = COMMUNITY_KEY_MAP[rawKey] || COMMUNITY_KEY_MAP[rawKey.toLowerCase()];
+  if (direct) return direct;
+
+  const camel = rawKey.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase()) as keyof CommunityLinks;
+  if (camel in DEFAULT_COMMUNITY_LINKS) return camel;
+
+  return null;
+}
+
 
 export interface LinkMetaItem {
   key: keyof CommunityLinks;
