@@ -88,10 +88,6 @@ export const EventsPage: React.FC = () => {
     return upcoming[0];
   }, [events]);
 
-  const totalAttendees = useMemo(() => {
-    return events.reduce((sum, e) => sum + (e.attendees || 0), 0);
-  }, [events]);
-
   return (
     <main>
       <PageHero
@@ -163,7 +159,7 @@ export const EventsPage: React.FC = () => {
         )}
 
         {/* Event Statistics Banner */}
-        {!isLoading && !error && events.length > 0 && <EventStats totalEvents={events.length} totalAttendees={totalAttendees} />}
+        {!isLoading && !error && events.length > 0 && <EventStats totalEvents={events.length} />}
       </div>
     </main>
   );

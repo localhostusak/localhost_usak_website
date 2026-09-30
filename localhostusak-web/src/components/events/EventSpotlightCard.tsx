@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, MapPin, Users, Download, ExternalLink } from 'lucide-react';
+import { Calendar, MapPin, Download } from 'lucide-react';
 import { EventItem, EventType } from '../../types/event';
 import { CountdownTimer, WhatsAppIcon } from '../shared';
 import { downloadICS, openGoogleCalendar } from '../../utils/calendarExport';
@@ -94,32 +94,6 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
               <span className="meta-icon"><MapPin size={18} /></span>
               <div>
                 <strong>Mekan:</strong> {event.location}
-                {event.mapUrl && (
-                  <a
-                    href={event.mapUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      color: 'var(--accent-secondary)',
-                      fontSize: '0.85rem',
-                      marginLeft: '0.5rem',
-                      textDecoration: 'underline',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.2rem',
-                    }}
-                  >
-                    <span>(Haritada Gör</span>
-                    <ExternalLink size={12} />
-                    <span>)</span>
-                  </a>
-                )}
-              </div>
-            </div>
-            <div className="meetup-meta-item">
-              <span className="meta-icon"><Users size={18} /></span>
-              <div>
-                <strong>Kontenjan & Katılım:</strong> {event.attendees} Kişi Masada (Kapasite: {event.capacity || 'Sınırsız'})
               </div>
             </div>
           </div>
@@ -170,6 +144,18 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
               <span>Google Takvim'e Kaydet</span>
               <Calendar size={16} />
             </button>
+            {event.mapUrl && (
+              <a
+                href={event.mapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-secondary btn-full"
+                style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+              >
+                <span>Haritada Gör</span>
+                <MapPin size={16} />
+              </a>
+            )}
             {statusInfo.canRegister ? (
               (event.whatsappLink || links.whatsappCoworking) && <a
                 href={event.whatsappLink || links.whatsappCoworking}

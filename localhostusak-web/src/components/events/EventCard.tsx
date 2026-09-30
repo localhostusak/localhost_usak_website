@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, MapPin, Users, Download, ExternalLink } from 'lucide-react';
+import { Calendar, MapPin, Download, ExternalLink } from 'lucide-react';
 import { EventItem, EventType } from '../../types/event';
 import { WhatsAppIcon } from '../shared';
 import { downloadICS } from '../../utils/calendarExport';
@@ -86,23 +86,13 @@ export const EventCard: React.FC<EventCardProps> = ({ event, eventType }) => {
                 href={event.mapUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  color: 'var(--accent-secondary)',
-                  fontSize: '0.8rem',
-                  textDecoration: 'underline',
-                  marginLeft: '0.25rem',
-                }}
+                className="btn btn-secondary btn-sm"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
               >
-                (Harita)
+                <MapPin size={12} />
+                <span>Haritada Gör</span>
               </a>
             )}
-          </div>
-
-          <div className="event-card-meta-item">
-            <span style={{ display: 'inline-flex', alignItems: 'center' }}><Users size={14} /></span>
-            <span>
-              {event.attendees} Katılımcı {event.capacity ? `/ ${event.capacity} Kontenjan` : ''}
-            </span>
           </div>
         </div>
 

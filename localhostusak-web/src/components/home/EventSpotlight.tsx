@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Calendar, MapPin, Coffee, Download, ExternalLink, AlertTriangle, Loader2 } from 'lucide-react';
+import { Calendar, MapPin, Coffee, Download, AlertTriangle, Loader2 } from 'lucide-react';
 import { CountdownTimer, WhatsAppIcon, EmptyState } from '../shared';
 import { downloadICS, openGoogleCalendar } from '../../utils/calendarExport';
 import { useLinks } from '../../context/LinksContext';
@@ -142,26 +142,6 @@ export const EventSpotlight: React.FC = () => {
                   <span className="meta-icon"><MapPin size={18} /></span>
                   <div>
                     <strong>Mekan:</strong> {eventLocation}
-                    {eventMapUrl && (
-                      <a
-                        href={eventMapUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          color: 'var(--accent-secondary)',
-                          fontSize: '0.85rem',
-                          marginLeft: '0.5rem',
-                          textDecoration: 'underline',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '0.2rem',
-                        }}
-                      >
-                        <span>(Haritada Gör</span>
-                        <ExternalLink size={12} />
-                        <span>)</span>
-                      </a>
-                    )}
                   </div>
                 </div>
                 <div className="meetup-meta-item">
@@ -228,6 +208,18 @@ export const EventSpotlight: React.FC = () => {
                   <span>Google Takvim'e Kaydet</span>
                   <Calendar size={16} />
                 </button>
+                {eventMapUrl && (
+                  <a
+                    href={eventMapUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-secondary btn-full"
+                    style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                  >
+                    <span>Haritada Gör</span>
+                    <MapPin size={16} />
+                  </a>
+                )}
                 {statusInfo?.canRegister ? (
                   (links.whatsappCoworking || links.whatsappGeneral) && <a
                     href={links.whatsappCoworking || links.whatsappGeneral}

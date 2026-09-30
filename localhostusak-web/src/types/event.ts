@@ -19,8 +19,6 @@ export interface EventItem {
   dateEnd?: string;
   location: string;
   mapUrl?: string;
-  capacity?: number;
-  attendees: number;
   imageUrl?: string;
   whatsappLink?: string;
   recapUrl?: string;

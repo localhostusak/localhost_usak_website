@@ -51,8 +51,6 @@ export function normalizeEventDoc(doc: any): EventItem {
     dateEnd: doc.dateEnd,
     location: doc.location || '',
     mapUrl: doc.mapUrl,
-    capacity: doc.capacity,
-    attendees: doc.attendees || 0,
     imageUrl: normalizeMediaUrl(doc.coverImage, doc.imageUrl),
     whatsappLink: configuredUrl(doc.whatsappLink) ? doc.whatsappLink : undefined,
     recapUrl: configuredUrl(doc.recapUrl) ? doc.recapUrl : undefined,
