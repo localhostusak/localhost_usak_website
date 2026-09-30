@@ -7,7 +7,7 @@ import { CareerResources } from '../components/careers/CareerResources';
 import { EmptyState } from '../components/shared/EmptyState';
 import { CareerItem } from '../types/career';
 
-import { fetchCareers, fetchCareersPageSettings, CareersPageSettingsData } from '../services/api';
+import { fetchCareers, fetchCareersPageSettings, getCachedCareersPageSettings, CareersPageSettingsData } from '../services/api';
 import seoPages from '../seo/pages.json';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useCmsCollection } from '../hooks/useCmsCollection';
@@ -17,7 +17,7 @@ export const CareersPage: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string>('all');
   const [selectedWorkMode, setSelectedWorkMode] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [settings, setSettings] = useState<CareersPageSettingsData | null>(null);
+  const [settings, setSettings] = useState<CareersPageSettingsData | null>(getCachedCareersPageSettings);
 
   // SEO Meta
   usePageMeta({
@@ -68,8 +68,9 @@ export const CareersPage: React.FC = () => {
   return (
     <main>
       <PageHero
-        title={settings?.hero?.title || "Uşak Yazılım Kariyeri,"}
-        highlightText={settings?.hero?.highlightText || "İş İlanları ve Staj"}
+        tag={settings?.hero?.tag || "// KARİYER & FIRSAT PANOSU"}
+        title={settings?.hero?.title || "Uşak'tan Globale,"}
+        highlightText={settings?.hero?.highlightText || "Doğru Fırsatı Yakala"}
         description={settings?.hero?.description || "Topluluk üyelerinin paylaştığı iş ilanları, staj fırsatları, freelance projeler ve ücretsiz mentorluk eşleşmeleri."}
       />
 

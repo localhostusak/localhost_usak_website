@@ -22,15 +22,50 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  animation: heroEntranceFade 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes heroEntranceFade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-hero-tag {
+  margin-bottom: 0.65rem;
+  letter-spacing: 0.08em;
 }
 
 .page-hero-title {
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-size: clamp(2.1rem, 4.4vw, 3.4rem);
   font-weight: 900;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
+  line-height: 1.18;
   margin-bottom: 0.85rem;
   text-align: center;
   width: 100%;
+  text-wrap: balance;
+  transition: opacity 0.2s ease;
+}
+
+.page-hero-title-main {
+  display: inline;
+}
+
+.page-hero-title-highlight {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .page-hero-title-highlight {
+    white-space: normal;
+  }
 }
 
 .page-hero-desc {
@@ -41,6 +76,7 @@
   margin: 0 auto 1.5rem auto;
   text-align: center;
   width: 100%;
+  text-wrap: pretty;
 }
 
 .page-hero-actions {

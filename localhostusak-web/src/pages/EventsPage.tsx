@@ -7,7 +7,7 @@ import { EmptyState } from '../components/shared/EmptyState';
 import { EventItem, EventType } from '../types/event';
 import { useLinks } from '../context/LinksContext';
 
-import { fetchEvents, fetchEventTypes, fetchEventsPageSettings, EventsPageSettingsData } from '../services/api';
+import { fetchEvents, fetchEventTypes, fetchEventsPageSettings, getCachedEventsPageSettings, EventsPageSettingsData } from '../services/api';
 import seoPages from '../seo/pages.json';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useCmsCollection } from '../hooks/useCmsCollection';
@@ -17,7 +17,7 @@ export const EventsPage: React.FC = () => {
   const { links } = useLinks();
   const { items: events, isLoading, error, retry } = useCmsCollection<EventItem>(fetchEvents);
   const { items: eventTypes } = useCmsCollection<EventType>(fetchEventTypes);
-  const [settings, setSettings] = useState<EventsPageSettingsData | null>(null);
+  const [settings, setSettings] = useState<EventsPageSettingsData | null>(getCachedEventsPageSettings);
 
   // SEO Meta
   usePageMeta({
@@ -63,8 +63,9 @@ export const EventsPage: React.FC = () => {
   return (
     <main>
       <PageHero
-        title={settings?.hero?.title || "Uşak Teknoloji Etkinlikleri,"}
-        highlightText={settings?.hero?.highlightText || "Coworking ve Buluşmalar"}
+        tag={settings?.hero?.tag || "// ETKİNLİK TAKVİMİ & COWORKING"}
+        title={settings?.hero?.title || "Cowork'ten Workshop'a,"}
+        highlightText={settings?.hero?.highlightText || "Tüm Buluşmalar"}
         description={settings?.hero?.description || "Kahveni al, etkinliğini seç, masada yerini al. Yazılım, tasarım, yapay zeka ve serbest çalışma Uşak'ta aynı masada."}
       />
 
