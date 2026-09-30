@@ -238,11 +238,15 @@ export const EventSpotlight: React.FC = () => {
                     <WhatsAppIcon size={18} />
                     <span>WhatsApp Grubuna Katıl</span>
                   </a>
-                ) : (
+                ) : statusInfo?.displayStatus === 'cancelled' ? (
+                  <span style={{ textAlign: 'center', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+                    Etkinlik iptal edildi
+                  </span>
+                ) : statusInfo?.displayStatus === 'closed' ? (
                   <span style={{ textAlign: 'center', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
                     Kontenjan doldu
                   </span>
-                )}
+                ) : null}
               </div>
             </div>
           </div>
