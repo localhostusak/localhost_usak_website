@@ -74,13 +74,21 @@ export const Events: CollectionConfig = {
       },
     },
     {
+      // Admin isteğiyle panelden gizlendi; veritabanındaki kolon ve mevcut değerler korunur.
       name: 'capacity',
       type: 'number',
+      admin: {
+        hidden: true,
+      },
     },
     {
+      // Admin isteğiyle panelden gizlendi; veritabanındaki kolon ve mevcut değerler korunur.
       name: 'attendees',
       type: 'number',
       defaultValue: 0,
+      admin: {
+        hidden: true,
+      },
     },
     {
       name: 'coverImage',
