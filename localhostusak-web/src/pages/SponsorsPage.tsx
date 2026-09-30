@@ -84,6 +84,7 @@ export const SponsorsPage: React.FC = () => {
   return (
     <div>
       <PageHero
+        tag="// SPONSORLAR & DESTEKÇİLER"
         title="Topluluğumuza Güç Katan"
         highlightText="Değerli Sponsorlarımız"
         description="Uşak'ta teknoloji, mühendislik ve yazılım ekosistemini birlikte büyüttüğümüz kurumsal ortaklarımız ve topluluk destekçilerimiz."

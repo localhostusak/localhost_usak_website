@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { ExternalLink, RefreshCw, ImageOff, Clock } from 'lucide-react';
+import { ExternalLink, Clock } from 'lucide-react';
 import { fetchInstagramPosts, InstagramPost } from '../../services/api';
 import { useCmsCollection } from '../../hooks/useCmsCollection';
 import './InstagramFeed.css';
@@ -110,7 +110,11 @@ const PostCard: React.FC<{ post: InstagramPost; index: number }> = ({ post, inde
 
 export const InstagramFeed: React.FC = () => {
   const loader = useCallback(() => fetchInstagramPosts(), []);
-  const { items: posts, isLoading, error, retry } = useCmsCollection<InstagramPost>(loader);
+  const { items: posts, isLoading, error } = useCmsCollection<InstagramPost>(loader);
+
+  if (!isLoading && (error || posts.length === 0)) {
+    return null;
+  }
 
   return (
     <section className="section ig-feed-section" id="instagram" aria-label="Instagram Gönderileri">
@@ -159,20 +163,6 @@ export const InstagramFeed: React.FC = () => {
                 </div>
               </div>
             ))}
-          </div>
-        ) : error ? (
-          <div className="ig-feed__error">
-            <ImageOff size={40} />
-            <p>Gönderiler şu an yüklenemiyor.</p>
-            <button className="btn btn-outline" onClick={retry}>
-              <RefreshCw size={16} />
-              Tekrar Dene
-            </button>
-          </div>
-        ) : posts.length === 0 ? (
-          <div className="ig-feed__error">
-            <IgGradientIcon size={40} />
-            <p>Henüz gönderi yok.</p>
           </div>
         ) : (
           <div className="ig-feed__grid">

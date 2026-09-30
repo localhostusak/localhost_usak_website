@@ -12,6 +12,7 @@ import { Events } from './collections/Events'
 import { Careers } from './collections/Careers'
 import { Projects } from './collections/Projects'
 import { Sponsors } from './collections/Sponsors'
+import { TeamMembers } from './collections/TeamMembers'
 import { CommunityLinks } from './collections/CommunityLinks'
 import { SiteSettings } from './globals/SiteSettings'
 import { GeneralSettings } from './globals/GeneralSettings'
@@ -39,6 +40,7 @@ export default buildConfig({
     Careers,
     Projects,
     Sponsors,
+    TeamMembers,
     CommunityLinks,
   ],
   globals: [

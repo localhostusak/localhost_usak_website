@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Calendar, MapPin, Coffee, Download, ExternalLink, AlertTriangle, Loader2 } from 'lucide-react';
+import { Calendar, MapPin, Coffee, Download, AlertTriangle, Loader2 } from 'lucide-react';
 import { CountdownTimer, WhatsAppIcon, EmptyState } from '../shared';
 import { downloadICS, openGoogleCalendar } from '../../utils/calendarExport';
 import { useLinks } from '../../context/LinksContext';
@@ -7,19 +7,22 @@ import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 import { fetchEvents } from '../../services/api';
 import { EventItem } from '../../types/event';
 import { useCmsCollection } from '../../hooks/useCmsCollection';
+import { getEventDisplayStatus, isUpcomingGroup } from '../../utils/eventStatus';
 
 export const EventSpotlight: React.FC = () => {
   const { links } = useLinks();
   const { openWhatsAppWithRules } = useWhatsAppModal();
   const { items: events, isLoading, error, retry } = useCmsCollection<EventItem>(fetchEvents);
 
-  // En yakın yaklaşan (upcoming) etkinliği tarihe göre en yakından uzağa sıralayarak seç:
+  // En yakın "yaklaşan grup" (upcoming/open/closed, tarihi gelmemiş) etkinliği seç:
   const upcomingEvent = useMemo(() => {
     const upcomingList = events
-      .filter((e) => e.status === 'upcoming' && new Date(e.dateStart).getTime() >= Date.now())
+      .filter((e) => isUpcomingGroup(e))
       .sort((a, b) => new Date(a.dateStart).getTime() - new Date(b.dateStart).getTime());
     return upcomingList[0];
   }, [events]);
+
+  const statusInfo = upcomingEvent ? getEventDisplayStatus(upcomingEvent) : null;
 
   if (isLoading || error || !upcomingEvent) {
     return (
@@ -110,6 +113,11 @@ export const EventSpotlight: React.FC = () => {
                 <span className="badge badge-orange">
                   {upcomingEvent?.type?.label?.toUpperCase() || 'BULUŞMA'}
                 </span>
+                {statusInfo && (
+                  <span className={`badge ${statusInfo.canRegister ? 'badge-live' : 'badge-orange'}`}>
+                    {statusInfo.label}
+                  </span>
+                )}
                 <span className="badge badge-blue">YÜZ YÜZE</span>
                 <span className="badge badge-live">KATILIM ÜCRETSİZ</span>
               </div>
@@ -134,26 +142,6 @@ export const EventSpotlight: React.FC = () => {
                   <span className="meta-icon"><MapPin size={18} /></span>
                   <div>
                     <strong>Mekan:</strong> {eventLocation}
-                    {eventMapUrl && (
-                      <a
-                        href={eventMapUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          color: 'var(--accent-secondary)',
-                          fontSize: '0.85rem',
-                          marginLeft: '0.5rem',
-                          textDecoration: 'underline',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '0.2rem',
-                        }}
-                      >
-                        <span>(Haritada Gör</span>
-                        <ExternalLink size={12} />
-                        <span>)</span>
-                      </a>
-                    )}
                   </div>
                 </div>
                 <div className="meetup-meta-item">
@@ -220,23 +208,45 @@ export const EventSpotlight: React.FC = () => {
                   <span>Google Takvim'e Kaydet</span>
                   <Calendar size={16} />
                 </button>
-                {(links.whatsappCoworking || links.whatsappGeneral) && <a
-                  href={links.whatsappCoworking || links.whatsappGeneral}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-whatsapp btn-full"
-                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.55rem' }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    openWhatsAppWithRules(
-                      links.whatsappCoworking || links.whatsappGeneral,
-                      'Coworking & Buluşma Grubu'
-                    );
-                  }}
-                >
-                  <WhatsAppIcon size={18} />
-                  <span>WhatsApp Grubuna Katıl</span>
-                </a>}
+                {eventMapUrl && (
+                  <a
+                    href={eventMapUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-secondary btn-full"
+                    style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                  >
+                    <span>Haritada Gör</span>
+                    <MapPin size={16} />
+                  </a>
+                )}
+                {statusInfo?.canRegister ? (
+                  (links.whatsappCoworking || links.whatsappGeneral) && <a
+                    href={links.whatsappCoworking || links.whatsappGeneral}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-whatsapp btn-full"
+                    style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.55rem' }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openWhatsAppWithRules(
+                        links.whatsappCoworking || links.whatsappGeneral,
+                        'Coworking & Buluşma Grubu'
+                      );
+                    }}
+                  >
+                    <WhatsAppIcon size={18} />
+                    <span>WhatsApp Grubuna Katıl</span>
+                  </a>
+                ) : statusInfo?.displayStatus === 'cancelled' ? (
+                  <span style={{ textAlign: 'center', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+                    Etkinlik iptal edildi
+                  </span>
+                ) : statusInfo?.displayStatus === 'closed' ? (
+                  <span style={{ textAlign: 'center', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+                    Kontenjan doldu
+                  </span>
+                ) : null}
               </div>
             </div>
           </div>

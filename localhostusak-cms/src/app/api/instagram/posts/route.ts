@@ -9,6 +9,9 @@ let cache: {
 
 const CACHE_TTL_MS = 15 * 60 * 1000 // 15 dakika
 
+// Eksik env uyarısını süreç başına yalnızca bir kez logla
+let hasWarnedMissingCredentials = false
+
 export interface InstagramPost {
   id: string
   media_type: 'IMAGE' | 'VIDEO' | 'CAROUSEL_ALBUM'
@@ -19,23 +22,40 @@ export interface InstagramPost {
   timestamp: string
 }
 
-// ─── GET /api/instagram/posts ───────────────────────────────────────────────
-export async function GET(_req: NextRequest) {
-  // CORS — web frontenden erişim için
-  const headers = {
-    'Access-Control-Allow-Origin': process.env.WEB_URL || 'http://localhost:5173',
-    'Access-Control-Allow-Methods': 'GET',
-    'Content-Type': 'application/json',
+// ─── CORS ────────────────────────────────────────────────────────────────
+const ALLOWED_ORIGINS = [
+  'https://localhostusak.tech',
+  'https://www.localhostusak.tech',
+  process.env.WEB_URL,
+  process.env.NODE_ENV !== 'production' ? 'http://localhost:5173' : undefined,
+].filter((origin): origin is string => Boolean(origin))
+
+function corsHeaders(req: NextRequest): Record<string, string> {
+  const origin = req.headers.get('origin')
+  const headers: Record<string, string> = {
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    Vary: 'Origin',
   }
+  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    headers['Access-Control-Allow-Origin'] = origin
+  }
+  return headers
+}
+
+// ─── GET /api/instagram/posts ───────────────────────────────────────────────
+export async function GET(req: NextRequest) {
+  const headers = { ...corsHeaders(req), 'Content-Type': 'application/json' }
 
   const token = process.env.INSTAGRAM_ACCESS_TOKEN
   const userId = process.env.INSTAGRAM_USER_ID
 
   if (!token || !userId) {
-    return NextResponse.json(
-      { error: 'Instagram credentials not configured' },
-      { status: 500, headers }
-    )
+    if (!hasWarnedMissingCredentials) {
+      console.warn('[Instagram API] INSTAGRAM_ACCESS_TOKEN / INSTAGRAM_USER_ID tanımlı değil — CMS ortam değişkenleri eksik')
+      hasWarnedMissingCredentials = true
+    }
+    return NextResponse.json({ posts: [], configured: false }, { status: 200, headers })
   }
 
   // Cache geçerliyse direkt dön
@@ -58,7 +78,7 @@ export async function GET(_req: NextRequest) {
         return NextResponse.json({ posts: cache.data, cached: true, stale: true }, { headers })
       }
       return NextResponse.json(
-        { error: 'Instagram API error', detail: errBody },
+        { error: 'Instagram API error' },
         { status: 502, headers }
       )
     }
@@ -83,13 +103,9 @@ export async function GET(_req: NextRequest) {
 }
 
 // OPTIONS — preflight için
-export async function OPTIONS() {
+export async function OPTIONS(req: NextRequest) {
   return new NextResponse(null, {
     status: 204,
-    headers: {
-      'Access-Control-Allow-Origin': process.env.WEB_URL || 'http://localhost:5173',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    },
+    headers: corsHeaders(req),
   })
 }

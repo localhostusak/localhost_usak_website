@@ -3,6 +3,7 @@ import { CareerItem } from '../types/career';
 import { ProjectItem } from '../types/project';
 import { SponsorItem } from '../types/sponsor';
 import { MOCK_SPONSORS } from '../data/mockSponsors';
+import { isUpcomingGroup } from '../utils/eventStatus';
 import { CommunityLinks, normalizeCommunityLinkKey } from '../constants/links';
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api';
@@ -50,10 +51,9 @@ export function normalizeEventDoc(doc: any): EventItem {
     dateEnd: doc.dateEnd,
     location: doc.location || '',
     mapUrl: doc.mapUrl,
-    capacity: doc.capacity,
-    attendees: doc.attendees || 0,
     imageUrl: normalizeMediaUrl(doc.coverImage, doc.imageUrl),
     whatsappLink: configuredUrl(doc.whatsappLink) ? doc.whatsappLink : undefined,
+    recapUrl: configuredUrl(doc.recapUrl) ? doc.recapUrl : undefined,
     tags: Array.isArray(doc.tags) ? doc.tags.map((t: any) => (typeof t === 'string' ? t : t.tag || t.name)) : [],
     createdAt: doc.createdAt || new Date().toISOString(),
   };
@@ -68,16 +68,18 @@ export async function fetchEvents(): Promise<EventItem[]> {
   const items = docs.map(normalizeEventDoc);
 
   // Sıralama mantığı:
-  // 1. Önce yaklaşan (upcoming) etkinlikler, tarihi EN YAKIN olan en başta (ASC)
-  // 2. Ardından tamamlanan (completed) etkinlikler, EN SON yapılan en başta (DESC)
+  // 1. Önce "yaklaşan grup" (upcoming/open/closed, tarihi gelmemiş), tarihi EN YAKIN olan en başta (ASC)
+  // 2. Ardından geri kalanlar (tamamlanan/iptal/tarihi geçmiş), EN SON yapılan en başta (DESC)
   return items.sort((a: EventItem, b: EventItem) => {
-    if (a.status === 'upcoming' && b.status !== 'upcoming') return -1;
-    if (a.status !== 'upcoming' && b.status === 'upcoming') return 1;
+    const aUpcoming = isUpcomingGroup(a);
+    const bUpcoming = isUpcomingGroup(b);
+    if (aUpcoming && !bUpcoming) return -1;
+    if (!aUpcoming && bUpcoming) return 1;
 
     const timeA = new Date(a.dateStart).getTime();
     const timeB = new Date(b.dateStart).getTime();
 
-    if (a.status === 'upcoming' && b.status === 'upcoming') {
+    if (aUpcoming && bUpcoming) {
       return timeA - timeB; // En yakın tarih ilk sırada
     }
     return timeB - timeA; // Geçmişte en son yapılan ilk sırada
@@ -344,12 +346,20 @@ export interface EventsPageSettingsData {
   };
 }
 
+let eventsPageSettingsCache: EventsPageSettingsData | null = null;
+
+export function getCachedEventsPageSettings(): EventsPageSettingsData | null {
+  return eventsPageSettingsCache;
+}
+
 export async function fetchEventsPageSettings(): Promise<EventsPageSettingsData | null> {
+  if (eventsPageSettingsCache) return eventsPageSettingsCache;
   try {
     const res = await fetch(`${API_BASE}/globals/events-page-settings`);
     if (!res.ok) return null;
     const data = await res.json();
-    return data as EventsPageSettingsData;
+    eventsPageSettingsCache = data as EventsPageSettingsData;
+    return eventsPageSettingsCache;
   } catch {
     return null;
   }
@@ -374,12 +384,20 @@ export interface CareersPageSettingsData {
   };
 }
 
+let careersPageSettingsCache: CareersPageSettingsData | null = null;
+
+export function getCachedCareersPageSettings(): CareersPageSettingsData | null {
+  return careersPageSettingsCache;
+}
+
 export async function fetchCareersPageSettings(): Promise<CareersPageSettingsData | null> {
+  if (careersPageSettingsCache) return careersPageSettingsCache;
   try {
     const res = await fetch(`${API_BASE}/globals/careers-page-settings`);
     if (!res.ok) return null;
     const data = await res.json();
-    return data as CareersPageSettingsData;
+    careersPageSettingsCache = data as CareersPageSettingsData;
+    return careersPageSettingsCache;
   } catch {
     return null;
   }
@@ -403,12 +421,20 @@ export interface ProjectsPageSettingsData {
   };
 }
 
+let projectsPageSettingsCache: ProjectsPageSettingsData | null = null;
+
+export function getCachedProjectsPageSettings(): ProjectsPageSettingsData | null {
+  return projectsPageSettingsCache;
+}
+
 export async function fetchProjectsPageSettings(): Promise<ProjectsPageSettingsData | null> {
+  if (projectsPageSettingsCache) return projectsPageSettingsCache;
   try {
     const res = await fetch(`${API_BASE}/globals/projects-page-settings`);
     if (!res.ok) return null;
     const data = await res.json();
-    return data as ProjectsPageSettingsData;
+    projectsPageSettingsCache = data as ProjectsPageSettingsData;
+    return projectsPageSettingsCache;
   } catch {
     return null;
   }
