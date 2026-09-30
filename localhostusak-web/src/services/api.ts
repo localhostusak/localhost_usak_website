@@ -3,7 +3,6 @@ import { CareerItem } from '../types/career';
 import { ProjectItem } from '../types/project';
 import { SponsorItem } from '../types/sponsor';
 import { MOCK_SPONSORS } from '../data/mockSponsors';
-import { CommunityLinks } from '../constants/links';
 import { isUpcomingGroup } from '../utils/eventStatus';
 import { CommunityLinks, normalizeCommunityLinkKey } from '../constants/links';
 
@@ -347,12 +346,20 @@ export interface EventsPageSettingsData {
   };
 }
 
+let eventsPageSettingsCache: EventsPageSettingsData | null = null;
+
+export function getCachedEventsPageSettings(): EventsPageSettingsData | null {
+  return eventsPageSettingsCache;
+}
+
 export async function fetchEventsPageSettings(): Promise<EventsPageSettingsData | null> {
+  if (eventsPageSettingsCache) return eventsPageSettingsCache;
   try {
     const res = await fetch(`${API_BASE}/globals/events-page-settings`);
     if (!res.ok) return null;
     const data = await res.json();
-    return data as EventsPageSettingsData;
+    eventsPageSettingsCache = data as EventsPageSettingsData;
+    return eventsPageSettingsCache;
   } catch {
     return null;
   }
@@ -377,12 +384,20 @@ export interface CareersPageSettingsData {
   };
 }
 
+let careersPageSettingsCache: CareersPageSettingsData | null = null;
+
+export function getCachedCareersPageSettings(): CareersPageSettingsData | null {
+  return careersPageSettingsCache;
+}
+
 export async function fetchCareersPageSettings(): Promise<CareersPageSettingsData | null> {
+  if (careersPageSettingsCache) return careersPageSettingsCache;
   try {
     const res = await fetch(`${API_BASE}/globals/careers-page-settings`);
     if (!res.ok) return null;
     const data = await res.json();
-    return data as CareersPageSettingsData;
+    careersPageSettingsCache = data as CareersPageSettingsData;
+    return careersPageSettingsCache;
   } catch {
     return null;
   }
@@ -406,12 +421,20 @@ export interface ProjectsPageSettingsData {
   };
 }
 
+let projectsPageSettingsCache: ProjectsPageSettingsData | null = null;
+
+export function getCachedProjectsPageSettings(): ProjectsPageSettingsData | null {
+  return projectsPageSettingsCache;
+}
+
 export async function fetchProjectsPageSettings(): Promise<ProjectsPageSettingsData | null> {
+  if (projectsPageSettingsCache) return projectsPageSettingsCache;
   try {
     const res = await fetch(`${API_BASE}/globals/projects-page-settings`);
     if (!res.ok) return null;
     const data = await res.json();
-    return data as ProjectsPageSettingsData;
+    projectsPageSettingsCache = data as ProjectsPageSettingsData;
+    return projectsPageSettingsCache;
   } catch {
     return null;
   }

@@ -18,11 +18,16 @@ export const PageHero: React.FC<PageHeroProps> = ({
   return (
     <section className="page-hero">
       <div className="container page-hero-inner">
-        {tag && <span className="page-hero-tag">{tag}</span>}
+        {tag && <span className="section-tag page-hero-tag">{tag}</span>}
 
         <h1 className="page-hero-title">
-          {title}{' '}
-          {highlightText && <span className="gradient-text">{highlightText}</span>}
+          <span className="page-hero-title-main">{title}</span>
+          {highlightText && (
+            <>
+              {' '}
+              <span className="gradient-text page-hero-title-highlight">{highlightText}</span>
+            </>
+          )}
         </h1>
 
         <p className="page-hero-desc">{description}</p>

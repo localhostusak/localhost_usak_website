@@ -196,12 +196,12 @@
 
 [data-theme="modern"] .gradient-text,
 [data-theme="dark"] .gradient-text {
-  background-image: linear-gradient(135deg, #F4F2EE 25%, #E35D14 90%);
+  background-image: linear-gradient(135deg, #FFA05C 0%, #E35D14 55%, #FF7A1A 100%);
 }
 
 [data-theme="pixel"] .gradient-text,
 [data-theme="light"] .gradient-text {
-  background-image: linear-gradient(135deg, #1A1D23 30%, #CC4F0D 95%);
+  background-image: linear-gradient(135deg, #D94E06 0%, #E35D14 50%, #B83B00 100%);
 }
 
 .gradient-text-orange {

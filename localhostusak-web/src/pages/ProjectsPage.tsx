@@ -7,7 +7,7 @@ import { ProjectCard } from '../components/projects/ProjectCard';
 import { EmptyState } from '../components/shared/EmptyState';
 import { ProjectItem } from '../types/project';
 
-import { fetchProjects, likeProject, fetchProjectsPageSettings, ProjectsPageSettingsData } from '../services/api';
+import { fetchProjects, likeProject, fetchProjectsPageSettings, getCachedProjectsPageSettings, ProjectsPageSettingsData } from '../services/api';
 import seoPages from '../seo/pages.json';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useCmsCollection } from '../hooks/useCmsCollection';
@@ -17,7 +17,7 @@ export const ProjectsPage: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string>('all');
   const [selectedTech, setSelectedTech] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [settings, setSettings] = useState<ProjectsPageSettingsData | null>(null);
+  const [settings, setSettings] = useState<ProjectsPageSettingsData | null>(getCachedProjectsPageSettings);
 
   // SEO Meta
   usePageMeta({
@@ -79,8 +79,9 @@ export const ProjectsPage: React.FC = () => {
   return (
     <main>
       <PageHero
-        title={settings?.hero?.title || "Uşak Yazılım Projeleri,"}
-        highlightText={settings?.hero?.highlightText || "Birlikte Üretiyoruz"}
+        tag={settings?.hero?.tag || "// PROJE VİTRİNİ & AÇIK KAYNAK"}
+        title={settings?.hero?.title || "Uşak'ta Üretiliyor,"}
+        highlightText={settings?.hero?.highlightText || "Dünyaya Açılıyor"}
         description={settings?.hero?.description || "Topluluk üyelerimizin geliştirdiği açık kaynak projeler, erken aşama girişimler ve birlikte üretmek için ekip arkadaşı arayanlar."}
       />
 

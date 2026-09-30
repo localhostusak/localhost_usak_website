@@ -462,7 +462,7 @@ export interface TeamMember {
 export interface CommunityLink {
   id: number;
   /**
-   * Benzersiz anahtar (Örn: whatsapp_coworking, whatsapp_projects, whatsapp_careers)
+   * Benzersiz anahtar (Örn: whatsapp_general, whatsapp_careers, whatsapp_projects, whatsapp_coworking, instagram, github, x)
    */
   key: string;
   /**
