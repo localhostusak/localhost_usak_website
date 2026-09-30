@@ -10,9 +10,11 @@ import { getEventDisplayStatus } from '../../utils/eventStatus';
 interface EventSpotlightCardProps {
   event: EventItem;
   eventType?: EventType;
+  /** Geri sayım bölümünü göster/gizle. Sadece listedeki en yakın (ilk iptal olmayan) etkinlikte true olmalı. */
+  showCountdown?: boolean;
 }
 
-export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, eventType }) => {
+export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, eventType, showCountdown = true }) => {
   const { links } = useLinks();
   const { openWhatsAppWithRules } = useWhatsAppModal();
   const statusInfo = getEventDisplayStatus(event);
@@ -110,22 +112,26 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
         </div>
 
         <div className="spotlight-countdown-card">
-          <div
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.85rem',
-              color: 'var(--accent-primary)',
-              fontWeight: 700,
-              marginBottom: '1rem',
-              textTransform: 'uppercase',
-            }}
-          >
-            BULUŞMAYA KALAN SÜRE
-          </div>
+          {showCountdown && (
+            <>
+              <div
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.85rem',
+                  color: 'var(--accent-primary)',
+                  fontWeight: 700,
+                  marginBottom: '1rem',
+                  textTransform: 'uppercase',
+                }}
+              >
+                BULUŞMAYA KALAN SÜRE
+              </div>
 
-          <CountdownTimer targetDate={event.dateStart} />
+              <CountdownTimer targetDate={event.dateStart} />
+            </>
+          )}
 
-          <div style={{ marginTop: '1.75rem', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+          <div style={{ marginTop: showCountdown ? '1.75rem' : 0, display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
             <button
               type="button"
               className="btn btn-primary btn-full"
