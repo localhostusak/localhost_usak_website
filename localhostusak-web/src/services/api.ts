@@ -3,7 +3,6 @@ import { CareerItem } from '../types/career';
 import { ProjectItem } from '../types/project';
 import { SponsorItem } from '../types/sponsor';
 import { MOCK_SPONSORS } from '../data/mockSponsors';
-import { CommunityLinks } from '../constants/links';
 import { isUpcomingGroup } from '../utils/eventStatus';
 import { CommunityLinks, normalizeCommunityLinkKey } from '../constants/links';
 

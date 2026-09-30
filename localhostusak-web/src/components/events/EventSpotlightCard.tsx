@@ -6,6 +6,7 @@ import { downloadICS, openGoogleCalendar } from '../../utils/calendarExport';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 import { getEventDisplayStatus } from '../../utils/eventStatus';
+import { getMapHref } from '../../utils/mapLink';
 
 interface EventSpotlightCardProps {
   event: EventItem;
@@ -19,6 +20,7 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
   const { openWhatsAppWithRules } = useWhatsAppModal();
   const statusInfo = getEventDisplayStatus(event);
   const startDate = new Date(event.dateStart);
+  const mapHref = getMapHref(event.mapUrl, event.location);
 
   const formattedDate = startDate.toLocaleDateString('tr-TR', {
     day: 'numeric',
@@ -150,9 +152,9 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
               <span>Google Takvim'e Kaydet</span>
               <Calendar size={16} />
             </button>
-            {event.mapUrl && (
+            {mapHref && (
               <a
-                href={event.mapUrl}
+                href={mapHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-secondary btn-full"
