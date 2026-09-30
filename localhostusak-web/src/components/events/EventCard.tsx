@@ -6,6 +6,7 @@ import { downloadICS } from '../../utils/calendarExport';
 import { useLinks } from '../../context/LinksContext';
 import { useWhatsAppModal } from '../../context/WhatsAppModalContext';
 import { getEventDisplayStatus } from '../../utils/eventStatus';
+import { getMapHref } from '../../utils/mapLink';
 
 interface EventCardProps {
   event: EventItem;
@@ -17,6 +18,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, eventType }) => {
   const { openWhatsAppWithRules } = useWhatsAppModal();
   const statusInfo = getEventDisplayStatus(event);
   const startDate = new Date(event.dateStart);
+  const mapHref = getMapHref(event.mapUrl, event.location);
 
   const formattedDate = startDate.toLocaleDateString('tr-TR', {
     day: 'numeric',
@@ -81,9 +83,9 @@ export const EventCard: React.FC<EventCardProps> = ({ event, eventType }) => {
           <div className="event-card-meta-item">
             <span style={{ display: 'inline-flex', alignItems: 'center' }}><MapPin size={14} /></span>
             <span>{event.location}</span>
-            {event.mapUrl && (
+            {mapHref && (
               <a
-                href={event.mapUrl}
+                href={mapHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-secondary btn-sm"

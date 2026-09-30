@@ -54,9 +54,9 @@ export const EventsPage: React.FC = () => {
       .sort((a, b) => new Date(a.dateStart).getTime() - new Date(b.dateStart).getTime());
   }, [events]);
 
-  // Geri sayım yalnızca listedeki ilk iptal olmayan etkinlikte gösterilir.
-  const countdownEventId = useMemo(
-    () => upcomingEvents.find((e) => e.status !== 'cancelled')?.id,
+  // Geri sayım iptal edilmemiş tüm yaklaşan etkinlik kartlarında gösterilir.
+  const countdownEventIds = useMemo(
+    () => new Set(upcomingEvents.filter((e) => e.status !== 'cancelled').map((e) => e.id)),
     [upcomingEvents]
   );
 
@@ -110,7 +110,7 @@ export const EventsPage: React.FC = () => {
                 key={ev.id}
                 event={ev}
                 eventType={typeMap.get(ev.typeId)}
-                showCountdown={ev.id === countdownEventId}
+                showCountdown={countdownEventIds.has(ev.id)}
               />
             ))}
           </div>

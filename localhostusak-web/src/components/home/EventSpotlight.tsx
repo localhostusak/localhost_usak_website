@@ -8,6 +8,7 @@ import { fetchEvents } from '../../services/api';
 import { EventItem } from '../../types/event';
 import { useCmsCollection } from '../../hooks/useCmsCollection';
 import { getEventDisplayStatus, isUpcomingGroup } from '../../utils/eventStatus';
+import { getMapHref } from '../../utils/mapLink';
 
 export const EventSpotlight: React.FC = () => {
   const { links } = useLinks();
@@ -66,6 +67,7 @@ export const EventSpotlight: React.FC = () => {
   const eventDesc = upcomingEvent.description || 'Etkinlik ayrıntıları yakında paylaşılacak.';
   const eventLocation = upcomingEvent.location || 'Mekan yakında duyurulacak';
   const eventMapUrl = upcomingEvent.mapUrl;
+  const mapHref = getMapHref(eventMapUrl, eventLocation);
   const eventTags = upcomingEvent.tags || [];
 
   const handleDownloadICS = () => {
@@ -208,9 +210,9 @@ export const EventSpotlight: React.FC = () => {
                   <span>Google Takvim'e Kaydet</span>
                   <Calendar size={16} />
                 </button>
-                {eventMapUrl && (
+                {mapHref && (
                   <a
-                    href={eventMapUrl}
+                    href={mapHref}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn btn-secondary btn-full"
