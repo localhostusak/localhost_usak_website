@@ -374,6 +374,18 @@ export interface Project {
    */
   githubUrl?: string | null;
   /**
+   * CONTRIBUTING.md veya katkı rehberi bağlantısı (açık kaynak projeler için)
+   */
+  contributingGuideUrl?: string | null;
+  /**
+   * Opsiyonel. Proje kartında durum rozeti olarak gösterilir.
+   */
+  projectStatus?: ('idea' | 'development' | 'active') | null;
+  /**
+   * Opsiyonel. Açık kaynak projelerde katkı seviyesini gösterir.
+   */
+  difficultyLevel?: ('beginner' | 'intermediate' | 'advanced') | null;
+  /**
    * Canlı demo bağlantısı
    */
   demoUrl?: string | null;
@@ -716,6 +728,9 @@ export interface ProjectsSelect<T extends boolean = true> {
         id?: T;
       };
   githubUrl?: T;
+  contributingGuideUrl?: T;
+  projectStatus?: T;
+  difficultyLevel?: T;
   demoUrl?: T;
   coverImage?: T;
   imageUrl?: T;
