@@ -157,6 +157,10 @@ export async function fetchProjects(): Promise<ProjectItem[]> {
     teamMax: doc.teamMax,
     rolesNeeded: Array.isArray(doc.rolesNeeded) ? doc.rolesNeeded.map((r: any) => (typeof r === 'string' ? r : r.role)) : [],
     githubUrl: doc.githubUrl,
+    // FAZ5: açık kaynak projeleri için ek alanlar (hepsi opsiyonel)
+    contributingGuideUrl: configuredUrl(doc.contributingGuideUrl) ? doc.contributingGuideUrl : undefined,
+    projectStatus: doc.projectStatus || undefined,
+    difficultyLevel: doc.difficultyLevel || undefined,
     demoUrl: doc.demoUrl,
     imageUrl: normalizeMediaUrl(doc.coverImage, doc.imageUrl),
     likes: doc.likes || 0,
