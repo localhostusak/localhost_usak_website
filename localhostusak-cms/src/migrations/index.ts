@@ -4,6 +4,7 @@ import * as migration_20260928_192652_reconcile_schema_drift from './20260928_19
 import * as migration_20260928_200754_add_team_members from './20260928_200754_add_team_members';
 import * as migration_20260929_074024_add_event_status_open_closed_and_recap_url from './20260929_074024_add_event_status_open_closed_and_recap_url';
 import * as migration_20260930_092130_add_project_status_difficulty_and_contributing_url from './20260930_092130_add_project_status_difficulty_and_contributing_url';
+import * as migration_20261005_163346_kariyer_cv_havuzu from './20261005_163346_kariyer_cv_havuzu';
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20260930_092130_add_project_status_difficulty_and_contributing_url.up,
     down: migration_20260930_092130_add_project_status_difficulty_and_contributing_url.down,
-    name: '20260930_092130_add_project_status_difficulty_and_contributing_url'
+    name: '20260930_092130_add_project_status_difficulty_and_contributing_url',
+  },
+  {
+    up: migration_20261005_163346_kariyer_cv_havuzu.up,
+    down: migration_20261005_163346_kariyer_cv_havuzu.down,
+    name: '20261005_163346_kariyer_cv_havuzu'
   },
 ];

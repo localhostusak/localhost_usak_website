@@ -14,6 +14,7 @@ import { Projects } from './collections/Projects'
 import { Sponsors } from './collections/Sponsors'
 import { TeamMembers } from './collections/TeamMembers'
 import { CommunityLinks } from './collections/CommunityLinks'
+import { JobApplications } from './collections/JobApplications'
 import { SiteSettings } from './globals/SiteSettings'
 import { GeneralSettings } from './globals/GeneralSettings'
 import { EventsPageSettings } from './globals/EventsPageSettings'
@@ -42,6 +43,7 @@ export default buildConfig({
     Sponsors,
     TeamMembers,
     CommunityLinks,
+    JobApplications,
   ],
   globals: [
     GeneralSettings,

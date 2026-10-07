@@ -76,6 +76,7 @@ export interface Config {
     sponsors: Sponsor;
     'team-members': TeamMember;
     'community-links': CommunityLink;
+    'job-applications': JobApplication;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -92,6 +93,7 @@ export interface Config {
     sponsors: SponsorsSelect<false> | SponsorsSelect<true>;
     'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
     'community-links': CommunityLinksSelect<false> | CommunityLinksSelect<true>;
+    'job-applications': JobApplicationsSelect<false> | JobApplicationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -494,6 +496,47 @@ export interface CommunityLink {
   createdAt: string;
 }
 /**
+ * Kariyer sayfasından gelen başvurular ve CV dosyaları. Kişisel veri içerir (KVKK): yalnızca gerektiği kadar açın, otomatik silme yoktur; saklama süresi dolanlar elle silinir.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "job-applications".
+ */
+export interface JobApplication {
+  id: number;
+  candidateName: string;
+  email: string;
+  phone?: string | null;
+  linkedinUrl?: string | null;
+  githubUrl?: string | null;
+  experienceLevel: 'intern' | 'junior' | 'mid' | 'senior';
+  fieldsOfInterest: ('frontend' | 'backend' | 'mobile' | 'devops' | 'uiux' | 'other')[];
+  /**
+   * Arşivlemek silmek değildir; CV dosyası arşivde de saklanır.
+   */
+  status: 'new' | 'reviewed' | 'contacted' | 'archived';
+  /**
+   * Yalnızca ekip içi notlar; adaya veya herkese açık API yanıtlarına dönmez.
+   */
+  notes?: string | null;
+  consentGiven: boolean;
+  /**
+   * Saklama süresi bu tarihten itibaren hesaplanır.
+   */
+  consentAt: string;
+  consentTextVersion: string;
+  scanEngines?: string | null;
+  ipHash?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -552,6 +595,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'community-links';
         value: number | CommunityLink;
+      } | null)
+    | ({
+        relationTo: 'job-applications';
+        value: number | JobApplication;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -787,6 +834,35 @@ export interface CommunityLinksSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "job-applications_select".
+ */
+export interface JobApplicationsSelect<T extends boolean = true> {
+  candidateName?: T;
+  email?: T;
+  phone?: T;
+  linkedinUrl?: T;
+  githubUrl?: T;
+  experienceLevel?: T;
+  fieldsOfInterest?: T;
+  status?: T;
+  notes?: T;
+  consentGiven?: T;
+  consentAt?: T;
+  consentTextVersion?: T;
+  scanEngines?: T;
+  ipHash?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -975,6 +1051,31 @@ export interface CareersPageSetting {
   meta?: {
     title?: string | null;
     description?: string | null;
+  };
+  applicationForm?: {
+    /**
+     * docs/KARIYER_MERGE_ONCESI_ADMIN_KONTROL.md tamamlanmadan (volume, CV_STORAGE_DIR, CV_IP_HASH_SECRET, yanlış pozitif testi) açmayın.
+     */
+    enabled?: boolean | null;
+    title?: string | null;
+    intro?: string | null;
+    /**
+     * ⚠ Hukuki inceleme gerekir: Bu metin taslaktır; hukuki onay alınmadan form açılmamalıdır. {{retentionYears}} ifadesi formda saklama süresiyle değiştirilir. Bu metni değiştirirseniz "Rıza / Aydınlatma Metni Sürümü" alanını da değiştirin.
+     */
+    privacyNotice?: string | null;
+    /**
+     * ⚠ Hukuki inceleme gerekir: Bu metin taslaktır. Onay kutusu önceden işaretli gösterilmez; etkinlik/fotoğraf muvafakatiyle birleştirilmez. Bu metni değiştirirseniz "Rıza / Aydınlatma Metni Sürümü" alanını MUTLAKA değiştirin.
+     */
+    consentText?: string | null;
+    /**
+     * Açık rıza metni, aydınlatma metni veya saklama süresi değiştiğinde bu değer de MUTLAKA değiştirilmelidir (örn. cv-v1 → cv-v2). Her başvuruya bu değer kaydedilir; hangi adayın hangi metne onay verdiği buradan anlaşılır.
+     */
+    consentVersion?: string | null;
+    /**
+     * Rıza tarihinden itibaren en fazla bu kadar yıl saklanır. Otomatik silme YOKTUR: süresi dolan CV’ler İş Başvuruları listesinde uyarı olarak gösterilir ve elle silinir. Değiştirirseniz aydınlatma/rıza metinleri de değişmiş sayılır; sürüm alanını güncelleyin.
+     */
+    retentionYears?: number | null;
+    successMessage?: string | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1207,6 +1308,18 @@ export interface CareersPageSettingsSelect<T extends boolean = true> {
     | {
         title?: T;
         description?: T;
+      };
+  applicationForm?:
+    | T
+    | {
+        enabled?: T;
+        title?: T;
+        intro?: T;
+        privacyNotice?: T;
+        consentText?: T;
+        consentVersion?: T;
+        retentionYears?: T;
+        successMessage?: T;
       };
   updatedAt?: T;
   createdAt?: T;
