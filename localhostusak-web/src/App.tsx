@@ -32,6 +32,7 @@ import './styles/animations.css';
 import './styles/subpages.css';
 import './styles/whatsapp-rules-modal.css';
 import './styles/kvkk.css';
+import './styles/careers-form.css';
 
 // Auto scroll to top on page navigation
 const ScrollToTop: React.FC = () => {

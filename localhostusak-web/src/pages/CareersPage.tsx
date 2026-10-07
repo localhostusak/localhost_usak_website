@@ -4,6 +4,7 @@ import { PageHero } from '../components/layout/PageHero';
 import { FilterBar, FilterOption } from '../components/shared/FilterBar';
 import { CareerCard } from '../components/careers/CareerCard';
 import { CareerResources } from '../components/careers/CareerResources';
+import { ApplicationSection } from '../components/careers/ApplicationSection';
 import { EmptyState } from '../components/shared/EmptyState';
 import { CareerItem } from '../types/career';
 
@@ -130,6 +131,9 @@ export const CareersPage: React.FC = () => {
             ))}
           </div>
         )}
+
+        {/* CV havuzu başvuru formu (CMS bayrağı kapalıysa çizilmez) */}
+        <ApplicationSection settings={settings?.applicationForm} />
 
         {/* Career Resources Grid */}
         <CareerResources items={settings?.careerResources} />

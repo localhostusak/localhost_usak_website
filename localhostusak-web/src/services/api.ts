@@ -5,6 +5,7 @@ import { SponsorItem } from '../types/sponsor';
 import { MOCK_SPONSORS } from '../data/mockSponsors';
 import { isUpcomingGroup } from '../utils/eventStatus';
 import { CommunityLinks, normalizeCommunityLinkKey } from '../constants/links';
+import type { ApplicationFormSettings, SubmitResult } from '../types/application';
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
@@ -386,6 +387,7 @@ export interface CareersPageSettingsData {
     title?: string;
     description?: string;
   };
+  applicationForm?: ApplicationFormSettings;
 }
 
 let careersPageSettingsCache: CareersPageSettingsData | null = null;
@@ -404,6 +406,51 @@ export async function fetchCareersPageSettings(): Promise<CareersPageSettingsDat
     return careersPageSettingsCache;
   } catch {
     return null;
+  }
+}
+
+// --- CV Havuzu Başvurusu (FAZ 6) ---
+
+// Başvuru tarayıcıdan DOĞRUDAN CMS'e gider; frontend sunucusu/proxy üzerinden geçerse CMS tüm
+// başvuruları tek IP'den görür ve günlük IP sınırı herkesi engeller. Production derlemesinde
+// VITE_API_URL mutlak (https://cms…/api) olmalıdır; göreli ise form gösterilmez.
+// (Geliştirmede göreli '/api' Vite proxy'sine gider; yalnızca yerel deneme içindir.)
+export function isDirectCmsApi(): boolean {
+  return !import.meta.env.PROD || /^https?:\/\//i.test(API_BASE);
+}
+
+const APPLY_TIMEOUT_MS = 60_000;
+const NETWORK_ERROR_MESSAGE = 'Bağlantı kurulamadı. İnternet bağlantınızı kontrol edip tekrar deneyin.';
+const UNEXPECTED_ERROR_MESSAGE = 'Başvurunuz şu anda gönderilemedi. Lütfen daha sonra tekrar deneyin.';
+
+// FormData'nın Content-Type başlığı (multipart sınırı) tarayıcı tarafından konur; elle eklenmez.
+// credentials: 'omit' — başvuru anonimdir, oturum çerezi gönderilmez.
+export async function submitJobApplication(form: FormData): Promise<SubmitResult> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), APPLY_TIMEOUT_MS);
+  try {
+    const res = await fetch(`${API_BASE}/job-applications/apply`, {
+      method: 'POST',
+      body: form,
+      credentials: 'omit',
+      signal: controller.signal,
+    });
+    if (res.ok) return { ok: true };
+
+    // CMS hata gövdesi: { success:false, code, message, fields? }; mesaj olduğu gibi gösterilir
+    let body: { message?: unknown; fields?: unknown } | null = null;
+    try {
+      body = await res.json();
+    } catch {
+      // JSON değil (ör. ters proxy hata sayfası)
+    }
+    const message = typeof body?.message === 'string' && body.message ? body.message : UNEXPECTED_ERROR_MESSAGE;
+    const fields = Array.isArray(body?.fields) ? body.fields.filter((f): f is string => typeof f === 'string') : [];
+    return { ok: false, message, fields };
+  } catch {
+    return { ok: false, message: NETWORK_ERROR_MESSAGE, fields: [] };
+  } finally {
+    clearTimeout(timer);
   }
 }
 
