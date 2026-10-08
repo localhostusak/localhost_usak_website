@@ -1,9 +1,9 @@
 import React from 'react';
-import { ExternalLink, Award, Shield, Heart, Sparkles, Mail, AlertTriangle, Loader2 } from 'lucide-react';
+import { ExternalLink, Award, Shield, Heart, Sparkles, Mail, AlertTriangle } from 'lucide-react';
 import { PageHero } from '../components/layout/PageHero';
-import { WhatsAppIcon } from '../components/shared';
+import { WhatsAppIcon, Reveal, SponsorLogo, SponsorCardSkeleton } from '../components/shared';
 import { SponsorItem } from '../types/sponsor';
-import { fetchSponsors } from '../services/api';
+import { fetchSponsors, getCachedSponsors } from '../services/api';
 import { useCmsCollection } from '../hooks/useCmsCollection';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useLinks } from '../context/LinksContext';
@@ -11,7 +11,7 @@ import { useWhatsAppModal } from '../context/WhatsAppModalContext';
 import seoPages from '../seo/pages.json';
 
 export const SponsorsPage: React.FC = () => {
-  const { items: sponsors, isLoading, error, retry } = useCmsCollection<SponsorItem>(fetchSponsors);
+  const { items: sponsors, isLoading, error, retry } = useCmsCollection<SponsorItem>(fetchSponsors, getCachedSponsors());
   const { links } = useLinks();
   const { openWhatsAppWithRules } = useWhatsAppModal();
 
@@ -25,59 +25,32 @@ export const SponsorsPage: React.FC = () => {
   const bronzeSponsors = React.useMemo(() => sponsors.filter((s) => s.tier === 'bronze'), [sponsors]);
   const communitySponsors = React.useMemo(() => sponsors.filter((s) => !s.tier || s.tier === 'community'), [sponsors]);
 
-  const renderSponsorCard = (sponsor: SponsorItem) => {
+  // index: kart sırası; ilk kartlar sırayla (stagger) belirir, gecikme 8 kartla sınırlı
+  const renderSponsorCard = (sponsor: SponsorItem, index: number) => {
     const tier = sponsor.tier || 'community';
     const tierSizeClass = `tier-size-${tier}`;
 
     return (
-      <a
-        key={sponsor.id}
-        href={sponsor.websiteUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`sponsor-card-block ${tierSizeClass} sponsor-grid-card`}
-        title={`${sponsor.name} (${tier.toUpperCase()}) web sitesini ziyaret et`}
-      >
-        <div className="sponsor-card-logo-box">
-          {sponsor.logoUrl ? (
-            <img
-              src={sponsor.logoUrl}
-              alt={sponsor.name}
-              loading="lazy"
-              onError={(e) => {
-                const target = e.currentTarget;
-                target.style.display = 'none';
-                const fallback = target.nextElementSibling as HTMLElement | null;
-                if (fallback) fallback.style.display = 'flex';
-              }}
-            />
-          ) : null}
-          <div
-            style={{
-              display: sponsor.logoUrl ? 'none' : 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '54px',
-              height: '54px',
-              borderRadius: '12px',
-              background: 'var(--bg-elevated)',
-              fontWeight: 800,
-              fontSize: '1.2rem',
-              color: 'var(--text-primary)',
-            }}
-          >
-            {sponsor.name.slice(0, 2).toUpperCase()}
-          </div>
-        </div>
+      <Reveal key={sponsor.id} delay={Math.min(index, 8) * 70}>
+        <a
+          href={sponsor.websiteUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`sponsor-card-block ${tierSizeClass} sponsor-grid-card`}
+          title={`${sponsor.name} (${tier.toUpperCase()}) web sitesini ziyaret et`}
+        >
+          {/* Altın sponsor logoları sayfanın üstünde: hemen ve yüksek öncelikle yüklenir */}
+          <SponsorLogo src={sponsor.logoUrl} name={sponsor.name} priority={tier === 'gold'} />
 
-        <div className="sponsor-card-footer">
-          <span className="sponsor-card-name">{sponsor.name}</span>
-          <div className="sponsor-card-sub">
-            <span>Web Sitesini İncele</span>
-            <ExternalLink size={12} />
+          <div className="sponsor-card-footer">
+            <span className="sponsor-card-name">{sponsor.name}</span>
+            <div className="sponsor-card-sub">
+              <span>Web Sitesini İncele</span>
+              <ExternalLink size={12} />
+            </div>
           </div>
-        </div>
-      </a>
+        </a>
+      </Reveal>
     );
   };
 
@@ -92,9 +65,21 @@ export const SponsorsPage: React.FC = () => {
 
       <div className="container" style={{ paddingBottom: '6rem' }}>
         {isLoading ? (
-          <div style={{ textAlign: 'center', padding: '5rem 0' }}>
-            <Loader2 size={40} style={{ animation: 'spin 1.5s linear infinite', color: 'var(--accent-primary)', margin: '0 auto 1rem' }} />
-            <p style={{ color: 'var(--text-secondary)' }}>Sponsorlar yükleniyor...</p>
+          // Gerçek sayfayla aynı grid ve tier yükseklikleri: yükleme bitince içerik kaymaz
+          <div
+            role="status"
+            aria-busy="true"
+            aria-label="Sponsorlar yükleniyor"
+            style={{ display: 'flex', flexDirection: 'column', gap: '3rem', marginTop: '3rem' }}
+          >
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.75rem' }}>
+              <SponsorCardSkeleton tier="gold" />
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
+              <SponsorCardSkeleton tier="silver" />
+              <SponsorCardSkeleton tier="silver" />
+              <SponsorCardSkeleton tier="silver" />
+            </div>
           </div>
         ) : error ? (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>

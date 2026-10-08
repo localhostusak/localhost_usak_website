@@ -1,13 +1,14 @@
 import React from 'react';
-import { ArrowRight, Users, AlertTriangle, Loader2 } from 'lucide-react';
+import { ArrowRight, Users, AlertTriangle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SponsorItem } from '../../types/sponsor';
-import { fetchSponsors } from '../../services/api';
+import { fetchSponsors, getCachedSponsors } from '../../services/api';
 import { useCmsCollection } from '../../hooks/useCmsCollection';
 import { EmptyState } from '../shared/EmptyState';
+import { Reveal, SponsorLogo, SponsorCardSkeleton } from '../shared';
 
 export const SponsorsSection: React.FC = () => {
-  const { items: sponsors, isLoading, error, retry } = useCmsCollection<SponsorItem>(fetchSponsors);
+  const { items: sponsors, isLoading, error, retry } = useCmsCollection<SponsorItem>(fetchSponsors, getCachedSponsors());
 
   // Duplicate sponsors for seamless marquee looping
   const goldSponsors = React.useMemo(() => sponsors.filter(s => (s.tier || 'community') === 'gold'), [sponsors]);
@@ -33,11 +34,15 @@ export const SponsorsSection: React.FC = () => {
         </div>
 
         {isLoading ? (
-          <EmptyState
-            icon={<Loader2 size={40} style={{ animation: 'spin 1.5s linear infinite', color: 'var(--text-muted)' }} />}
-            title="Destekçiler Yükleniyor"
-            description="Güncel destekçiler getiriliyor."
-          />
+          // Gerçek kartla aynı yükseklikte skeleton: yükleme bitince layout kaymaz
+          <div
+            role="status"
+            aria-busy="true"
+            aria-label="Destekçiler yükleniyor"
+            style={{ display: 'flex', justifyContent: 'center', margin: '1rem auto 2rem auto' }}
+          >
+            <SponsorCardSkeleton tier="gold" grid={false} />
+          </div>
         ) : error ? (
           <EmptyState
             icon={<AlertTriangle size={40} style={{ color: 'var(--accent-primary)' }} />}
@@ -67,58 +72,29 @@ export const SponsorsSection: React.FC = () => {
                   maxWidth: '960px',
                 }}
               >
-                {goldSponsors.map((sponsor) => {
+                {goldSponsors.map((sponsor, index) => {
                   const tier = 'gold';
                   const tierSizeClass = `tier-size-${tier}`;
                   return (
-                    <a
-                      key={sponsor.id}
-                      href={sponsor.websiteUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`sponsor-card-block ${tierSizeClass}`}
-                      title={`${sponsor.name} web sitesini ziyaret et`}
-                      style={{ transform: 'none' }}
-                    >
-                      <div className="sponsor-card-logo-box">
-                        {sponsor.logoUrl ? (
-                          <img
-                            src={sponsor.logoUrl}
-                            alt={sponsor.name}
-                            loading="lazy"
-                            onError={(e) => {
-                              const target = e.currentTarget;
-                              target.style.display = 'none';
-                              const fallback = target.nextElementSibling as HTMLElement | null;
-                              if (fallback) fallback.style.display = 'flex';
-                            }}
-                          />
-                        ) : null}
-                        <div
-                          style={{
-                            display: sponsor.logoUrl ? 'none' : 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            width: '54px',
-                            height: '54px',
-                            borderRadius: '12px',
-                            background: 'var(--bg-elevated)',
-                            fontWeight: 800,
-                            fontSize: '1.2rem',
-                            color: 'var(--text-primary)',
-                          }}
-                        >
-                          {sponsor.name.slice(0, 2).toUpperCase()}
-                        </div>
-                      </div>
+                    <Reveal key={sponsor.id} delay={index * 90}>
+                      <a
+                        href={sponsor.websiteUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`sponsor-card-block ${tierSizeClass}`}
+                        title={`${sponsor.name} web sitesini ziyaret et`}
+                        style={{ transform: 'none' }}
+                      >
+                        <SponsorLogo src={sponsor.logoUrl} name={sponsor.name} />
 
-                      <div className="sponsor-card-footer">
-                        <span className="sponsor-card-name">{sponsor.name}</span>
-                        <span className="tier-badge tier-gold-badge" style={{ fontSize: '0.68rem', padding: '0.15rem 0.6rem' }}>
-                          Altın Sponsor
-                        </span>
-                      </div>
-                    </a>
+                        <div className="sponsor-card-footer">
+                          <span className="sponsor-card-name">{sponsor.name}</span>
+                          <span className="tier-badge tier-gold-badge" style={{ fontSize: '0.68rem', padding: '0.15rem 0.6rem' }}>
+                            Altın Sponsor
+                          </span>
+                        </div>
+                      </a>
+                    </Reveal>
                   );
                 })}
               </div>
@@ -138,37 +114,7 @@ export const SponsorsSection: React.FC = () => {
                         className={`sponsor-card-block ${tierSizeClass}`}
                         title={`${sponsor.name} (${tier.toUpperCase()}) web sitesini ziyaret et`}
                       >
-                        <div className="sponsor-card-logo-box">
-                          {sponsor.logoUrl ? (
-                            <img
-                              src={sponsor.logoUrl}
-                              alt={sponsor.name}
-                              loading="lazy"
-                              onError={(e) => {
-                                const target = e.currentTarget;
-                                target.style.display = 'none';
-                                const fallback = target.nextElementSibling as HTMLElement | null;
-                                if (fallback) fallback.style.display = 'flex';
-                              }}
-                            />
-                          ) : null}
-                          <div
-                            style={{
-                              display: sponsor.logoUrl ? 'none' : 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              width: '54px',
-                              height: '54px',
-                              borderRadius: '12px',
-                              background: 'var(--bg-elevated)',
-                              fontWeight: 800,
-                              fontSize: '1.2rem',
-                              color: 'var(--text-primary)',
-                            }}
-                          >
-                            {sponsor.name.slice(0, 2).toUpperCase()}
-                          </div>
-                        </div>
+                        <SponsorLogo src={sponsor.logoUrl} name={sponsor.name} />
 
                         <div className="sponsor-card-footer">
                           <span className="sponsor-card-name">{sponsor.name}</span>

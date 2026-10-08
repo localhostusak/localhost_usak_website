@@ -308,3 +308,8 @@
   animation: crack-line-expand 0.45s ease forwards;
 }
 
+
+/* Sponsor logo shimmer (yükleme placeholder'ı) */
+@keyframes sponsor-shimmer {
+  100% { transform: translateX(100%); }
+}
