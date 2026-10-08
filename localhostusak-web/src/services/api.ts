@@ -179,7 +179,32 @@ export async function likeProject(id: number | string): Promise<number | null> {
   }
 }
 
-export async function fetchSponsors(): Promise<SponsorItem[]> {
+// Sponsor listesi için modül önbelleği: sayfalar arası geçişte tekrar istek/spinner olmasın
+const SPONSORS_CACHE_TTL_MS = 5 * 60 * 1000;
+let sponsorsCache: { items: SponsorItem[]; at: number } | null = null;
+let sponsorsRequest: Promise<SponsorItem[]> | null = null;
+
+// Geçerli önbellek varsa senkron döner (ilk render'da skeleton'u atlamak için)
+export function getCachedSponsors(): SponsorItem[] | undefined {
+  if (sponsorsCache && Date.now() - sponsorsCache.at < SPONSORS_CACHE_TTL_MS) {
+    return sponsorsCache.items;
+  }
+  return undefined;
+}
+
+export function fetchSponsors(): Promise<SponsorItem[]> {
+  const cached = getCachedSponsors();
+  if (cached) return Promise.resolve(cached);
+  // Aynı anda gelen çağrılar (anasayfa + sponsor sayfası) tek isteği paylaşır
+  if (!sponsorsRequest) {
+    sponsorsRequest = loadSponsors().finally(() => {
+      sponsorsRequest = null;
+    });
+  }
+  return sponsorsRequest;
+}
+
+async function loadSponsors(): Promise<SponsorItem[]> {
   try {
     const res = await fetch(`${API_BASE}/sponsors?limit=100&where[isActive][equals]=true&sort=sortOrder`);
     if (!res.ok) return MOCK_SPONSORS;
@@ -190,7 +215,7 @@ export async function fetchSponsors(): Promise<SponsorItem[]> {
       return MOCK_SPONSORS;
     }
 
-    return docs.map((doc: any) => ({
+    const items: SponsorItem[] = docs.map((doc: any) => ({
       id: doc.id,
       name: doc.name,
       tier: doc.tier || 'community',
@@ -199,6 +224,9 @@ export async function fetchSponsors(): Promise<SponsorItem[]> {
       sortOrder: doc.sortOrder || 0,
       isActive: doc.isActive !== false,
     }));
+    // Sadece gerçek API yanıtı önbelleğe alınır; mock yedekler alınmaz (hata sonrası düzelme şansı kalsın)
+    sponsorsCache = { items, at: Date.now() };
+    return items;
   } catch {
     return MOCK_SPONSORS;
   }
