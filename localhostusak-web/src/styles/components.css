@@ -1656,3 +1656,47 @@
   }
 }
 
+
+/* --------------------------------------------------------------------------
+   Sponsor logo yükleme: shimmer placeholder, fade-in ve skeleton kartlar
+   -------------------------------------------------------------------------- */
+.sponsor-card-logo-box.is-logo-loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.sponsor-card-logo-box.is-logo-loading::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, color-mix(in srgb, var(--text-primary) 9%, transparent) 50%, transparent 80%);
+  transform: translateX(-100%);
+  animation: sponsor-shimmer 1.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Logo yüklenene kadar görünmez, yüklenince yumuşakça belirir */
+.sponsor-card-logo-box img.sponsor-logo-fade {
+  opacity: 0;
+  transition: opacity 0.5s ease, transform var(--transition-normal), filter var(--transition-normal);
+}
+
+.sponsor-card-logo-box img.sponsor-logo-fade.is-loaded {
+  opacity: 1;
+}
+
+.sponsor-skeleton {
+  pointer-events: none;
+}
+
+.sponsor-skeleton:hover {
+  transform: none;
+}
+
+.sponsor-skeleton-bar {
+  display: block;
+  height: 14px;
+  border-radius: var(--radius-xs);
+  background: var(--border-subtle);
+  opacity: 0.7;
+}
