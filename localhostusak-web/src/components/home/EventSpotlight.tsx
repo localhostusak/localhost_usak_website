@@ -112,7 +112,16 @@ export const EventSpotlight: React.FC = () => {
             {/* Left Info Block */}
             <div>
               <div className="spotlight-badges">
-                <span className="badge badge-orange">
+                <span
+                  className="badge"
+                  style={{
+                    backgroundColor: upcomingEvent?.type?.colorModern
+                      ? `${upcomingEvent.type.colorModern}22`
+                      : 'rgba(255, 102, 0, 0.15)',
+                    color: upcomingEvent?.type?.colorModern || 'var(--accent-primary)',
+                    border: `1px solid ${upcomingEvent?.type?.colorModern || 'var(--accent-primary)'}`,
+                  }}
+                >
                   {upcomingEvent?.type?.label?.toUpperCase() || 'BULUŞMA'}
                 </span>
                 {statusInfo && (
