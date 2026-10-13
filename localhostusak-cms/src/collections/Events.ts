@@ -14,6 +14,15 @@ export const Events: CollectionConfig = {
   },
   fields: [
     {
+      name: 'eventTemplateAssistant',
+      type: 'ui',
+      admin: {
+        components: {
+          Field: '@/components/EventTemplateAssistant#EventTemplateAssistant',
+        },
+      },
+    },
+    {
       name: 'title',
       type: 'text',
       required: true,
