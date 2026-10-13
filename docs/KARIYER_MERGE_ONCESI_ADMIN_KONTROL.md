@@ -76,7 +76,8 @@ Sunucudaki tarama antivirüs değildir; yalnızca bilinen aktif içerik anahtarl
 - Erişim logları container loglarındadır; redeploy/rotasyonda kaybolabilir.
 - Dakikalık burst sayacı bellektedir, redeploy'da sıfırlanır; günlük sınırlar (IP 15, e-posta 1) veritabanındadır.
 - Tarama: PDF doğrulaması + aktif içerik (JS vb.) kontrolü; ClamAV yok. Kontrol hata verirse başvuru reddedilir.
-- Tarama sınırları: nesne sayısı > 20.000 veya iç içe derinlik > 32 reddedilir; JBIG2/JPX (taranmış belge kodekleri) ve > 3.000 nesne reddedilmez, yalnızca `[cv] basvuru=<id> uyari=…` olarak loglanır. Eşikler tahminidir; log toplandıkça gözden geçirilir (`src/lib/cv/limits.ts`).
+- Tarama sınırları: nesne sayısı > 20.000 veya iç içe derinlik > 32 reddedilir; JBIG2/JPX (taranmış/fotoğraf tabanlı PDF) da reddedilir (13 Ekim 2026 kararı; kullanıcıya "yeniden PDF olarak kaydedin" mesajı gider). > 3.000 nesne reddedilmez, yalnızca `[cv] basvuru=<id> uyari=…` olarak loglanır. Eşikler tahminidir; log toplandıkça gözden geçirilir (`src/lib/cv/limits.ts`).
+- Bayrak açılmadan önce JBIG2/JPX yanlış pozitif testi dijital araçlar için yapıldı (Canva, Google Docs, Mac yazdır: üçü de temiz, kabul edildi; 13 Ekim 2026). Taranmış CV reddi bilinçli karardır.
 - E-posta doğrulaması yok.
 - Bot koruması: gizli alan (honeypot, anlamsız adlı) ve form açık kalma süresi (< 3 sn). Süre istemcide `performance.now()` farkıyla ölçülür (cihaz saatinden bağımsız). Bu iki kontrole takılan istek sessizce yok sayılır ve kullanıcıya başarı görünür; container logunda tek satır `[cv] başvuru yok sayıldı sebep=honeypot|fill_too_fast` düşer (kişisel veri yok).
 - IP adresi ham saklanmaz; `CV_IP_HASH_SECRET` ile HMAC-SHA256 özeti tutulur.
