@@ -58,7 +58,7 @@ type RejectCode =
   | 'invalid'
   | 'encrypted'
   | 'embedded'
-  | 'risky_codec'
+  | 'scanned_pdf'
   | 'rejected'
   | 'server_error'
 
@@ -82,9 +82,9 @@ const MESSAGES: Record<RejectCode, string> = {
     'PDF\'iniz parola veya izin korumalı. CV\'nizi oluşturduğunuz programdan (Word, Google Docs, Canva vb.) korumasız olarak yeniden PDF\'e aktarıp tekrar yükleyin.',
   embedded:
     'PDF\'inizin içinde başka bir dosya gömülü. LibreOffice kullanıyorsanız Dışa Aktar → PDF ekranında \'Hibrit PDF (ODF dosyasını göm)\' seçeneğini kapatıp yeniden kaydedin.',
-  // v1'de tetiklenmez (PDF_RISKY_CODEC_ACTION='warn'); sabit 'reject' yapılırsa kullanılır
-  risky_codec:
-    'PDF\'iniz taranmış görüntü biçimi içeriyor. CV\'nizi Word/Docs gibi bir programdan PDF olarak kaydedip tekrar yükleyin.',
+  // JBIG2/JPX (PDF_RISKY_CODEC_ACTION='reject'). Kodek adı kullanıcıya sızmaz.
+  scanned_pdf:
+    'CV\'niz taranmış veya fotoğraf tabanlı bir biçimde görünüyor. Lütfen CV\'nizi Word, Google Docs veya Canva gibi bir programdan PDF olarak kaydedip yeniden yükleyin.',
   rejected: GENERIC_REJECT,
   server_error: 'Başvurunuz şu anda kaydedilemedi. Lütfen daha sonra tekrar deneyin.',
 }
@@ -102,7 +102,7 @@ const STATUS: Record<RejectCode, number> = {
   invalid: 400,
   encrypted: 400,
   embedded: 400,
-  risky_codec: 400,
+  scanned_pdf: 400,
   rejected: 400,
   server_error: 500,
 }
@@ -285,7 +285,7 @@ export const applyHandler: PayloadHandler = async (req) => {
       case 'encrypted':
       case 'embedded':
       case 'invalid':
-      case 'risky_codec':
+      case 'scanned_pdf':
       case 'too_large':
         return reject(req, scan.code)
       default:

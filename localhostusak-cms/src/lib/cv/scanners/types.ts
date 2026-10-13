@@ -4,11 +4,11 @@
 // Red türleri: kullanıcıya gösterilecek mesaj bu türe göre seçilir.
 // active: aktif içerik (JS, Launch …) · encrypted: parola/izin korumalı · embedded: gömülü dosya
 // invalid: geçerli/denetlenebilir PDF değil (nesne sayısı ve iç içe derinlik aşımı dahil)
-// risky_codec: JBIG2/JPX içeren PDF. Tanımlı ama v1'de kullanılmaz (bkz. PDF_RISKY_CODEC_ACTION)
-export type ScanRejectCode = 'active' | 'encrypted' | 'embedded' | 'invalid' | 'risky_codec'
+// scanned_pdf: JBIG2/JPX içeren PDF (taranmış/fotoğraf tabanlı); bkz. PDF_RISKY_CODEC_ACTION
+export type ScanRejectCode = 'active' | 'encrypted' | 'embedded' | 'invalid' | 'scanned_pdf'
 
 // Uyarılar reddetmez; yalnızca loga yazılır (kişisel veri içermez).
-// jbig2 / jpx: riskli görüntü kodeği · many_objects: nesne sayısı log eşiğini aştı
+// jbig2 / jpx: riskli görüntü kodeği (yalnızca PDF_RISKY_CODEC_ACTION='warn' iken) · many_objects: nesne sayısı log eşiğini aştı
 export type ScanWarningCode = 'jbig2' | 'jpx' | 'many_objects'
 
 export type ScanVerdict =

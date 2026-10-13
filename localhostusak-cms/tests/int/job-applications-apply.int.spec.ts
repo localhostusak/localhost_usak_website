@@ -180,25 +180,34 @@ describe.skipIf(!canRun)('POST /api/job-applications/apply', () => {
     expect(warns.join('\n')).not.toMatch(/@example\.com|Test Kullanıcı|203\.0\.113/)
   })
 
-  it('JBIG2 içeren PDF kabul edilir; uyarı başvuru id\'siyle tek satır loglanır (kişisel veri yok)', async () => {
+  it('JBIG2/JPX içeren PDF reddedilir: yönlendirici mesaj, kayıt yok, log yalnızca sebep kodu (iç ayrıntı sızmaz)', async () => {
     const warns: string[] = []
     const original = payload.logger.warn.bind(payload.logger)
     payload.logger.warn = ((msg: unknown) => {
       warns.push(String(msg))
       return original(msg as never)
     }) as typeof payload.logger.warn
-    let res: Awaited<ReturnType<typeof post>>
+    const before = await count()
+    const results: Awaited<ReturnType<typeof post>>[] = []
     try {
-      const cv = new File([new Uint8Array(codecPdf('JBIG2Decode'))], 'tarama.pdf', { type: 'application/pdf' })
-      res = await post(buildForm({ email: 'jbig2@example.com', cv }), { ip: '203.0.113.54' })
+      for (const [i, filter] of (['JBIG2Decode', 'JPXDecode'] as const).entries()) {
+        const cv = new File([new Uint8Array(codecPdf(filter))], 'tarama.pdf', { type: 'application/pdf' })
+        results.push(await post(buildForm({ email: `codec${i}@example.com`, cv }), { ip: `203.0.113.${54 + i}` }))
+      }
     } finally {
       payload.logger.warn = original as typeof payload.logger.warn
     }
-    expect(res).toEqual({ status: 201, json: { success: true } })
-    const { docs } = await payload.find({ collection: COLLECTION, where: { email: { equals: 'jbig2@example.com' } }, overrideAccess: true })
-    expect(docs).toHaveLength(1)
-    expect(warns.filter((w) => w.includes('uyari='))).toEqual([`[cv] basvuru=${docs[0].id} uyari=jbig2`])
-    expect(warns.join('\n')).not.toMatch(/@example\.com|Test Kullanıcı|203\.0\.113/)
+    for (const res of results) {
+      expect(res.status).toBe(400)
+      expect(res.json.code).toBe('scanned_pdf')
+      expect(res.json.message).toBe(
+        'CV\'niz taranmış veya fotoğraf tabanlı bir biçimde görünüyor. Lütfen CV\'nizi Word, Google Docs veya Canva gibi bir programdan PDF olarak kaydedip yeniden yükleyin.',
+      )
+      expect(JSON.stringify(res.json)).not.toMatch(/JBIG2|JPX|codec|kodek/i) // kodek adı yanıta sızmaz
+    }
+    expect(await count()).toBe(before)
+    expect(warns.filter((w) => w.includes('[cv] başvuru reddedildi sebep=scanned_pdf'))).toHaveLength(2)
+    expect(warns.join('\n')).not.toMatch(/@example\.com|Test Kullanıcı|203\.0\.113|JBIG2|JPX/)
   })
 
   it('çok büyük süre reddedilmez; eksik veya sayı olmayan süre geçersiz istektir', async () => {

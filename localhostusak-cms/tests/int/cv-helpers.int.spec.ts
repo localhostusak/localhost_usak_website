@@ -128,32 +128,46 @@ describe('scanCv', () => {
     })
   })
 
-  it('JBIG2 / JPX: reddetmez, yalnızca uyarı verir', async () => {
-    const jbig2 = await scanCv(codecPdf('JBIG2Decode'))
-    expect(jbig2).toMatchObject({ ok: true, code: 'clean', warnings: ['jbig2'] })
-    const jpx = await scanCv(codecPdf('JPXDecode'))
-    expect(jpx).toMatchObject({ ok: true, code: 'clean', warnings: ['jpx'] })
-    // Temiz PDF uyarı üretmez; "#" kodlamalı gizlenmiş isim de yakalanır
-    expect((await scanCv(cleanPdf())).warnings).toEqual([])
+  it('JBIG2 / JPX: scanned_pdf ile reddedilir; temiz PDF ve diğer kontroller etkilenmez', async () => {
+    for (const filter of ['JBIG2Decode', 'JPXDecode'] as const) {
+      const result = await scanCv(codecPdf(filter))
+      expect(result).toMatchObject({ ok: false, code: 'scanned_pdf' })
+    }
+    // "#" kodlamalı gizlenmiş isim de yakalanır
     const hidden = Buffer.from(codecPdf('JPXDecode').toString('latin1').replace('/JPXDecode', '/JPX#44ecode'), 'latin1')
-    expect((await scanCv(hidden)).warnings).toEqual(['jpx'])
+    expect((await scanCv(hidden)).code).toBe('scanned_pdf')
+    // Temiz PDF kabul edilir, uyarı üretmez
+    expect(await scanCv(cleanPdf())).toMatchObject({ ok: true, warnings: [] })
   })
 
-  it('JBIG2 / JPX: sabit "reject" yapılırsa risky_codec ile reddedilir', async () => {
+  it('JBIG2 / JPX: sabit "warn" yapılırsa reddetmez, yalnızca uyarı verir', async () => {
     vi.resetModules()
     vi.doMock('@/lib/cv/limits', async (importOriginal) => ({
       ...(await importOriginal<typeof import('@/lib/cv/limits')>()),
-      PDF_RISKY_CODEC_ACTION: 'reject',
+      PDF_RISKY_CODEC_ACTION: 'warn',
     }))
     try {
-      const { scanCv: strictScanCv } = await import('@/lib/cv/scanner')
-      const result = await strictScanCv(codecPdf('JBIG2Decode'))
-      expect(result).toMatchObject({ ok: false, code: 'risky_codec' })
-      expect((await strictScanCv(cleanPdf())).ok).toBe(true)
+      const { scanCv: lenientScanCv } = await import('@/lib/cv/scanner')
+      expect(await lenientScanCv(codecPdf('JBIG2Decode'))).toMatchObject({ ok: true, warnings: ['jbig2'] })
+      expect(await lenientScanCv(codecPdf('JPXDecode'))).toMatchObject({ ok: true, warnings: ['jpx'] })
     } finally {
       vi.doUnmock('@/lib/cv/limits')
       vi.resetModules()
     }
+  })
+
+  it('red önceliği: active/encrypted/embedded, scanned_pdf\'ten önce gelir', async () => {
+    const activeWithCodec = buildPdf([
+      ...cleanObjects('/OpenAction 7 0 R'),
+      '<< /S /JavaScript /JS (x) >>',
+      '<< /Filter /JBIG2Decode >>',
+    ])
+    expect((await scanCv(activeWithCodec)).code).toBe('active')
+    const embeddedWithCodec = buildPdf([
+      ...cleanObjects('/Names << /EmbeddedFiles 7 0 R >>'),
+      '<< /Filter /JPXDecode >>',
+    ])
+    expect((await scanCv(embeddedWithCodec)).code).toBe('embedded')
   })
 
   it('nesne sayısı: log eşiğinde uyarı, red eşiğinde invalid', async () => {

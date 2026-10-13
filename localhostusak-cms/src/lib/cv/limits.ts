@@ -13,7 +13,7 @@ export const PDF_OBJECT_MAX_COUNT = 20_000 // aşılırsa red (invalid)
 export const PDF_MAX_NESTING_DEPTH = 32
 
 // JBIG2/JPX (taranmış belge kodekleri) görüntüleyicilerde geçmişte açık çıkaran kod yolları.
-// 'warn': yalnızca uyarı loglanır (v1). 'reject': 'risky_codec' koduyla reddedilir.
-// Taranmış CV'ler meşru olduğundan v1'de reddedilmez; değiştirmek için yalnızca bu sabit yeterlidir.
+// 'reject': 'scanned_pdf' koduyla reddedilir (13 Ekim 2026 kararı; taranmış/fotoğraf tabanlı CV'ler
+// yeniden PDF'e aktarılarak yüklenir). 'warn': yalnızca uyarı loglanır. Değiştirmek için bu sabit yeterlidir.
 export type RiskyCodecAction = 'warn' | 'reject'
-export const PDF_RISKY_CODEC_ACTION: RiskyCodecAction = 'warn'
+export const PDF_RISKY_CODEC_ACTION: RiskyCodecAction = 'reject'

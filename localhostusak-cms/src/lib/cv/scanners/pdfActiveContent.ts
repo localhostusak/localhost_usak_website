@@ -200,7 +200,7 @@ function inspect(input: Buffer, deadline: number): ScanVerdict {
 
   const codecs = findKeys(joined, Object.keys(CODEC_KEYS))
   if (codecs.length > 0 && PDF_RISKY_CODEC_ACTION === 'reject') {
-    return { ok: false, code: 'risky_codec', reasons: codecs }
+    return { ok: false, code: 'scanned_pdf', reasons: codecs }
   }
 
   // Reddetmeyen sinyaller: yalnızca loglanır
