@@ -120,7 +120,13 @@ export const EventSpotlight: React.FC = () => {
                     {statusInfo.label}
                   </span>
                 )}
-                <span className="badge badge-blue">YÜZ YÜZE</span>
+                <span className="badge badge-blue">
+                  {upcomingEvent.modality === 'online'
+                    ? 'ONLINE'
+                    : upcomingEvent.modality === 'hybrid'
+                    ? 'HİBRİT'
+                    : 'YÜZ YÜZE'}
+                </span>
                 <span className="badge badge-live">KATILIM ÜCRETSİZ</span>
               </div>
 
@@ -149,7 +155,7 @@ export const EventSpotlight: React.FC = () => {
                 <div className="meetup-meta-item">
                   <span className="meta-icon"><Coffee size={18} /></span>
                   <div>
-                    <strong>Format:</strong> Serbest Çalışma, Proje Paylaşımı, Tanışma & Sohbet
+                    <strong>Format:</strong> {upcomingEvent.format || upcomingEvent.type?.format || 'Serbest Çalışma, Proje Paylaşımı, Tanışma & Sohbet'}
                   </div>
                 </div>
               </div>

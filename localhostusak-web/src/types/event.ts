@@ -2,6 +2,7 @@ export interface EventType {
   id: string;           // "cowork" | "workshop" | "talk" | dynamic ID
   label: string;        // "Cowork" | "Workshop" | "Talk"
   icon: string;         // "coffee" | "wrench" | "mic"
+  format?: string;      // Default format description
   colorModern: string;  // e.g. "#FF6600"
   colorPixel: string;   // e.g. "#EE6C19"
   isDefault?: boolean;
@@ -14,6 +15,8 @@ export interface EventItem {
   description: string;
   typeId: string;
   type?: EventType;
+  format?: string;
+  modality?: 'in-person' | 'online' | 'hybrid';
   status: "upcoming" | "open" | "closed" | "completed" | "cancelled";
   dateStart: string;    // ISO datetime or readable string
   dateEnd?: string;

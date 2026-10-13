@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, MapPin, Download } from 'lucide-react';
+import { Calendar, MapPin, Download, Coffee } from 'lucide-react';
 import { EventItem, EventType } from '../../types/event';
 import { CountdownTimer, WhatsAppIcon } from '../shared';
 import { downloadICS, openGoogleCalendar } from '../../utils/calendarExport';
@@ -75,7 +75,13 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
             <span className={`badge ${statusInfo.canRegister ? 'badge-live' : 'badge-orange'}`}>
               {statusInfo.label}
             </span>
-            <span className="badge badge-blue">YÜZ YÜZE</span>
+            <span className="badge badge-blue">
+              {event.modality === 'online'
+                ? 'ONLINE'
+                : event.modality === 'hybrid'
+                ? 'HİBRİT'
+                : 'YÜZ YÜZE'}
+            </span>
             <span className="badge badge-live">KATILIM ÜCRETSİZ</span>
           </div>
 
@@ -100,6 +106,14 @@ export const EventSpotlightCard: React.FC<EventSpotlightCardProps> = ({ event, e
                 <strong>Mekan:</strong> {event.location}
               </div>
             </div>
+            {(event.format || eventType?.format) && (
+              <div className="meetup-meta-item">
+                <span className="meta-icon"><Coffee size={18} /></span>
+                <div>
+                  <strong>Format:</strong> {event.format || eventType?.format}
+                </div>
+              </div>
+            )}
           </div>
 
           {event.tags && (

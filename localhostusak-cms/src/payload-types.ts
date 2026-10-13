@@ -209,6 +209,10 @@ export interface EventType {
    */
   icon: string;
   /**
+   * Varsayılan etkinlik formatı (Örn: Serbest Çalışma, Proje Paylaşımı, Tanışma & Sohbet)
+   */
+  format?: string | null;
+  /**
    * Modern HUD tema rengi (HEX)
    */
   colorModern: string;
@@ -232,6 +236,14 @@ export interface Event {
    * Etkinlik türü seçin
    */
   type: number | EventType;
+  /**
+   * Özel format açıklaması (Boş bırakılırsa seçilen etkinlik türünün varsayılan formatı geçerli olur)
+   */
+  format?: string | null;
+  /**
+   * Katılım türü / Ortam (Varsayılan: Yüz Yüze)
+   */
+  modality?: ('in-person' | 'online' | 'hybrid') | null;
   status: 'upcoming' | 'open' | 'closed' | 'completed' | 'cancelled';
   dateStart: string;
   dateEnd?: string | null;
@@ -632,6 +644,7 @@ export interface EventTypesSelect<T extends boolean = true> {
   slug?: T;
   label?: T;
   icon?: T;
+  format?: T;
   colorModern?: T;
   colorPixel?: T;
   isDefault?: T;
@@ -646,6 +659,8 @@ export interface EventTypesSelect<T extends boolean = true> {
 export interface EventsSelect<T extends boolean = true> {
   title?: T;
   type?: T;
+  format?: T;
+  modality?: T;
   status?: T;
   dateStart?: T;
   dateEnd?: T;

@@ -4,7 +4,7 @@ export const EventTypes: CollectionConfig = {
   slug: 'event-types',
   admin: {
     useAsTitle: 'label',
-    defaultColumns: ['label', 'slug', 'icon', 'sortOrder'],
+    defaultColumns: ['label', 'slug', 'icon', 'format', 'sortOrder'],
   },
   access: {
     read: () => true, // Publicly readable by frontend
@@ -37,6 +37,13 @@ export const EventTypes: CollectionConfig = {
       defaultValue: '☕',
       admin: {
         description: 'Emoji veya simge (Örn: ☕, 🛠️, 🎤)',
+      },
+    },
+    {
+      name: 'format',
+      type: 'text',
+      admin: {
+        description: 'Varsayılan etkinlik formatı (Örn: Serbest Çalışma, Proje Paylaşımı, Tanışma & Sohbet)',
       },
     },
     {

@@ -34,18 +34,22 @@ function normalizeMediaUrl(media: any, fallbackUrl?: string): string {
 }
 
 export function normalizeEventDoc(doc: any): EventItem {
+  const typeObj = typeof doc.type === 'object' && doc.type ? doc.type : null;
   return {
     id: doc.id,
     title: doc.title,
     description: typeof doc.description === 'string' ? doc.description : (doc.description?.root?.children?.[0]?.children?.[0]?.text || ''),
-    typeId: typeof doc.type === 'object' && doc.type ? (doc.type.slug || doc.type.id) : (doc.type || 'cowork'),
-    type: typeof doc.type === 'object' && doc.type ? {
-      id: doc.type.slug || doc.type.id,
-      label: doc.type.label,
-      icon: doc.type.icon,
-      colorModern: doc.type.colorModern,
-      colorPixel: doc.type.colorPixel,
+    typeId: typeObj ? (typeObj.slug || typeObj.id) : (doc.type || 'cowork'),
+    type: typeObj ? {
+      id: typeObj.slug || typeObj.id,
+      label: typeObj.label,
+      icon: typeObj.icon,
+      format: typeObj.format,
+      colorModern: typeObj.colorModern,
+      colorPixel: typeObj.colorPixel,
     } : undefined,
+    format: doc.format || (typeObj ? typeObj.format : undefined),
+    modality: doc.modality || 'in-person',
     status: doc.status || 'upcoming',
     dateStart: doc.dateStart,
     dateEnd: doc.dateEnd,
@@ -109,6 +113,7 @@ export async function fetchEventTypes(): Promise<EventType[]> {
     id: doc.slug || String(doc.id),
     label: doc.label,
     icon: doc.icon || 'coffee',
+    format: doc.format,
     colorModern: doc.colorModern || '#FF6600',
     colorPixel: doc.colorPixel || '#EE6C19',
     isDefault: doc.isDefault,

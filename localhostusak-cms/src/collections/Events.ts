@@ -4,7 +4,7 @@ export const Events: CollectionConfig = {
   slug: 'events',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'type', 'status', 'dateStart', 'location'],
+    defaultColumns: ['title', 'type', 'status', 'modality', 'dateStart', 'location'],
   },
   access: {
     read: () => true, // Frontend can read events publicly
@@ -25,6 +25,26 @@ export const Events: CollectionConfig = {
       required: true,
       admin: {
         description: 'Etkinlik türü seçin',
+      },
+    },
+    {
+      name: 'format',
+      type: 'text',
+      admin: {
+        description: 'Özel format açıklaması (Boş bırakılırsa seçilen etkinlik türünün varsayılan formatı geçerli olur)',
+      },
+    },
+    {
+      name: 'modality',
+      type: 'select',
+      defaultValue: 'in-person',
+      options: [
+        { label: 'Yüz Yüze (In-Person)', value: 'in-person' },
+        { label: 'Online', value: 'online' },
+        { label: 'Hibrit (Hybrid)', value: 'hybrid' },
+      ],
+      admin: {
+        description: 'Katılım türü / Ortam (Varsayılan: Yüz Yüze)',
       },
     },
     {
