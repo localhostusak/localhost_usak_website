@@ -10,10 +10,14 @@ import {
   type ApplicationValues,
 } from '../../types/application';
 import { checkCvFile, validateApplication } from '../../utils/applicationForm';
+import { createOpenTimer } from '../../utils/openTimer';
 import { FileDropzone } from './FileDropzone';
+import { PrivacyModal } from './PrivacyModal';
 
 interface ApplicationFormProps {
   texts: ApplicationFormTexts;
+  // Form açık mı (açılır-kapanır bölüm). Açık kalma süresi sayacı ilk açılışta başlar.
+  open: boolean;
 }
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
@@ -46,7 +50,7 @@ const FIELD_ORDER: (keyof ApplicationValues)[] = [
   'consent',
 ];
 
-export const ApplicationForm: React.FC<ApplicationFormProps> = ({ texts }) => {
+export const ApplicationForm: React.FC<ApplicationFormProps> = ({ texts, open }) => {
   const uid = useId();
   const fid = (name: string) => `${uid}-${name}`;
 
@@ -55,9 +59,9 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ texts }) => {
   const [errors, setErrors] = useState<ApplicationErrors>({});
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState('');
-  // Formun açıldığı an (performance.now(), cihaz saatinden bağımsız): gönderimde "açık kalma süresi"
-  // hesaplanır; sunucu çok hızlı gönderimleri bot sayar
-  const openedAt = useRef(performance.now());
+  // Formun İLK AÇILDIĞI an (performance.now(), cihaz saatinden bağımsız): gönderimde "açık kalma süresi"
+  // hesaplanır; sunucu çok hızlı gönderimleri bot sayar. Form kapalıyken geçen süre sayılmaz (bkz. openTimer).
+  const openTimer = useRef(createOpenTimer(() => performance.now()));
   const resultRef = useRef<HTMLDivElement>(null);
   const refs = useRef<Partial<Record<keyof ApplicationValues, HTMLElement | null>>>({});
   const setRef = (key: keyof ApplicationValues) => (el: HTMLElement | null) => {
@@ -66,8 +70,35 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ texts }) => {
 
   const submitting = status === 'submitting';
 
+  // Aydınlatma pop-up'ı: onay kutusu yalnızca metin okunup onaylanınca işaretlenir. İşaretliyken
+  // tıklamak doğrudan işareti kaldırır (pop-up açılmaz).
+  const [privacyOpen, setPrivacyOpen] = useState(false);
+  const handleConsentChange = (checked: boolean) => {
+    if (checked) setPrivacyOpen(true);
+    else update('consent', false);
+  };
+  const closePrivacy = () => {
+    setPrivacyOpen(false);
+    // Pop-up kalkınca odak onay kutusuna döner
+    setTimeout(() => refs.current.consent?.focus(), 0);
+  };
+  const confirmPrivacy = () => {
+    update('consent', true);
+    closePrivacy();
+  };
+
   // Sunucu hatasında odak, alanlar yeniden etkinleştirildikten (disabled kalktıktan) sonra verilir
   const pendingFocus = useRef<keyof ApplicationValues | null>(null);
+
+  // Açılışta sayacı başlat ve odağı ilk alana ver. İlk render'da (form kapalı) odak verilmez.
+  const wasOpen = useRef(false);
+  useEffect(() => {
+    if (open) {
+      openTimer.current.markOpened();
+      if (!wasOpen.current) refs.current.candidateName?.focus();
+    }
+    wasOpen.current = open;
+  }, [open]);
   useEffect(() => {
     if (status === 'submitting' || !pendingFocus.current) return;
     refs.current[pendingFocus.current]?.focus();
@@ -129,7 +160,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ texts }) => {
     set(APPLICATION_FIELDS.level, values.experienceLevel);
     values.fieldsOfInterest.forEach((v) => form.append(APPLICATION_FIELDS.interests, v));
     form.append(APPLICATION_FIELDS.consent, 'true');
-    form.append(APPLICATION_FIELDS.fillMs, String(Math.round(performance.now() - openedAt.current)));
+    form.append(APPLICATION_FIELDS.fillMs, String(openTimer.current.elapsedMs()));
     form.append(APPLICATION_FIELDS.honeypot, honeypot);
     if (values.file) form.append(APPLICATION_FIELDS.file, values.file, values.file.name);
     return form;
@@ -156,7 +187,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ texts }) => {
     if (result.ok) {
       setValues(EMPTY_VALUES);
       setHoneypot('');
-      openedAt.current = performance.now();
+      openTimer.current.restart();
       setStatus('success');
       setMessage(texts.successMessage);
     } else {
@@ -362,15 +393,6 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ texts }) => {
         {fieldError('file')}
       </div>
 
-      <details className="application-privacy" open>
-        <summary>Aydınlatma metni</summary>
-        <div className="application-privacy-body">
-          {texts.privacyParagraphs.map((p, i) => (
-            <p key={i}>{p}</p>
-          ))}
-        </div>
-      </details>
-
       <div className="form-group">
         <div className="application-consent">
           <input
@@ -378,7 +400,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ texts }) => {
             ref={setRef('consent')}
             type="checkbox"
             checked={values.consent}
-            onChange={(e) => update('consent', e.target.checked)}
+            onChange={(e) => handleConsentChange(e.target.checked)}
             disabled={submitting}
             aria-required="true"
             aria-invalid={errors.consent ? true : undefined}
@@ -437,6 +459,9 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ texts }) => {
           </>
         )}
       </button>
+      {privacyOpen && (
+        <PrivacyModal paragraphs={texts.privacyParagraphs} onConfirm={confirmPrivacy} onCancel={closePrivacy} />
+      )}
     </form>
   );
 };

@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useId, useMemo, useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { isDirectCmsApi } from '../../services/api';
 import type { ApplicationFormSettings } from '../../types/application';
 import { resolveApplicationTexts } from '../../utils/applicationForm';
@@ -13,6 +14,9 @@ interface ApplicationSectionProps {
 // ve konsola uyarı yazılır (kullanıcıya ham {{...}} metni ya da yanlış IP sınırı gösterilmesin).
 export const ApplicationSection: React.FC<ApplicationSectionProps> = ({ settings }) => {
   const enabled = settings?.enabled === true;
+  const panelId = useId();
+  // Form varsayılan olarak kapalıdır; sayfa içinde açılıp kapanır (modal değil)
+  const [open, setOpen] = useState(false);
   const direct = isDirectCmsApi();
 
   const resolved = useMemo(
@@ -45,9 +49,28 @@ export const ApplicationSection: React.FC<ApplicationSectionProps> = ({ settings
         <h2 id="basvuru-baslik" className="section-title">
           {texts.title}
         </h2>
-        {texts.intro && <p className="section-desc">{texts.intro}</p>}
       </div>
-      <ApplicationForm texts={texts} />
+
+      <button
+        type="button"
+        className="application-toggle card"
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={() => setOpen((v) => !v)}
+      >
+        <span className="application-toggle-text">
+          <span className="application-toggle-title">CV Havuzuna Başvur</span>
+          <span className="application-toggle-desc">CV’nizi yetenek havuzumuza ekleyin</span>
+        </span>
+        <ChevronDown className="application-toggle-icon" size={22} aria-hidden="true" />
+      </button>
+
+      {/* Kapalıyken inert: içindeki alanlara klavyeyle/ekran okuyucuyla ulaşılamaz; form DOM'da kalır,
+          yazılan değerler kapatılıp açılınca kaybolmaz */}
+      <div id={panelId} className="application-collapse" data-open={open} inert={!open}>
+        {texts.intro && <p className="section-desc application-intro">{texts.intro}</p>}
+        <ApplicationForm texts={texts} open={open} />
+      </div>
     </section>
   );
 };
